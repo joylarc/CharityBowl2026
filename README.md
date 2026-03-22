@@ -12,6 +12,7 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 - [ ] Update `rivalries.txt` if rivalry matchups change for 2026
 - [ ] Update `conferences.txt` if conference groupings change for 2026
 - [ ] Review `data/harmonization.csv` — add any new team name mappings needed for 2026
+- [ ] Update DNS to point custom domain to GitHub Pages
 
 ### During the Event
 
