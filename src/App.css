@@ -1,0 +1,3 @@
+.MuiTableRow-root:hover .delete-button {
+  visibility: visible !important;
+}
