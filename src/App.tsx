@@ -14,10 +14,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { LIGHTS_OUT } from "./constants.ts";
+import { LIGHTS_OUT, PRE_EVENT } from "./constants.ts";
 import { useTheme } from "@mui/material/styles";
 
 import HeadToHead from "./HeadToHead";
+import PreEvent from "./PreEvent";
 import Leaderboard from "./Leaderboard";
 import Navigation, { TabType } from "./Navigation";
 import Rivalries from "./Rivalries";
@@ -250,9 +251,13 @@ export default function App() {
           />
         </a>
       </header>
-      <Suspense fallback={<Loading />}>
-        <DataContent />
-      </Suspense>
+      {PRE_EVENT ? (
+        <PreEvent />
+      ) : (
+        <Suspense fallback={<Loading />}>
+          <DataContent />
+        </Suspense>
+      )}
     </>
   );
 }

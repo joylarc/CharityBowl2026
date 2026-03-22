@@ -44,7 +44,8 @@ CharityBowl2026/
 │   ├── Navigation.tsx           # Tab bar (desktop) / bottom nav (mobile)
 │   ├── StripedTableRow.tsx      # Alternating row styling
 │   ├── state.ts                 # Data loading: reads donations.csv, rivalries.txt, conferences.txt
-│   ├── constants.ts             # LIGHTS_OUT flag
+│   ├── constants.ts             # PRE_EVENT and LIGHTS_OUT flags
+│   ├── PreEvent.tsx             # Pre-event landing page (shown when PRE_EVENT=true)
 │   └── main.tsx                 # React entry point, MUI theme
 ├── donations.csv                # Auto-generated: timestamp + "school","amount" rows
 ├── unmapped.json                # Auto-generated: write-in entries with no mapping
@@ -185,6 +186,7 @@ School names must match the canonical names used in donations.csv.
 - Data is loaded once via React Suspense, no auto-refresh (the whole site is rebuilt every 5 min)
 
 ### Special Features
+- `PRE_EVENT` flag in `src/constants.ts`: when true, shows a landing page instead of the leaderboard (for before the event starts)
 - `LIGHTS_OUT` flag in `src/constants.ts`: when true, forces dark mode and shows a dialog announcing the "lights out" free-for-all phase
 - Search works across all tabs, persisted to URL query param `?q=`
 - Tab selection persisted to URL query param `?t=`
@@ -216,6 +218,7 @@ Builds the site and creates a GitHub release with the zipped `dist/` folder.
 - **Check `unmapped.json`** periodically for new write-in entries that need mappings
 - **Add mappings** by editing `data/harmonization.csv` and pushing to the repo
 - **Add offline/corporate donations** by editing `data/manual_additions.json`
+- **Go live**: Set `PRE_EVENT = false` in `src/constants.ts` and push — the leaderboard replaces the landing page
 - **Lights out mode**: Set `LIGHTS_OUT = true` in `src/constants.ts` to hide the leaderboard and show a dialog
 - **Rivalries/conferences**: Edit `rivalries.txt` and `conferences.txt` to update matchups
 

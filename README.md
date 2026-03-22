@@ -13,6 +13,12 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 - [ ] Update `conferences.txt` if conference groupings change for 2026
 - [ ] Review `data/harmonization.csv` — add any new team name mappings needed for 2026
 - [ ] Update DNS to point custom domain to GitHub Pages
+- [ ] Confirm pre-event landing page looks correct once deployed
+
+### Go Live
+
+- [ ] Set `PRE_EVENT = false` in `src/constants.ts` and push
+- [ ] Uncomment the cron schedule in `.github/workflows/update-data.yml` and push
 
 ### During the Event
 
