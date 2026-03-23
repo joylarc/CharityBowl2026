@@ -90,8 +90,7 @@ export default function PreEvent() {
         <Button
           variant="contained"
           size="large"
-          href="http://edsbscharitybowl.com"
-          target="_blank"
+          href={import.meta.env.BASE_URL + "info.html"}
           sx={{ backgroundColor: "#000", color: "#00ffff", "&:hover": { backgroundColor: "#333" } }}
         >
           Learn More

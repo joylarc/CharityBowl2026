@@ -5,6 +5,14 @@ import react from "@vitejs/plugin-react-swc";
 // https://vite.dev/config/
 export default defineConfig({
   base: "/CharityBowl2026/",
+  build: {
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        info: "info.html",
+      },
+    },
+  },
   plugins: [
     react(),
     viteStaticCopy({
