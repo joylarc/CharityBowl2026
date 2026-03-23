@@ -66,12 +66,14 @@ export default function PreEvent() {
         gap: "1.5rem",
       }}
     >
-      <Typography variant={isSmall ? "h4" : "h3"} fontWeight="bold" color="#000">
-        Coming Soon
-      </Typography>
-      <Typography variant="h6" color="#000">
-        The CharitiBundi Bowl 2026 leaderboard is almost here.
-      </Typography>
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant={isSmall ? "h4" : "h3"} fontWeight="bold" color="#000">
+          Avengers: Charity Bowl
+        </Typography>
+        <Typography variant={isSmall ? "h5" : "h4"} fontWeight="bold" color="#000">
+          Coming Soon
+        </Typography>
+      </Box>
       {timeLeft ? (
         <Box sx={{ display: "flex", gap: isSmall ? "0.75rem" : "1.5rem", marginTop: "0.5rem" }}>
           <CountdownUnit value={timeLeft.days} label="Days" />
@@ -84,10 +86,6 @@ export default function PreEvent() {
           The event has started!
         </Typography>
       )}
-      <Typography variant="body1" color="#000" sx={{ maxWidth: 480 }}>
-        Donations open April 20, 2026. Follow along as schools compete to raise
-        the most for New American Pathways.
-      </Typography>
       <Box sx={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
         <Button
           variant="contained"
