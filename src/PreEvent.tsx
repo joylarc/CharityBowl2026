@@ -23,10 +23,10 @@ function getTimeLeft() {
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
     <Box sx={{ textAlign: "center", minWidth: 60 }}>
-      <Typography variant="h3" fontWeight="bold" sx={{ fontVariantNumeric: "tabular-nums" }}>
+      <Typography variant="h3" fontWeight="bold" color="#000" sx={{ fontVariantNumeric: "tabular-nums" }}>
         {String(value).padStart(2, "0")}
       </Typography>
-      <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase" }}>
+      <Typography variant="caption" color="#000" sx={{ textTransform: "uppercase" }}>
         {label}
       </Typography>
     </Box>
@@ -47,6 +47,14 @@ export default function PreEvent() {
   }, []);
 
   return (
+    <Box
+      sx={{
+        backgroundColor: "#00ffff",
+        minHeight: "calc(100vh - 40vh)",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
     <Container
       maxWidth="sm"
       sx={{
@@ -58,10 +66,10 @@ export default function PreEvent() {
         gap: "1.5rem",
       }}
     >
-      <Typography variant={isSmall ? "h4" : "h3"} fontWeight="bold">
+      <Typography variant={isSmall ? "h4" : "h3"} fontWeight="bold" color="#000">
         Coming Soon
       </Typography>
-      <Typography variant="h6" color="text.secondary">
+      <Typography variant="h6" color="#000">
         The CharitiBundi Bowl 2026 leaderboard is almost here.
       </Typography>
       {timeLeft ? (
@@ -72,11 +80,11 @@ export default function PreEvent() {
           <CountdownUnit value={timeLeft.seconds} label="Sec" />
         </Box>
       ) : (
-        <Typography variant="h5" fontWeight="bold">
+        <Typography variant="h5" fontWeight="bold" color="#000">
           The event has started!
         </Typography>
       )}
-      <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 480 }}>
+      <Typography variant="body1" color="#000" sx={{ maxWidth: 480 }}>
         Donations open April 20, 2026. Follow along as schools compete to raise
         the most for New American Pathways.
       </Typography>
@@ -86,10 +94,12 @@ export default function PreEvent() {
           size="large"
           href="http://edsbscharitybowl.com"
           target="_blank"
+          sx={{ backgroundColor: "#000", color: "#00ffff", "&:hover": { backgroundColor: "#333" } }}
         >
           Learn More
         </Button>
       </Box>
     </Container>
+    </Box>
   );
 }

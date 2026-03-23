@@ -246,7 +246,7 @@ export default function App() {
         <a href="http://edsbscharitybowl.com" target="_blank">
           <img
             style={{ objectFit: "contain", width: "100%", height: "100%" }}
-            src="/logo.png"
+            src={import.meta.env.BASE_URL + "logo.png"}
             alt="CharitiBundi Bowl 2026 - Supporting New American Pathways"
           />
         </a>
