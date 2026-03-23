@@ -251,7 +251,7 @@ export default function App() {
           />
         </a>
       </header>
-      {PRE_EVENT ? (
+      {PRE_EVENT && new URL(window.location.href).searchParams.get("mode") !== "live" ? (
         <PreEvent />
       ) : (
         <Suspense fallback={<Loading />}>
