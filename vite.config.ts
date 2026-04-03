@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         info: "info.html",
+        results2025: "results2025.html",
       },
     },
   },
