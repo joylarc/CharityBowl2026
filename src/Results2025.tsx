@@ -120,7 +120,7 @@ export default function Results2025() {
       >
         <img
           style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "40vh" }}
-          src={import.meta.env.BASE_URL + "logo-2025.png"}
+          src={import.meta.env.BASE_URL + "2025results.png"}
           alt="CharitiBundi Bowl 2025"
         />
       </header>
