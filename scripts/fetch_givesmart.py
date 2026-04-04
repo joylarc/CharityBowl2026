@@ -23,7 +23,9 @@ REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 HARMONIZATION_PATH = os.path.join(REPO_ROOT, "data", "harmonization.csv")
 MANUAL_ADDITIONS_PATH = os.path.join(REPO_ROOT, "data", "manual_additions.json")
 DONATIONS_CSV_PATH = os.path.join(REPO_ROOT, "donations.csv")
+TRANSACTIONS_CSV_PATH = os.path.join(REPO_ROOT, "transactions.csv")
 UNMAPPED_JSON_PATH = os.path.join(REPO_ROOT, "unmapped.json")
+CONFERENCES_PATH = os.path.join(REPO_ROOT, "conferences.txt")
 
 # How long to wait for the async report (seconds)
 REPORT_TIMEOUT = 600
@@ -49,6 +51,44 @@ def load_harmonization():
             if raw and harmonized:
                 mapping[raw.lower()] = harmonized
     return mapping
+
+
+def load_conferences():
+    """Load conferences.txt into a school -> conference lookup dict."""
+    mapping = {}
+    if not os.path.exists(CONFERENCES_PATH):
+        return mapping
+    current_conf = None
+    with open(CONFERENCES_PATH, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                current_conf = None
+                continue
+            if current_conf is None:
+                current_conf = line
+            else:
+                mapping[line.lower()] = current_conf
+    return mapping
+
+
+def compute_total(amount, frequency):
+    """Compute total based on pledged amount and frequency."""
+    if not frequency:
+        return amount
+    freq = frequency.strip().lower()
+    if freq in ("one-time", "one time", "onetime", ""):
+        return amount
+    if freq == "monthly":
+        return amount * 12
+    if freq in ("quarterly", "every 3 months"):
+        return amount * 4
+    if freq in ("weekly", "every week"):
+        return amount * 52
+    if freq in ("annually", "yearly", "annual"):
+        return amount
+    # Unknown frequency — return the single amount
+    return amount
 
 
 def load_manual_additions():
@@ -178,6 +218,10 @@ def main():
     harmonization = load_harmonization()
     print(f"Loaded {len(harmonization)} harmonization mappings")
 
+    # Load conference mapping
+    conferences = load_conferences()
+    print(f"Loaded {len(conferences)} conference mappings")
+
     # Load manual additions
     manual_additions = load_manual_additions()
     print(f"Loaded {len(manual_additions)} manual additions")
@@ -185,11 +229,12 @@ def main():
     # Fetch transactions
     transactions = fetch_transactions()
 
-    # Aggregate by team
+    # Aggregate by team and build transaction rows
     team_totals = {}
     unmapped = []
     skipped_no_team = 0
     skipped_unmapped = 0
+    txn_rows = []
 
     for txn in transactions:
         amount = parse_amount(txn.get("pledged_amount"))
@@ -206,6 +251,35 @@ def main():
         else:
             skipped_no_team += 1
 
+        # Build transaction row for detailed CSV
+        dropdown = (txn.get("name_of_school/team_(dropdown)") or "").strip()
+        write_in = ""
+        if dropdown.upper() == "OTHER - WRITE IN":
+            write_in = (txn.get("name_of_school/team_(manualentry)") or "").strip()
+
+        frequency = (txn.get("frequency") or "").strip()
+        total = compute_total(amount, frequency)
+
+        # Look up conference for the harmonized team
+        conf = ""
+        if team:
+            conf = conferences.get(team.lower(), "")
+
+        txn_rows.append({
+            "transaction_date": txn.get("transaction_date", ""),
+            "first_name": txn.get("first_name", ""),
+            "last_name": txn.get("last_name", ""),
+            "zip_code": txn.get("zip") or txn.get("zip_code") or txn.get("postal_code") or "",
+            "frequency": frequency,
+            "amount": f"{amount:.2f}",
+            "total": f"{total:.2f}",
+            "dropdown_school_team": dropdown,
+            "write_in_school_team": write_in,
+            "harmonized_school_team": team or "",
+            "conference": conf,
+            "message": txn.get("message") or txn.get("comment") or "",
+        })
+
     # Apply manual additions
     for addition in manual_additions:
         team = addition.get("team", "").strip()
@@ -220,6 +294,18 @@ def main():
         for team, total in sorted(team_totals.items()):
             f.write(f'"{team}","{total}"\n')
 
+    # Write transactions.csv
+    txn_fields = [
+        "transaction_date", "first_name", "last_name", "zip_code",
+        "frequency", "amount", "total",
+        "dropdown_school_team", "write_in_school_team",
+        "harmonized_school_team", "conference", "message",
+    ]
+    with open(TRANSACTIONS_CSV_PATH, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=txn_fields)
+        writer.writeheader()
+        writer.writerows(txn_rows)
+
     # Write unmapped.json
     with open(UNMAPPED_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(unmapped, f, indent=2)
@@ -233,6 +319,7 @@ def main():
     print(f"  Skipped (unmapped write-in): {skipped_unmapped}")
     print(f"  Unmapped entries written to: {UNMAPPED_JSON_PATH}")
     print(f"  Donations CSV written to: {DONATIONS_CSV_PATH}")
+    print(f"  Transactions CSV written to: {TRANSACTIONS_CSV_PATH}")
 
 
 if __name__ == "__main__":

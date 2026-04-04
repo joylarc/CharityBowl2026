@@ -17,6 +17,9 @@ build
 # Raw API data (do not commit)
 transactions_2025.json
 
+# Detailed transaction log with PII (do not commit or deploy)
+transactions.csv
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

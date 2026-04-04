@@ -23,7 +23,7 @@ export default defineConfig({
           dest: ".",
         },
         {
-          src: "*.csv",
+          src: "donations*.csv",
           dest: ".",
         },
       ],
