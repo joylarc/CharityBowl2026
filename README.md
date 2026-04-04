@@ -7,13 +7,15 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 - [x] Add `GIVESMART_API_TOKEN` as a repository secret (Settings > Secrets and variables > Actions)
 - [ ] Add `GIVESMART_CAMPAIGN` as a repository variable with this year's campaign name
 - [x] Enable GitHub Pages (Settings > Pages > Source: GitHub Actions)
-- [ ] Replace `public/logo.png` with the 2026 event logo
+- [x] Replace `public/logo.png` with the 2026 event logo
 - [ ] Update donation link (`edsbscharitybowl.com`) in `src/App.tsx` and `src/HeadToHead.tsx`
 - [ ] Update `rivalries.txt` if rivalry matchups change for 2026
-- [ ] Update `conferences.txt` if conference groupings change for 2026
+- [x] Update `conferences.txt` if conference groupings change for 2026
 - [ ] Review `data/harmonization.csv` — add any new team name mappings needed for 2026
-- [ ] Update DNS to point custom domain to GitHub Pages
+- [x] Update DNS to point custom domain to GitHub Pages
 - [ ] Confirm pre-event landing page looks correct once deployed
+- [ ] Update info page with feedback
+- [ ] Update edsbscharitybowl.com DNS to point to info page
 
 ### Go Live
 
