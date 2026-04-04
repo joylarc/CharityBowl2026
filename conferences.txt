@@ -71,12 +71,15 @@ Washington
 Wisconsin
 
 Conference USA
+Delaware
 FIU
 Jacksonville State
 Kennesaw State
 Liberty 
 Louisiana Tech
 Middle Tennessee State
+Missouri State
+North Dakota State
 New Mexico State
 Sam Houston State
 UTEP
@@ -98,7 +101,6 @@ Independent
 Army
 Connecticut (UConn)
 Notre Dame
-UMass
 
 MAC
 Akron
@@ -111,25 +113,28 @@ Kent State
 Miami (OH)
 Northern Illinois
 Ohio
+Sacramento State
 Toledo
+UMass
 Western Michigan
 
 Mountain West
 Air Force
-Boise State
-Colorado State
-Fresno State
-Hawaii
+Hawai'i
 Nevada
 New Mexico
-San Diego State
 San Jose State
 UNLV
-Utah State
 Wyoming
 
 PAC 12
+Boise State
+Colorado State
+Fresno State
 Oregon State
+San Diego State
+Texas State
+Utah State
 Washington State
 
 SEC
@@ -163,7 +168,6 @@ Marshall
 Old Dominion
 South Alabama
 Southern Mississippi
-Texas State
 Troy
 
 FCS
@@ -181,7 +185,6 @@ Cornell
 Dartmouth
 Davidson
 Dayton
-Delaware
 Drake University
 Duquesne University
 East Tennessee State
@@ -208,7 +211,6 @@ Maine
 Marist College
 McNeese State
 Mercer
-Missouri State
 Montana
 Montana State
 Murray State
@@ -218,7 +220,6 @@ Norfolk State
 North Alabama
 North Carolina A&T
 North Dakota
-North Dakota State
 Northern Arizona
 Northern Colorado
 Northern Iowa
@@ -229,7 +230,6 @@ Presbyterian College
 Princeton
 Richmond
 Robert Morris
-Sacramento State
 South Dakota State
 Southeast Missouri State
 Southeastern Louisiana
