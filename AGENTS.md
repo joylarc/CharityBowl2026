@@ -32,9 +32,27 @@ The frontend is a React + TypeScript + Vite + MUI app. It reads `donations.csv` 
 
 - **GitHub Pages** serves the site from the `dist/` folder
 - **Custom domain:** moneycannon.org (configured via `public/CNAME`)
-- **DNS (Gandi.net):** Four A records pointing to GitHub's IPs (185.199.108-111.153), plus a CNAME for `www` pointing to `joylarc.github.io`
 - **Base path:** `/` in vite.config.ts (since we use a custom domain, not the `username.github.io/repo` path)
 - All asset references use `import.meta.env.BASE_URL + "filename"` for base path compatibility
+
+### DNS Configuration (Gandi.net)
+
+The domain `moneycannon.org` is managed at Gandi.net. The following DNS records are required:
+
+| Type | Name | Value | TTL |
+|------|------|-------|-----|
+| A | @ | 185.199.108.153 | 10800 |
+| A | @ | 185.199.109.153 | 10800 |
+| A | @ | 185.199.110.153 | 10800 |
+| A | @ | 185.199.111.153 | 10800 |
+| CNAME | www | joylarc.github.io. | 10800 |
+
+**Important notes:**
+- The four A records point the apex domain (moneycannon.org) to GitHub Pages' IPs
+- The `www` CNAME must use a trailing dot (`joylarc.github.io.`) to prevent Gandi from appending `.moneycannon.org` to it
+- Do not delete the existing MX/mail-related DNS records (gm1._domainkey, gm2._domainkey, gm3._domainkey CNAME records for Gandi mail)
+- "Enforce HTTPS" should be checked in GitHub repo Settings > Pages
+- After DNS changes, propagation can take up to the TTL (10800s = 3 hours)
 
 ## Multi-Page App Structure
 
