@@ -244,7 +244,7 @@ export default function App() {
         }}
       >
         <img
-          style={{ objectFit: "contain", width: "100%", height: "100%" }}
+          style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "40vh" }}
           src={import.meta.env.BASE_URL + "logo.png"}
           alt="CharitiBundi Bowl 2026 - Supporting New American Pathways"
         />
