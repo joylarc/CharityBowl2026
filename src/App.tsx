@@ -237,19 +237,17 @@ export default function App() {
         style={{
           backgroundColor: theme.palette.primary.main,
           display: "flex",
-          flexDirection: "row",
           justifyContent: "center",
           maxHeight: "40vh",
-          overflow: "hidden",
         }}
       >
-        <div>
+        <a style={{ display: "inline-block" }}>
           <img
             style={{ objectFit: "contain", width: "100%", height: "100%" }}
             src={import.meta.env.BASE_URL + "logo.png"}
             alt="CharitiBundi Bowl 2026 - Supporting New American Pathways"
           />
-        </div>
+        </a>
       </header>
       {PRE_EVENT && new URL(window.location.href).searchParams.get("mode") !== "live" ? (
         <PreEvent />
