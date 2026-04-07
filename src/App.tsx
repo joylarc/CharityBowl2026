@@ -243,11 +243,13 @@ export default function App() {
           overflow: "hidden",
         }}
       >
-        <img
-          style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "40vh" }}
-          src={import.meta.env.BASE_URL + "logo.png"}
-          alt="CharitiBundi Bowl 2026 - Supporting New American Pathways"
-        />
+        <div>
+          <img
+            style={{ objectFit: "contain", width: "100%", height: "100%" }}
+            src={import.meta.env.BASE_URL + "logo.png"}
+            alt="CharitiBundi Bowl 2026 - Supporting New American Pathways"
+          />
+        </div>
       </header>
       {PRE_EVENT && new URL(window.location.href).searchParams.get("mode") !== "live" ? (
         <PreEvent />
