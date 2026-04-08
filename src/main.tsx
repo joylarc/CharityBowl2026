@@ -17,7 +17,7 @@ const omniPalette: PaletteOptions = {
   mode: LIGHTS_OUT ? "dark" : undefined,
   primary: {
     light: "#d9fffe",
-    main: "#00ffff",
+    main: "#00feff",
     dark: "#00f5fe",
     contrastText: "#000",
   },
@@ -46,7 +46,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-selected svg": {
-            color: "#00ffff",
+            color: "#00feff",
           },
           "&.Mui-selected": {
             color: "inherit",

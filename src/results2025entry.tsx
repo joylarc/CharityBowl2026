@@ -15,7 +15,7 @@ import Results2025 from "./Results2025";
 const omniPalette: PaletteOptions = {
   primary: {
     light: "#d9fffe",
-    main: "#00ffff",
+    main: "#00feff",
     dark: "#00f5fe",
     contrastText: "#000",
   },

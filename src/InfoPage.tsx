@@ -57,7 +57,7 @@ export default function InfoPage() {
   return (
     <Box sx={{ minHeight: "100vh" }}>
       {/* Cyan hero area */}
-      <Box sx={{ backgroundColor: "#00ffff" }}>
+      <Box sx={{ backgroundColor: "#00feff" }}>
         <Container maxWidth="lg" sx={{ padding: isSmall ? "1.5rem 1.5rem 1rem" : "2rem 2rem 1rem" }}>
 
           {/* Hero: tagline + countdown */}
@@ -106,7 +106,7 @@ export default function InfoPage() {
             </Typography>
           </Section>
 
-          <Divider sx={{ borderColor: "#00ffff", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5 }} />
 
           {/* The game is the same */}
           <Section>
@@ -124,7 +124,7 @@ export default function InfoPage() {
             </Typography>
           </Section>
 
-          <Divider sx={{ borderColor: "#00ffff", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5 }} />
 
           {/* New American Pathways */}
           <Section>
@@ -165,7 +165,7 @@ export default function InfoPage() {
             </Typography>
           </Section>
 
-          <Divider sx={{ borderColor: "#00ffff", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5 }} />
 
           {/* Highlights */}
           <Section>
@@ -201,7 +201,7 @@ export default function InfoPage() {
             </Box>
           </Section>
 
-          <Divider sx={{ borderColor: "#00ffff", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5 }} />
 
           {/* Where is your money going */}
           <Section>
@@ -239,7 +239,7 @@ export default function InfoPage() {
             </Box>
           </Section>
 
-          <Divider sx={{ borderColor: "#00ffff", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5 }} />
 
           {/* It begins with spite */}
           <Section>

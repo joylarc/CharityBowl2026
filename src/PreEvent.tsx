@@ -61,7 +61,7 @@ export default function PreEvent() {
     <ThemeProvider theme={preEventTheme}>
       <Box
         sx={{
-          backgroundColor: "#00ffff",
+          backgroundColor: "#00feff",
           minHeight: "calc(100vh - 40vh)",
           display: "flex",
           justifyContent: "center",
@@ -104,7 +104,7 @@ export default function PreEvent() {
               size="large"
               href="https://newamericanpathways.org/"
               target="_blank"
-              sx={{ backgroundColor: "#000", color: "#00ffff", "&:hover": { backgroundColor: "#333" } }}
+              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
               Learn More
             </Button>
@@ -112,7 +112,7 @@ export default function PreEvent() {
               variant="contained"
               size="large"
               href={import.meta.env.BASE_URL + "results2025.html"}
-              sx={{ backgroundColor: "#000", color: "#00ffff", "&:hover": { backgroundColor: "#333" } }}
+              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
               2025 Final Scores
             </Button>
