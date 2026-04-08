@@ -9,16 +9,15 @@ The site is hosted at **moneycannon.org** via GitHub Pages with a custom domain.
 ## Architecture
 
 ```
-Every 5 minutes (during event):
+Every 15 minutes (during event):
   GitHub Actions (scheduled workflow)
       |
       v
   Python script (scripts/fetch_givesmart.py)
       |-- Calls GiveSmart Transactions API (async 2-step pattern)
-      |-- Resolves team names via harmonization CSV
+      |-- Team name taken directly from dropdown (no harmonization needed)
       |-- Writes donations.csv (leaderboard data)
       |-- Writes transactions.csv (detailed per-transaction data, NOT deployed)
-      |-- Writes unmapped.json (unmatched write-ins)
       v
   Vite builds the React app (yarn build)
       |
@@ -51,7 +50,8 @@ The domain `moneycannon.org` is managed at Gandi.net. The following DNS records 
 - The four A records point the apex domain (moneycannon.org) to GitHub Pages' IPs
 - The `www` CNAME must use a trailing dot (`joylarc.github.io.`) to prevent Gandi from appending `.moneycannon.org` to it
 - Do not delete the existing MX/mail-related DNS records (gm1._domainkey, gm2._domainkey, gm3._domainkey CNAME records for Gandi mail)
-- "Enforce HTTPS" should be checked in GitHub repo Settings > Pages
+- **Custom domain in GitHub Pages Settings is set to `www.moneycannon.org`** — GitHub handles redirecting the apex to www and provisions certs for both
+- "Enforce HTTPS" should be checked in GitHub repo Settings > Pages (it gets unchecked automatically when the custom domain is changed — re-enable after cert provisioning)
 - After DNS changes, propagation can take up to the TTL (10800s = 3 hours)
 
 ## Multi-Page App Structure
@@ -126,9 +126,11 @@ CharityBowl2026/
 │   └── update-data.yml           # Scheduled: fetch data, build, deploy to Pages
 ├── scripts/
 │   └── fetch_givesmart.py        # GiveSmart API -> donations.csv + transactions.csv
-├── data/
-│   ├── harmonization.csv         # 1,877-row team name mapping (raw -> canonical)
-│   └── manual_additions.json     # Offline/corporate match donations to add manually
+├── data/                          # (empty — harmonization no longer needed for 2026)
+├── archive/
+│   ├── harmonization.csv         # 2025 team name mapping (1,877 rows) — kept for rollback
+│   ├── manual_additions.json     # 2025 manual additions format — kept for rollback
+│   └── unmapped.json             # 2025 unmapped write-ins — kept for rollback
 ├── src/
 │   ├── App.tsx                   # Main app: header, search, tab routing, PRE_EVENT gate
 │   ├── PreEvent.tsx              # Pre-event landing page with countdown (Montserrat font)
@@ -147,7 +149,6 @@ CharityBowl2026/
 ├── donations.csv                 # Auto-generated: timestamp + "school","amount" rows
 ├── donations-2025.csv            # Frozen 2025 final data (not regenerated)
 ├── transactions.csv              # Auto-generated: detailed per-transaction data (GITIGNORED — contains PII)
-├── unmapped.json                 # Auto-generated: write-in entries with no mapping
 ├── rivalries.txt                 # Rivalry groupings (name + school list, blank-line separated)
 ├── conferences.txt               # Conference groupings (same format as rivalries.txt)
 ├── index.html                    # Main Vite entry point
@@ -180,8 +181,7 @@ CharityBowl2026/
 ### Key Transaction Fields
 | Field | Description |
 |-------|-------------|
-| `name_of_school/team_(dropdown)` | Dropdown selection (mixed case) |
-| `name_of_school/team_(manualentry)` | Free-text entry when "Other - Write In" selected |
+| `name_of_school/team_(dropdown)` | Dropdown selection — used directly as team name (canonical, ~150 schools) |
 | `pledged_amount` | Dollar string like "$100.00" (used for leaderboard totals) |
 | `first_name` | Donor first name |
 | `last_name` | Donor last name |
@@ -195,24 +195,14 @@ CharityBowl2026/
 
 ### Team Name Resolution (scripts/fetch_givesmart.py)
 
-For each transaction:
+For 2026, the GiveSmart campaign uses a fixed dropdown of ~150 schools with no write-in option. The dropdown value is used directly as the team name — no harmonization step is needed.
 
-1. **Read dropdown value** (`name_of_school/team_(dropdown)`)
-   - If empty/null: skip (offline/corporate match with no team)
-   - If "OTHER - WRITE IN": go to step 2
-   - Otherwise: look up in `data/harmonization.csv` (case-insensitive). Use canonical name.
+If the dropdown is empty/null, the transaction is skipped (no team).
 
-2. **Read write-in value** (`name_of_school/team_(manualentry)`)
-   - Look up in `data/harmonization.csv` (case-insensitive)
-   - If match: use canonical name
-   - If no match: **exclude from leaderboard**, add to `unmapped.json`
-
-3. **Manual additions** (`data/manual_additions.json`)
-   - Added to team totals after API data is processed
-   - For offline donations or corporate matches that need to be attributed to a team
+> **Rollback note:** The 2025 pipeline with harmonization, write-in handling, and unmapped tracking is archived in `archive/` and fully documented in the Claude memory file `project_2025_data_pipeline.md`.
 
 ### Conference Lookup
-The script reads `conferences.txt` to build a school-to-conference mapping. For each transaction, after harmonizing the team name, it looks up the conference. This is used in the transactions CSV output.
+The script reads `conferences.txt` to build a school-to-conference mapping. For each transaction, it looks up the conference for the team. This is used in the transactions CSV output.
 
 ### Environment Variables
 | Variable | Where Set | Description |
@@ -245,49 +235,12 @@ Columns:
 | `frequency` | Donation frequency (one-time, monthly, etc.) |
 | `amount` | Pledged amount for this transaction |
 | `total` | Computed total (amount x12 for monthly, x4 for quarterly, x52 for weekly; same as amount for one-time/annual) |
-| `dropdown_school_team` | Raw dropdown selection from GiveSmart |
-| `write_in_school_team` | Manual write-in text (only if dropdown was "Other - Write In") |
-| `harmonized_school_team` | Canonical team name from harmonization.csv |
+| `school_team` | Team name from GiveSmart dropdown |
 | `conference` | Conference from conferences.txt |
 | `message` | Donor message/comment |
 
 ### donations-2025.csv (static, deployed to site)
 Frozen final data from the 2025 event. Used by the 2025 results page. Not regenerated by the script.
-
-### data/harmonization.csv
-Maps raw team names (from dropdown or write-in) to canonical display names. Two columns:
-```
-Name Of School/Team,Harmonized Name
-Bama,Alabama
-University of Alabama,Alabama
-ALABAMA,Alabama
-...
-```
-Currently has 1,877 mappings covering 667 unique canonical names. Includes the 128 dropdown options plus hundreds of write-in variations from previous years. Can be edited directly on GitHub during the event.
-
-### data/manual_additions.json
-For adding offline/corporate match donations to specific teams:
-```json
-[
-  {"team": "Michigan", "amount": 500.00, "note": "Google Benevity match - John Lynch"},
-  {"team": "Georgia", "amount": 1000.00, "note": "Wells Fargo match - Kacie Rowlette"}
-]
-```
-Team names must match canonical names from the harmonization CSV.
-
-### unmapped.json (auto-generated, deployed to site)
-Auto-generated list of write-in entries that didn't match any harmonization mapping:
-```json
-[
-  {
-    "write_in": "U of Central Oklahoma",
-    "amount": "$51.32",
-    "date": "04/25/2025 21:44",
-    "donor": "Fred Jones"
-  }
-]
-```
-Check this during the event. To fix: add a row to `data/harmonization.csv` mapping the write-in to a canonical name. The next update cycle will pick it up.
 
 ### rivalries.txt / conferences.txt
 Groupings displayed in the Rivalries and Conferences tabs. Format: group name on first line, school names on subsequent lines, blank line separates groups.
@@ -313,7 +266,7 @@ School names must match the canonical names used in donations.csv.
 - Fetches `donations.csv`, `rivalries.txt`, `conferences.txt` at startup
 - Parses donations CSV into a `{school: amount}` map (aggregates duplicates)
 - First line of CSV is the "Last updated" timestamp
-- Data is loaded once via React Suspense, no client-side auto-refresh (the whole site is rebuilt every 5 min by GitHub Actions)
+- Data is loaded once via React Suspense, no client-side auto-refresh (the whole site is rebuilt every 15 min by GitHub Actions)
 
 ### URL Parameters
 - `?mode=live` — bypasses `PRE_EVENT` flag, shows leaderboard even before go-live (for testing)
@@ -323,17 +276,17 @@ School names must match the canonical names used in donations.csv.
 
 ## GitHub Actions Workflows
 
-### update-data.yml (every 5 minutes during event)
+### update-data.yml (every 15 minutes during event)
 - Cron schedule is **commented out** until go-live — uncomment when the event starts
 - Also has `workflow_dispatch` for manual triggering
 - Steps:
   1. Checkout repo
   2. Set up Python 3.12
-  3. Run `fetch_givesmart.py` (generates `donations.csv`, `transactions.csv`, `unmapped.json`)
+  3. Run `fetch_givesmart.py` (generates `donations.csv` and `transactions.csv`)
   4. Set up Node, `yarn install --frozen-lockfile`, `yarn build`
   5. Deploy `dist/` to GitHub Pages
 
-### build.yml (on push to master)
+### build.yml (on push to main)
 Builds the site and creates a GitHub release with the zipped `dist/` folder.
 
 ## Go-Live Checklist
@@ -344,9 +297,6 @@ Builds the site and creates a GitHub release with the zipped `dist/` folder.
 
 ## During the Event
 
-- **Check `unmapped.json`** periodically for new write-in entries that need mappings
-- **Add mappings** by editing `data/harmonization.csv` (can be done directly on GitHub) and pushing
-- **Add offline/corporate donations** by editing `data/manual_additions.json`
 - **"Lights out" mode**: Set `LIGHTS_OUT = true` in `src/constants.ts` to hide scores and show a dialog
 
 ## Local Development
