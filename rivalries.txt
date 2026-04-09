@@ -103,10 +103,8 @@ Arkansas State
 
 Californias
 Cal (Berkeley)
-Caltech
 Stanford
 UCLA
-UCSB
 USC (University Of Southern California)
 
 Carolinas
@@ -116,50 +114,24 @@ Clemson
 Coastal Carolina
 Duke
 East Carolina
-Furman
 North Carolina (UNC)
 North Carolina State
 South Carolina
 Wake Forest
-
-Directional Illinoise
-Eastern Illinois
-Illinois
-Illinois State
-Northern Illinois
-Southern Illinois
-
-Directional Kentuckies
-Eastern Kentucky
-Kentucky
-Western Kentucky
 
 Directional Michigans
 Central Michigan
 Eastern Michigan
 Michigan
 Michigan State
-Northern Michigan
 Western Michigan
-
-Indiana Fight
-Ball State
-Hanover College
-Indiana
-Indiana University-Southeast
-Notre Dame
-Purdue
-Southern Indiana
-Wabash College
 
 Louisiana Fight
 Louisiana Lafayette
 Louisiana Monroe
 Louisiana State (LSU)
 Louisiana Tech
-Southeastern Louisiana
 Tulane
-University of New Orleans
 
 Pan-Floridian
 Florida
@@ -184,32 +156,9 @@ Texas Tech
 UTEP
 UTSA
 
-Pennsylvania Fight
-Allegheny College
-California University of Pennsylvania
-Carnegie Mellon
-Clarion University of Pennsylvania
-Gettysburg College
-Penn State
-Pittsburgh (Pitt)
-Saint Joseph's University
-Slippery Rock
-Temple
-Villanova
-
-SUNY
-Buffalo
-SUNY Albany
-SUNY Cortland
-SUNY Geneseo
-SUNY Potsdam
-SUNY Stony Brook
-
 Virginias
-George Mason
 James Madison
 Old Dominion
-Richmond
 Virginia (UVA)
 Virginia Tech
 Washington & Lee
@@ -223,45 +172,9 @@ North Carolina (UNC)
 Northwestern
 Syracuse
 
-“I Go To School In Boston”
-Boston College
-Boston University
-Brandeis
-Harvard
-MIT
-Tufts
-UMass
-
-Depau_
-DePaul
-DePauw
-
 Idahos?
 Boise State
-Idaho
 Washington State
-
-Liberal Arts
-Allegheny College
-Alma College
-Amherst College
-Augsburg University
-Carleton College
-Central College
-Centre College
-Connecticut College
-Gettysburg College
-Gustavus Adolphus College
-Hanover College
-Hendrix College
-Kenyon College
-Knox College
-Macalester College
-McDaniel College
-Middlebury College
-Oberlin College
-Pomona College
-The College of Wooster
 
 Miamis
 Miami (FL)
@@ -274,14 +187,11 @@ Louisville
 
 Schools With Large Aviation Programs
 Auburn
-Embry-Riddle
-Florida Institute of Technology
 Kansas State
 Kent State
 Purdue
 Ohio State
 Oklahoma State
-Southern Illinois
 Western Michigan
 
 SWC
@@ -296,8 +206,6 @@ Texas Christian (TCU)
 Texas Tech
 
 War of the Washingtons
-Central Washington
-George Washington
 Washington
 Washington & Lee
 Washington State
