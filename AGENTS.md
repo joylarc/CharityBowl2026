@@ -294,6 +294,7 @@ Builds the site and creates a GitHub release with the zipped `dist/` folder.
 1. Set `PRE_EVENT = false` in `src/constants.ts` and push
 2. Uncomment the cron schedule in `.github/workflows/update-data.yml` and push
 3. Set `GIVESMART_CAMPAIGN` repository variable to the 2026 campaign name
+4. Delete `.github/workflows/deploy.yml` (the push-triggered deploy-only workflow) so it doesn't race with `update-data.yml`
 
 ## During the Event
 
