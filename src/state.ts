@@ -84,9 +84,17 @@ export function createState(): Promise<AppState> {
   const donationsPr = fetch("/donations.csv").then((res) => res.text());
   const rivalriesPr = fetch("/rivalries.txt").then((res) => res.text());
   const conferencesPr = fetch("/conferences.txt").then((res) => res.text());
-  cachedLoad = Promise.all([donationsPr, rivalriesPr, conferencesPr]).then(
-    ([donationsMod, rivalriesMod, conferencesMod]) => {
+  const schoolsPr = fetch("/schools.txt").then((res) => res.text());
+  cachedLoad = Promise.all([donationsPr, rivalriesPr, conferencesPr, schoolsPr]).then(
+    ([donationsMod, rivalriesMod, conferencesMod, schoolsMod]) => {
       const [donations, timestamp] = readDonations(donationsMod);
+      // Ensure every school from schools.txt appears in the donations map at $0
+      for (const line of schoolsMod.split("\n")) {
+        const school = line.trim();
+        if (school && !(school in donations)) {
+          donations[school] = 0;
+        }
+      }
       const rivalries = readRivalries(rivalriesMod, donations);
       const conferences = readRivalries(conferencesMod, donations);
       return { timestamp, donations, rivalries, conferences };

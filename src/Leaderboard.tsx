@@ -27,7 +27,7 @@ export default function Leaderboard({ query }: LeaderboardProps) {
         amount: donations[key],
       });
     }
-    rows.sort((a, b) => b.amount - a.amount);
+    rows.sort((a, b) => b.amount - a.amount || a.school.localeCompare(b.school));
     for (const [i, row] of rows.entries()) {
       row.rank = i + 1;
     }
