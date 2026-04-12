@@ -80,7 +80,7 @@ export default function PreEvent() {
         >
           <Box sx={{ textAlign: "center" }}>
             <Typography variant={isSmall ? "h4" : "h3"} fontWeight="bold" color="#000">
-              The 2026 Charitibundi Bowl
+              2026 Charitibundi Bowl
             </Typography>
             <Typography variant={isSmall ? "h5" : "h4"} fontWeight="bold" fontStyle="italic" color="#000" sx={{ marginTop: "1.5rem" }}>
               Coming Soon
