@@ -1,0 +1,309 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+
+const { useState, useEffect } = React;
+
+// Bluesky SVG icon (no MUI icon available)
+function BlueskyIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 600 530" fill="currentColor">
+      <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.72 40.255-67.24 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z" />
+    </svg>
+  );
+}
+
+function SocialIcons({ size = 24 }: { size?: number }) {
+  return (
+    <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+      <a href="https://www.facebook.com/NewAmericanPathways" target="_blank" style={{ color: "white" }}>
+        <FacebookIcon sx={{ fontSize: size }} />
+      </a>
+      <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={{ color: "white" }}>
+        <BlueskyIcon size={size - 4} />
+      </a>
+      <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={{ color: "white" }}>
+        <InstagramIcon sx={{ fontSize: size }} />
+      </a>
+    </Box>
+  );
+}
+
+function GreenButton({ children, href }: { children: React.ReactNode; href: string }) {
+  return (
+    <Button
+      variant="contained"
+      href={href}
+      target="_blank"
+      sx={{
+        backgroundColor: "#6ab648",
+        color: "#fff",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        borderRadius: 0,
+        "&:hover": { backgroundColor: "#5a9e3e" },
+      }}
+    >
+      {children}
+    </Button>
+  );
+}
+
+function Section({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
+  return (
+    <Box sx={{ backgroundColor: dark ? "#333" : "#444", padding: "3rem 0" }}>
+      <Container maxWidth="lg" sx={{ padding: "0 2rem" }}>
+        {children}
+      </Container>
+    </Box>
+  );
+}
+
+function GreenBar() {
+  return <Box sx={{ width: 50, height: 3, backgroundColor: "#6ab648", marginBottom: "1.5rem" }} />;
+}
+
+export default function LandingPage() {
+  const isSmall = useMediaQuery("(max-width:600px)");
+  const [totalRaised, setTotalRaised] = useState(0);
+  const [totalDonors, setTotalDonors] = useState(0);
+  const goal = 1_000_000;
+
+  useEffect(() => {
+    fetch(import.meta.env.BASE_URL + "donations.csv")
+      .then((res) => res.text())
+      .then((text) => {
+        const lines = text.split("\n");
+        lines.shift(); // skip timestamp
+        let total = 0;
+        let donors = 0;
+        for (const line of lines) {
+          const parts = line.split(",");
+          if (parts.length !== 2) continue;
+          const amount = parseFloat(parts[1].replace(/"/g, "").trim());
+          if (!isNaN(amount) && amount > 0) {
+            total += amount;
+            donors++;
+          }
+        }
+        setTotalRaised(total);
+        setTotalDonors(donors);
+      });
+  }, []);
+
+  return (
+    <Box>
+      {/* Nav bar */}
+      <Box
+        sx={{
+          backgroundColor: "#326295",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0.5rem 1.5rem",
+        }}
+      >
+        <img
+          src={import.meta.env.BASE_URL + "nap-logo-white.png"}
+          alt="New American Pathways"
+          style={{ height: 40, objectFit: "contain" }}
+        />
+        <Box sx={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+          <SocialIcons size={20} />
+          <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+        </Box>
+      </Box>
+
+      {/* Hero banner */}
+      <Box
+        sx={{
+          position: "relative",
+          height: isSmall ? "50vh" : "70vh",
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${import.meta.env.BASE_URL}IMG_1107.jpg)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          padding: "2rem",
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{ color: "#fff", fontWeight: "bold", letterSpacing: 2, textTransform: "uppercase", marginBottom: "1rem" }}
+        >
+          Prove yourself better than your rival in the name of charity
+        </Typography>
+        <Typography variant={isSmall ? "h4" : "h2"} sx={{ color: "white", fontWeight: "bold" }}>
+          EDSBS Charity Bowl
+        </Typography>
+        <Typography variant={isSmall ? "h4" : "h2"} sx={{ color: "white", fontWeight: "bold" }}>
+          April 20-24, 2026
+        </Typography>
+      </Box>
+
+      {/* Section 2: Benefiting New American Pathways */}
+      <Section dark>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
+          Benefiting New American Pathways
+        </Typography>
+        <GreenBar />
+        <Typography variant="body1" sx={{ marginBottom: "1rem", fontWeight: "bold" }}>
+          Give to New American Pathways in the name of your favorite college football team to help win the bowl -- and bragging
+          rights as the <em>most generous team</em> in the nation.
+        </Typography>
+        <Typography variant="body1" sx={{ marginBottom: "1.5rem" }}>
+          In honor of the 20th edition of the Charitibundi Bowl, we're returning the contest to its college football roots with a{" "}
+          <strong>pre-set field of teams</strong>. This field will consist of all 138 schools scheduled to field FBS programs in 2026,
+          a handful of mid-major schools with longstanding community ties to the Charity Bowl, and a few noncorporeal programs that
+          are, strictly speaking, imaginary. You can view the full list of eligible teams{" "}
+          <a href={import.meta.env.BASE_URL + "schools.html"} style={{ color: "#6ab648" }}>
+            here
+          </a>
+          .
+        </Typography>
+        <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+      </Section>
+
+      {/* Section 3: Where is the Leaderboard */}
+      <Section>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+          Where is the Leaderboard?
+        </Typography>
+        <GreenBar />
+        <Typography variant="body1">
+          Check out your team rankings and create custom leaderboards to demonstrate your superiority{" "}
+          <a href="https://www.moneycannon.org" style={{ color: "#6ab648" }}>
+            here
+          </a>
+          .
+        </Typography>
+      </Section>
+
+      {/* Section 4: What is the Charity Bowl */}
+      <Section dark>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+          What is the Leaderboard?
+        </Typography>
+        <GreenBar />
+        <Typography variant="body1">
+          You can learn almost everything there is to know about the Charity Bowl with our FAQs{" "}
+          <a href={import.meta.env.BASE_URL + "faq.html"} style={{ color: "#6ab648" }}>
+            here
+          </a>
+          .
+        </Typography>
+      </Section>
+
+      {/* Section 5: A Crippling Blow to Refugee Resettlement */}
+      <Section>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "1.5rem" }}>
+          A Crippling Blow to Refugee Resettlement
+        </Typography>
+        <Typography variant="body1" sx={{ fontStyle: "italic", color: "#aaa" }}>
+          Replace with new text from New AP
+        </Typography>
+      </Section>
+
+      {/* Section 6+7: It begins with spite + progress circle */}
+      <Box
+        sx={{
+          backgroundColor: "#555",
+          padding: "3rem 0",
+          textAlign: "center",
+        }}
+      >
+        <Container maxWidth="lg" sx={{ padding: "0 2rem" }}>
+          <Box sx={{ marginBottom: "2rem" }}>
+            <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+          </Box>
+          <Typography variant={isSmall ? "h5" : "h4"} sx={{ fontWeight: "bold", fontSize: isSmall ? "1.875rem" : "2.625rem", marginBottom: "1.5rem" }}>
+            It begins with spite and ends with hugs (and spite).
+          </Typography>
+
+          {/* Progress circle */}
+          <Box
+            sx={{
+              width: isSmall ? 320 : 450,
+              height: isSmall ? 320 : 450,
+              borderRadius: "50%",
+              border: "8px solid #666",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "2rem auto",
+              gap: "0.5rem",
+            }}
+          >
+            <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
+              Raised so far
+            </Typography>
+            <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
+              ${Math.round(totalRaised).toLocaleString()}
+            </Typography>
+            <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: "0.5rem", paddingTop: "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem" }}>
+                  Our Goal
+                </Typography>
+                <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                  ${goal.toLocaleString()}
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
+                  Total Donors
+                </Typography>
+                <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                  {totalDonors}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Text to donate */}
+      <Box sx={{ backgroundColor: "#555", textAlign: "center", padding: "2rem 0", borderTop: "3px solid #666" }}>
+        <Typography variant="h5">
+          Text <span style={{ color: "#6ab648", fontWeight: "bold" }}>charitybowl261</span> to{" "}
+          <span style={{ fontWeight: "bold" }}>91999</span>
+        </Typography>
+        <Typography variant="caption" sx={{ color: "#aaa" }}>
+          Msg & data rates may apply.
+        </Typography>
+      </Box>
+
+      {/* Footer */}
+      <Box sx={{ backgroundColor: "#333", padding: "2rem 1.5rem" }}>
+        <Container maxWidth="lg">
+          <Box sx={{ display: "flex", flexDirection: isSmall ? "column" : "row", alignItems: "center", gap: "1.5rem" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+              <img
+                src={import.meta.env.BASE_URL + "nap-logo-white.png"}
+                alt="New American Pathways"
+                style={{ height: 60, objectFit: "contain" }}
+              />
+              <a href="https://newamericanpathways.org/" target="_blank" style={{ color: "white", textDecoration: "none" }}>
+                <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                  Get to Know Us
+                </Typography>
+              </a>
+            </Box>
+            <Box sx={{ marginLeft: isSmall ? 0 : "auto" }}>
+              <SocialIcons size={18} />
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
+  );
+}

@@ -12,6 +12,7 @@ export default defineConfig({
         info: "info.html",
         results2025: "results2025.html",
         schools: "schools.html",
+        testreplacement: "testreplacement.html",
       },
     },
   },

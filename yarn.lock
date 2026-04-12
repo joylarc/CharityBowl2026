@@ -394,6 +394,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/montserrat/-/montserrat-5.2.8.tgz#4be164061dbab2b81bc803e9ceed47f5bd9c9f88"
   integrity sha512-xTjLxSbSfCycDB0pwmNsfNvdfWPaDaRQ2LC6yt/ZI7SdvXG52zHnzNYC/09mzuAuWNJyShkteutfCoDgym56hQ==
 
+"@fontsource/open-sans@^5.2.7":
+  version "5.2.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/open-sans/-/open-sans-5.2.7.tgz#dc82cec21f3995163bfb15affea937083b4701fb"
+  integrity sha512-8yfgDYjE5O0vmTPdrcjV35y4yMnctsokmi9gN49Gcsr0sjzkMkR97AnKDe6OqZh2SFkYlR28fxOvi21bYEgMSw==
+
 "@fontsource/roboto@^5.2.5":
   version "5.2.5"
   resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.2.5.tgz#b2d869075277e2cba31694951a2d355a8965d763"
