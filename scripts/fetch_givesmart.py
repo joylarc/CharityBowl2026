@@ -162,11 +162,11 @@ def main():
         if not team:
             continue
 
-        team_totals[team] = team_totals.get(team, 0) + amount
-
         # Build transaction row for detailed CSV
         frequency = (txn.get("frequency") or "").strip()
         total = compute_total(amount, frequency)
+
+        team_totals[team] = team_totals.get(team, 0) + total
         conf = conferences.get(team.lower(), "")
 
         txn_rows.append({
