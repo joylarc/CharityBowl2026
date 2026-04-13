@@ -29,14 +29,15 @@ const { Suspense, useCallback, useRef, useState, use } = React;
 interface SearchProps {
   query: string;
   setQuery: (q: string) => void;
+  placeholder?: string;
 }
-function Search({ query, setQuery }: SearchProps) {
+function Search({ query, setQuery, placeholder = "Search for a team" }: SearchProps) {
   const isSmall = useMediaQuery("(max-width:500px)");
   const ref = useRef<HTMLElement>(null);
   return (
     <Box ref={ref} sx={{ margin: isSmall ? "0 1rem 1rem 1rem" : "0 0 1rem 0" }}>
       <TextField
-        placeholder="Search for a team"
+        placeholder={placeholder}
         value={query}
         fullWidth
         onFocus={() => {
@@ -135,11 +136,11 @@ function Content() {
           <Leaderboard query={query} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index="rivalries">
-          <Search query={query} setQuery={setQuery} />
+          <Search query={query} setQuery={setQuery} placeholder="Search for a team or rivalry" />
           <Rivalries data={rivalries} query={query} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index="conferences">
-          <Search query={query} setQuery={setQuery} />
+          <Search query={query} setQuery={setQuery} placeholder="Search for a team or conference" />
           <Rivalries data={conferences} query={query} />
         </CustomTabPanel>
         <CustomTabPanel value={tab} index="head-to-head">
