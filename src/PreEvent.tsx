@@ -106,15 +106,15 @@ export default function PreEvent() {
               target="_blank"
               sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
-              Learn More
+              About New American Pathways
             </Button>
             <Button
               variant="contained"
               size="large"
-              href={import.meta.env.BASE_URL + "results2025.html"}
-              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
+              disabled
+              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" }, "&.Mui-disabled": { backgroundColor: "#000", color: "#00feff", opacity: 0.7 } }}
             >
-              2025 Final Scores
+              About Moneycannon (Coming Soon)
             </Button>
           </Box>
         </Container>
