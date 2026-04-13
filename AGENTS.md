@@ -295,6 +295,7 @@ Builds the site and creates a GitHub release with the zipped `dist/` folder.
 2. Uncomment the cron schedule in `.github/workflows/update-data.yml` and push
 3. Set `GIVESMART_CAMPAIGN` repository variable to the 2026 campaign name
 4. Delete `.github/workflows/deploy.yml` (the push-triggered deploy-only workflow) so it doesn't race with `update-data.yml`
+5. Ensure DNS for both `moneycannon.org` and `edsbscharitybowl.com` point to Cloudflare Pages
 
 ## During the Event
 

@@ -1,4 +1,4 @@
-name: Deploy to Pages (no data fetch)
+name: Deploy to Cloudflare Pages (no data fetch)
 
 on:
   push:
@@ -6,21 +6,13 @@ on:
       - main
   workflow_dispatch: {}
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: "pages"
+  group: "deploy"
   cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,11 +29,21 @@ jobs:
       - name: Build site
         run: yarn build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+      - name: Prepare edsbscharitybowl dist
+        run: |
+          cp -r dist dist-edsbs
+          cp dist-edsbs/testreplacement.html dist-edsbs/index.html
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy moneycannon to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=2026moneycannon
+
+      - name: Deploy edsbscharitybowl to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist-edsbs --project-name=2026edsbs
