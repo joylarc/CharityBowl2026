@@ -52,14 +52,14 @@ export default function Navigation({
           icon={<BarChartIcon />}
         />
         <BottomNavigationAction
-          label="Rivalries"
-          value="rivalries"
-          icon={<GroupIcon />}
-        />
-        <BottomNavigationAction
           label="Conferences"
           value="conferences"
           icon={<GroupsIcon />}
+        />
+        <BottomNavigationAction
+          label="Rivalries"
+          value="rivalries"
+          icon={<GroupIcon />}
         />
         <BottomNavigationAction
           label="Head-to-head"
@@ -86,8 +86,8 @@ export default function Navigation({
         }}
       >
         <Tab label="Leaderboard" value="leaderboard" />
-        <Tab label="Rivalries" value="rivalries" />
         <Tab label="Conferences" value="conferences" />
+        <Tab label="Rivalries" value="rivalries" />
         <Tab label="Head-to-head" value="head-to-head" />
       </Tabs>
     );
