@@ -13,7 +13,7 @@ const MID_MAJORS = new Set([
   "Marquette",
   "Villanova",
   "Washington & Lee",
-  "Washington University in Saint Louis (WashU)",
+  "Washington University in St. Louis (WashU)",
   "William & Mary",
 ]);
 
