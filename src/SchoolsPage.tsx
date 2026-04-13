@@ -1,5 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -91,10 +92,16 @@ export default function SchoolsPage() {
       <Container maxWidth="lg" sx={{ padding: isSmall ? "1rem 1.5rem" : "1.5rem 2rem" }}>
         {/* Jump links on mobile */}
         {isSmall && (
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
-            <a href="#fbs" style={{ color: "#00feff", fontWeight: "bold" }}>FBS</a>
-            <a href="#mid-majors" style={{ color: "#00feff", fontWeight: "bold" }}>Mid-Majors</a>
-            <a href="#edsbs" style={{ color: "#00feff", fontWeight: "bold" }}>EDSBS Extended Universe</a>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+            <Button variant="contained" href="#fbs" sx={{ backgroundColor: "#000", color: "#00feff", borderRadius: "24px", "&:hover": { backgroundColor: "#333" } }}>
+              FBS
+            </Button>
+            <Button variant="contained" href="#mid-majors" sx={{ backgroundColor: "#000", color: "#00feff", borderRadius: "24px", "&:hover": { backgroundColor: "#333" } }}>
+              Mid-Majors
+            </Button>
+            <Button variant="contained" href="#edsbs" sx={{ backgroundColor: "#000", color: "#00feff", borderRadius: "24px", "&:hover": { backgroundColor: "#333" } }}>
+              EDSBS Extended Universe
+            </Button>
           </Box>
         )}
 
