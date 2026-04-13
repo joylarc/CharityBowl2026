@@ -1,9 +1,11 @@
-name: Deploy to Cloudflare Pages (no data fetch)
+name: Deploy to Cloudflare Pages
 
 on:
   push:
     branches:
       - main
+  # schedule:
+  #   - cron: "*/15 * * * *"  # Every 15 minutes — uncomment when campaign is live
   workflow_dispatch: {}
 
 concurrency:
@@ -16,6 +18,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch donation data from GiveSmart
+        env:
+          GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
+          GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2025' }}
+        run: python scripts/fetch_givesmart.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
