@@ -6,7 +6,12 @@ on:
       - main
   # schedule:
   #   - cron: "*/15 * * * *"  # Every 15 minutes — uncomment when campaign is live
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      fetch_data:
+        description: "Fetch fresh data from GiveSmart API"
+        type: boolean
+        default: false
 
 concurrency:
   group: "deploy"
@@ -20,11 +25,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.fetch_data) }}
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Fetch donation data from GiveSmart
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.fetch_data) }}
         env:
           GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
           GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2025' }}
