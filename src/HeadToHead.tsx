@@ -60,8 +60,19 @@ function copyTextToClipboard(text: string): Promise<boolean> {
   );
 }
 
+function parseSchoolsFromQuery(cQuery: string, idToName: { [id: number]: string }): string[] {
+  if (!cQuery) return [];
+  const parts = cQuery.split(",");
+  // Check if it's numeric IDs (new format) or pipe-separated names (old format)
+  if (parts.length > 0 && /^\d+$/.test(parts[0])) {
+    return parts.map((id) => idToName[parseInt(id)]).filter((v) => v != null);
+  }
+  // Backwards compatibility: old pipe-separated name format
+  return cQuery.split("|").filter((v) => v !== "");
+}
+
 export default function HeadToHead() {
-  const { donations } = useAppState();
+  const { donations, schoolIndex } = useAppState();
   const ref = useRef<HTMLDivElement>(null);
   const isSmall = useMediaQuery("(max-width:500px)");
   const url = new URL(window.location.href);
@@ -73,7 +84,7 @@ export default function HeadToHead() {
     }, 3000);
   }
   const [schools, setSchoolsState] = useState<string[]>(
-    cQuery.split("|").filter((v) => v !== "")
+    parseSchoolsFromQuery(cQuery, schoolIndex.idToName)
   );
   const setSchools = useCallback(
     (q: string[]) => {
@@ -82,11 +93,11 @@ export default function HeadToHead() {
       if (q.length === 0) {
         url.searchParams.delete("c");
       } else {
-        url.searchParams.set("c", q.join("|"));
+        url.searchParams.set("c", q.map((name) => schoolIndex.nameToId[name]).join(","));
       }
       window.history.replaceState({}, "", url);
     },
-    [setSchoolsState]
+    [setSchoolsState, schoolIndex]
   );
   const rows = useMemo(() => {
     const rows = [];

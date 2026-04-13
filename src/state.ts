@@ -88,26 +88,38 @@ export function createState(): Promise<AppState> {
   cachedLoad = Promise.all([donationsPr, rivalriesPr, conferencesPr, schoolsPr]).then(
     ([donationsMod, rivalriesMod, conferencesMod, schoolsMod]) => {
       const [donations, timestamp] = readDonations(donationsMod);
-      // Ensure every school from schools.txt appears in the donations map at $0
-      for (const line of schoolsMod.split("\n")) {
-        const school = line.trim();
-        if (school && !(school in donations)) {
+      // Build school index from schools.txt line order (stable IDs for short URLs)
+      const schoolIndex: SchoolIndex = { nameToId: {}, idToName: {} };
+      const schoolLines = schoolsMod.split("\n");
+      for (let i = 0; i < schoolLines.length; i++) {
+        const school = schoolLines[i].trim();
+        if (!school) continue;
+        schoolIndex.nameToId[school] = i;
+        schoolIndex.idToName[i] = school;
+        // Ensure every school appears in the donations map at $0
+        if (!(school in donations)) {
           donations[school] = 0;
         }
       }
       const rivalries = readRivalries(rivalriesMod, donations);
       const conferences = readRivalries(conferencesMod, donations);
-      return { timestamp, donations, rivalries, conferences };
+      return { timestamp, donations, rivalries, conferences, schoolIndex };
     }
   );
   return cachedLoad;
 }
+
+export type SchoolIndex = {
+  nameToId: { [name: string]: number };
+  idToName: { [id: number]: string };
+};
 
 export interface AppState {
   timestamp: string;
   donations: DonationMap;
   rivalries: SchoolSet[];
   conferences: SchoolSet[];
+  schoolIndex: SchoolIndex;
 }
 
 export const AppContext = createContext<AppState>({
@@ -115,6 +127,7 @@ export const AppContext = createContext<AppState>({
   donations: {},
   rivalries: [],
   conferences: [],
+  schoolIndex: { nameToId: {}, idToName: {} },
 });
 
 export function useAppState(): AppState {
