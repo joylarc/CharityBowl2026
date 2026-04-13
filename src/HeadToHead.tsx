@@ -137,7 +137,7 @@ export default function HeadToHead() {
             blurOnSelect={true}
             options={options}
             renderInput={(params) => (
-              <TextField {...params} label="Add school" />
+              <TextField {...params} label="Add team" />
             )}
             value={""}
             onFocus={() => {
@@ -159,7 +159,7 @@ export default function HeadToHead() {
           <TableHead>
             <TableRow>
               <TableCell>Rank</TableCell>
-              <TableCell>School</TableCell>
+              <TableCell>Team</TableCell>
               <TableCell>Donations</TableCell>
             </TableRow>
           </TableHead>

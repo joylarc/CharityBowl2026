@@ -36,7 +36,7 @@ function Search({ query, setQuery }: SearchProps) {
   return (
     <Box ref={ref} sx={{ margin: isSmall ? "0 1rem 1rem 1rem" : "0 0 1rem 0" }}>
       <TextField
-        placeholder="Search for a school"
+        placeholder="Search for a team"
         value={query}
         fullWidth
         onFocus={() => {

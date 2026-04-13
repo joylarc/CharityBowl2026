@@ -45,7 +45,7 @@ export default function Leaderboard({ query }: LeaderboardProps) {
           <TableHead>
             <TableRow>
               <TableCell>Rank</TableCell>
-              <TableCell>School</TableCell>
+              <TableCell>Team</TableCell>
               <TableCell>Donations</TableCell>
             </TableRow>
           </TableHead>
