@@ -16,6 +16,8 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 - [ ] Confirm pre-event landing page looks correct once deployed
 - [ ] Update info page with feedback
 - [ ] Update edsbscharitybowl.com DNS to point to info page
+- [ ] Update donate link on moneycannon head-to-head page
+- [ ] Re-link logo to edsbscharitybowl.com
 
 ### Go Live
 
