@@ -13,6 +13,7 @@ export default defineConfig({
         teams: "teams.html",
         testreplacement: "testreplacement.html",
         about: "about.html",
+        faq: "faq.html",
       },
     },
   },
