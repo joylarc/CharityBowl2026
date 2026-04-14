@@ -114,7 +114,7 @@ export default function PreEvent() {
               href={import.meta.env.BASE_URL + "about.html"}
               sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
-              About Moneycannon
+              About Money Cannon
             </Button>
           </Box>
         </Container>
