@@ -111,10 +111,10 @@ export default function PreEvent() {
             <Button
               variant="contained"
               size="large"
-              disabled
-              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" }, "&.Mui-disabled": { backgroundColor: "#000", color: "#00feff", opacity: 0.7 } }}
+              href={import.meta.env.BASE_URL + "about.html"}
+              sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
-              About Moneycannon (Coming Soon)
+              About Moneycannon
             </Button>
           </Box>
         </Container>
