@@ -242,7 +242,7 @@ export default function App() {
           maxHeight: "40vh",
         }}
       >
-        <a style={{ display: "inline-block" }}>
+        <a href="https://www.edsbscharitybowl.com" style={{ display: "inline-block" }}>
           <img
             style={{ objectFit: "contain", width: "100%", height: "100%" }}
             src={import.meta.env.BASE_URL + "logo.png"}

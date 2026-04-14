@@ -237,7 +237,7 @@ export default function HeadToHead() {
           <span>Don't like what you see?</span>{" "}
           <Button
             variant="contained"
-            href="http://edsbscharitybowl.com"
+            href="https://www.edsbscharitybowl.com"
             target="_blank"
           >
             Donate
