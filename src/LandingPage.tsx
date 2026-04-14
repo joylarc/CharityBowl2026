@@ -207,7 +207,7 @@ export default function LandingPage() {
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "1.5rem" }}>
           Refugees Under Siege
         </Typography>
-        <Typography variant="body1" sx={{ marginBottom: "1.5rem" }}>
+        <Typography variant="body1" component="blockquote" sx={{ marginBottom: "1.5rem", fontStyle: "italic", borderLeft: "3px solid #6ab648", paddingLeft: "1.5rem", marginLeft: 0 }}>
           Fiscal year 2025 was a year full of change and challenges for New American Pathways and the clients we serve. Over the course of the year, there were more than 500 executive actions issued from the current administration that negatively impacted refugee and immigrant communities. Many of those fundamentally changed the work we do, resulting in us pivoting multiple times to ensure we were responding to current needs.
         </Typography>
         <a href={import.meta.env.BASE_URL + "2025impactreport.pdf"} target="_blank" style={{ color: "#6ab648", fontWeight: "bold", fontSize: "1rem" }}>
