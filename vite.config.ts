@@ -9,7 +9,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html",
-        info: "info.html",
         results2025: "results2025.html",
         teams: "teams.html",
         testreplacement: "testreplacement.html",
