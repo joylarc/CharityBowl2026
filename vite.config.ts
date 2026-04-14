@@ -13,6 +13,7 @@ export default defineConfig({
         results2025: "results2025.html",
         teams: "teams.html",
         testreplacement: "testreplacement.html",
+        about: "about.html",
       },
     },
   },
