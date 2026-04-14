@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       <Container maxWidth="md" sx={{ padding: isSmall ? "1.5rem" : "2rem" }}>
         <QA question="What am I looking at here?">
-          Money Cannon is a live-ish* updating scoreboard of EDSBS Charity Bowl (or #CharitibundiBowl) donations by team.
+          Money Cannon is a live-ish updating scoreboard of EDSBS Charity Bowl (or #CharitibundiBowl) donations by team.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
@@ -65,7 +65,7 @@ export default function AboutPage() {
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question="What if my incredibly specific grudge-match rivalry is not listed? Concierge Spencer assigned me to Louisiana Tech and I want to ensure we are crushing Louisiana-Monroe.">
-          We got you, cher. Click on over to the <strong>Head-to-Head</strong> tab. Type the team name into the search bar and click to add any team to your custom leaderboard. To remove a team, mouse over the team name and click the red trash can on the right.
+          We got you, cher. Click on over to the <strong>Head-to-Head</strong> tab. Type the team name into the search bar and click to add any team to your custom leaderboard. To remove a team, mouse over the team name and click the red trash can on the right. (On mobile, click on the team name, then click the trash can.)
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
