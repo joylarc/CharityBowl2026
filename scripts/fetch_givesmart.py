@@ -4,14 +4,14 @@ Fetches donation transactions from the GiveSmart API and writes
 donations.csv for the leaderboard.
 """
 
+import argparse
 import csv
 import json
 import os
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
-
-import subprocess
 
 # --- Configuration ---
 API_BASE = "https://fundraise.givesmart.com/api/v2"
@@ -130,13 +130,41 @@ def fetch_transactions():
 
 
 def parse_amount(amount_str):
-    """Parse a dollar amount string like '$100.00' into a float."""
+    """Parse a dollar amount string like '$100.00' into a float.
+
+    Returns the parsed float, or None if the string is not a valid amount.
+    """
     if not amount_str:
         return 0.0
-    return float(amount_str.replace("$", "").replace(",", ""))
+    try:
+        return float(amount_str.replace("$", "").replace(",", ""))
+    except ValueError:
+        return None
+
+
+def format_txn_label(txn, index):
+    """Build a short label identifying a transaction for error messages."""
+    date = txn.get("transaction_date", "")
+    first = txn.get("first_name", "")
+    last = txn.get("last_name", "")
+    parts = [f"row {index}"]
+    if first or last:
+        parts.append(f"{first} {last}".strip())
+    if date:
+        parts.append(date)
+    return ", ".join(parts)
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--error-log",
+        metavar="FILE",
+        default=None,
+        help="Write skipped-row errors to FILE instead of stdout",
+    )
+    args = parser.parse_args()
+
     if not TOKEN:
         print("ERROR: GIVESMART_API_TOKEN environment variable not set", file=sys.stderr)
         sys.exit(1)
@@ -151,20 +179,37 @@ def main():
     # Aggregate by team and build transaction rows
     team_totals = {}
     txn_rows = []
+    errors = []
 
-    for txn in transactions:
-        amount = parse_amount(txn.get("pledged_amount"))
+    for i, txn in enumerate(transactions, start=1):
+        label = format_txn_label(txn, i)
+
+        amount_raw = txn.get("pledged_amount")
+        amount = parse_amount(amount_raw)
+        if amount is None:
+            errors.append(f"[{label}] Invalid pledged_amount: {amount_raw!r}")
+            continue
         if amount <= 0:
             continue
 
         # Team name comes directly from the dropdown — no harmonization needed
         team = (txn.get("name_of_school/team_(dropdown)") or "").strip()
         if not team:
+            errors.append(f"[{label}] Missing school/team name")
             continue
 
         # Build transaction row for detailed CSV
         frequency = (txn.get("frequency") or "").strip()
         total = compute_total(amount, frequency)
+        if total == amount and frequency and frequency.lower() not in (
+            "one-time", "one time", "onetime", "",
+            "monthly", "quarterly", "every 3 months",
+            "weekly", "every week",
+            "annually", "yearly", "annual",
+        ):
+            errors.append(
+                f"[{label}] Unknown frequency {frequency!r}, treating as one-time"
+            )
 
         team_totals[team] = team_totals.get(team, 0) + total
         conf = conferences.get(team.lower(), "")
@@ -200,11 +245,22 @@ def main():
         writer.writeheader()
         writer.writerows(txn_rows)
 
+    # Report errors
+    if errors:
+        error_text = f"{len(errors)} row(s) skipped:\n" + "\n".join(errors) + "\n"
+        if args.error_log:
+            with open(args.error_log, "w", encoding="utf-8") as f:
+                f.write(error_text)
+            print(f"  Errors written to: {args.error_log}")
+        else:
+            print(f"\n{error_text}")
+
     # Summary
     print(f"\nResults:")
     print(f"  Teams on leaderboard: {len(team_totals)}")
     print(f"  Total raised: ${sum(team_totals.values()):,.2f}")
     print(f"  Transactions processed: {len(transactions)}")
+    print(f"  Rows skipped: {len(errors)}")
     print(f"  Donations CSV written to: {DONATIONS_CSV_PATH}")
     print(f"  Transactions CSV written to: {TRANSACTIONS_CSV_PATH}")
 
