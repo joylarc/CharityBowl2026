@@ -139,7 +139,7 @@ export default function LandingPage() {
           variant="body1"
           sx={{ color: "#fff", fontWeight: "bold", letterSpacing: 2, textTransform: "uppercase", marginBottom: "1rem" }}
         >
-          Prove yourself better than your rival in the name of charity
+          Prove yourself against your rivals. For good.
         </Typography>
         <Typography variant={isSmall ? "h4" : "h2"} sx={{ color: "white", fontWeight: "bold" }}>
           EDSBS Charity Bowl
@@ -152,18 +152,18 @@ export default function LandingPage() {
       {/* Section 2: Benefiting New American Pathways */}
       <Section dark>
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-          Benefiting New American Pathways
+          Benefiting <a href="https://newamericanpathways.org/" target="_blank" style={{ color: "inherit", textDecoration: "underline" }}>New American Pathways</a>
         </Typography>
         <GreenBar />
         <Typography variant="body1" sx={{ marginBottom: "1rem", fontWeight: "bold" }}>
-          Give to New American Pathways in the name of your favorite college football team to help win the bowl -- and bragging
-          rights as the <em>most generous team</em> in the nation.
+          Give to New American Pathways in the name of your favorite college football team to win the 2026 EDSBS Charity Bowl and bragging
+          rights as the most generous fanbase in the country.
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: "1.5rem" }}>
-          In honor of the 20th edition of the Charitibundi Bowl, we're returning the contest to its college football roots with a{" "}
+          In honor of the 20th edition of the #CharitibundiBowl, we're returning the contest to its college football roots with a{" "}
           <strong>pre-set field of teams</strong>. This field will consist of all 138 schools scheduled to field FBS programs in 2026,
-          a handful of mid-major schools with longstanding community ties to the Charity Bowl, and a few noncorporeal programs that
-          are, strictly speaking, imaginary. You can view the full list of eligible teams{" "}
+          a handful of mid-major schools with longstanding community ties to the Charity Bowl, and a few legacy programs that
+          are, strictly speaking, imaginary. You can view the full list of eligible teams for 2026{" "}
           <a href={import.meta.env.BASE_URL + "teams.html"} style={{ color: "#6ab648" }}>
             here
           </a>
@@ -175,22 +175,7 @@ export default function LandingPage() {
       {/* Section 3: Where is the Leaderboard */}
       <Section>
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
-          Where is the Leaderboard?
-        </Typography>
-        <GreenBar />
-        <Typography variant="body1">
-          Check out your team rankings and create custom leaderboards to demonstrate your superiority{" "}
-          <a href="https://www.moneycannon.org" style={{ color: "#6ab648" }}>
-            here
-          </a>
-          .
-        </Typography>
-      </Section>
-
-      {/* Section 4: What is the Charity Bowl */}
-      <Section dark>
-        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
-          What is the Leaderboard?
+          Where am I? What is this?
         </Typography>
         <GreenBar />
         <Typography variant="body1">
@@ -202,10 +187,25 @@ export default function LandingPage() {
         </Typography>
       </Section>
 
+      {/* Section 4: What is the Charity Bowl */}
+      <Section dark>
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+          What's the score?
+        </Typography>
+        <GreenBar />
+        <Typography variant="body1">
+          You can see how your team stacks up against its conference and non-conference rivals AND create custom rivalry leaderboards{" "}
+          <a href="https://www.moneycannon.org" style={{ color: "#6ab648" }}>
+            here
+          </a>
+          .
+        </Typography>
+      </Section>
+
       {/* Section 5: A Crippling Blow to Refugee Resettlement */}
       <Section>
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "1.5rem" }}>
-          A Crippling Blow to Refugee Resettlement
+          Refugees Under Siege
         </Typography>
         <Typography variant="body1" sx={{ fontStyle: "italic", color: "#aaa" }}>
           Replace with new text from New AP
@@ -274,7 +274,7 @@ export default function LandingPage() {
       {/* Text to donate */}
       <Box sx={{ backgroundColor: "#555", textAlign: "center", padding: "2rem 0", borderTop: "3px solid #666" }}>
         <Typography variant="h5">
-          Text <span style={{ color: "#6ab648", fontWeight: "bold" }}>charitybowl261</span> to{" "}
+          Text <span style={{ color: "#6ab648", fontWeight: "bold" }}>charitybowl26</span> to{" "}
           <span style={{ fontWeight: "bold" }}>91999</span>
         </Typography>
         <Typography variant="caption" sx={{ color: "#aaa" }}>
