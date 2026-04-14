@@ -126,6 +126,16 @@ Michigan
 Michigan State
 Western Michigan
 
+Indiana Fight
+Ball State
+Indiana
+Notre Dame
+Purdue
+
+Kentuckies
+Kentucky
+Western Kentucky
+
 Louisiana Fight
 Louisiana Lafayette
 Louisiana Monroe
@@ -156,6 +166,12 @@ Texas Tech
 UTEP
 UTSA
 
+Pennsylvania Fight
+Penn State
+Pittsburgh (Pitt)
+Temple
+Villanova
+
 Virginias
 James Madison
 Old Dominion
@@ -164,7 +180,23 @@ Virginia Tech
 Washington & Lee
 William & Mary
 
-“Actually I Went To Journalism School”
+New York's College Football Team
+Syracuse
+Buffalo
+Army
+Rutgers
+Notre Dame
+Delaware
+
+Chicago's College Football Team
+Notre Dame
+Northwestern
+Northern Illinois
+Illinois
+Western Michigan
+Wisconsin
+
+"Actually I Went To Journalism School"
 Florida
 Marquette
 Missouri (Mizzou)
@@ -210,4 +242,3 @@ Washington
 Washington & Lee
 Washington State
 Washington University in St. Louis (WashU)
-
