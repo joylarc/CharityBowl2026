@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-function QA({ question, children }: { question: string; children: React.ReactNode }) {
+function QA({ question, children }: { question: React.ReactNode; children: React.ReactNode }) {
   return (
     <Box sx={{ marginBottom: "2rem" }}>
       <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
@@ -52,12 +52,12 @@ export default function AboutPage() {
         <QA question="How do I navigate Money Cannon?">
           <>
             <p>
-              The default view is the complete leaderboard, with all 151 eligible teams for the 2026 #CharitibundiBowl. You can also view standings by conference on the Conferences tab, and use the Rivalries tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
+              The default view is the complete leaderboard, with all 151 eligible teams for the 2026 #CharitibundiBowl. You can also view standings by conference on the <strong>Conferences</strong> tab, and use the <strong>Rivalries</strong> tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
             </p>
             <p>
               Teams are listed by the names shown{" "}
               <a href="/teams.html" style={{ color: "#00bfbf" }}>here</a>
-              , and correspond to the drop-down menu options on GiveSmart. If you can't find your team, Money Cannon has a handy search bar on the Leaderboard, Conferences and Rivalries tabs.
+              , and correspond to the drop-down menu options on GiveSmart. If you can't find your team, Money Cannon has a handy search bar on the <strong>Leaderboard</strong>, <strong>Conferences</strong> and <strong>Rivalries</strong> tabs.
             </p>
           </>
         </QA>
@@ -65,13 +65,13 @@ export default function AboutPage() {
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question="What if my incredibly specific grudge-match rivalry is not listed? Concierge Spencer assigned me to Louisiana Tech and I want to ensure we are crushing Louisiana-Monroe.">
-          We got you, cher. Click on over to the Head-to-Head tab. Type the team name into the search bar and click to add any team to your custom leaderboard. To remove a team, mouse over the team name and click the red trash can on the right.
+          We got you, cher. Click on over to the <strong>Head-to-Head</strong> tab. Type the team name into the search bar and click to add any team to your custom leaderboard. To remove a team, mouse over the team name and click the red trash can on the right.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question="How can I share the good news of my team's moral and physical superiority over our lesser rivals?">
-          After creating a set of teams on the Head-to-Head tab, click the "Share This Score" button at the bottom of the page to copy a link that will go directly to your bespoke rivalry view. This url is specific to that set of teams, and will continue to work throughout the bowl as the donation totals change. If you want to add or drop teams from your custom rivalry, you'll need to generate a new link.
+          After creating a set of teams on the <strong>Head-to-Head</strong> tab, click the <strong>"Share This Score"</strong> button at the bottom of the page to copy a link that will go directly to your bespoke rivalry view. This url is specific to that set of teams, and will continue to work throughout the bowl as the donation totals change. If you want to add or drop teams from your custom rivalry, you'll need to generate a new link.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
@@ -82,15 +82,15 @@ export default function AboutPage() {
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
-        <QA question="What if, once I've created my perfect custom leaderboard, I discover my team is losing?">
+        <QA question={<>What if, once I've created my perfect custom leaderboard, I discover my team is <em>losing</em>?</>}>
           Hit that donate button to head on over to GiveSmart and make a contribution, wait about 20 minutes, then reload to see the impact your gift is having on the race. Feel free to spend your idle time while waiting for your donation to percolate through our system to brag online about your generosity of spirit.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question="I have a question not addressed here!">
-          You can get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk, manned by local Atlanta hero JacketDan. You can reach him on{" "}
-          <a href="https://bsky.app" target="_blank" style={{ color: "#00bfbf" }}>Bluesky</a>
+          You can get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk, manned by local Atlanta hero JacketDan. You can reach him{" "}
+          <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={{ color: "#00bfbf" }}>on Bluesky</a>
           {" "}or by emailing{" "}
           <a href="mailto:dannewampathway@gmail.com" style={{ color: "#00bfbf" }}>dannewampathway@gmail.com</a>.
         </QA>
