@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       <Container maxWidth="md" sx={{ padding: isSmall ? "1.5rem" : "2rem" }}>
         <QA question="What am I looking at here?">
-          Money Cannon is a live-ish updating scoreboard of EDSBS Charity Bowl (or #CharitibundiBowl) donations by team.
+          Money Cannon is a live-ish updating scoreboard of <a href="https://www.edsbscharitybowl.com" target="_blank" style={{ color: "#00bfbf" }}>EDSBS Charity Bowl</a> (or #CharitibundiBowl) donations by team.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
