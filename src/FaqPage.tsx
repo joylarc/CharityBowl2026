@@ -4,15 +4,15 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const link = { color: "#6ab648" };
+const link = { color: "#1a73e8" };
 
 function Section({ id, emoji, title, children }: { id: string; emoji?: string; title: React.ReactNode; children: React.ReactNode }) {
   return (
     <Box id={id} sx={{ marginBottom: "2.5rem", scrollMarginTop: "1rem" }}>
       <Typography variant="body1" component="div" sx={{ lineHeight: 1.8 }}>
-        <Typography variant="h6" component="span" sx={{ fontWeight: "bold" }}>
+        <span style={{ fontWeight: "bold" }}>
           {emoji && <>{emoji} </>}{title}
-        </Typography>
+        </span>
         {" "}{children}
       </Typography>
     </Box>
@@ -116,7 +116,7 @@ export default function FaqPage() {
 
         <Section id="what-am-i-looking-at" emoji="❓" title={<strong>What am I looking at here?</strong>}>
           The <a href="https://www.edsbscharitybowl.com" target="_blank" style={link}>Charity Bowl</a> (known online as the #CharitibundiBowl) is an annual fundraising contest staged by the EDSBS extended universe in aid of <a href="https://newamericanpathways.org/" target="_blank" style={link}>New American Pathways</a>, a full-service refugee resettlement nonprofit based in Atlanta. This year marks the 20th (TWENTIETH) edition of the Charity Bowl, in which teams of rival football fans compete to see who can bring in the most money to aid our most vulnerable neighbors.
-          <Box sx={{ backgroundColor: "#f5f5f5", padding: "1rem", borderLeft: "3px solid #6ab648", marginTop: "1rem" }}>
+          <Box sx={{ backgroundColor: "#f5f5f5", padding: "1rem", borderLeft: "3px solid #00feff", marginTop: "1rem" }}>
             <strong>NOTE: If you've competed in the Bowl before, you might want to read on anyway; we're celebrating the 20th edition with a brand-new leaderboard system. More about that shortly!</strong>
           </Box>
         </Section>
@@ -195,7 +195,7 @@ export default function FaqPage() {
         <Section id="where-is-link" emoji="⁉️" title={<strong>Where is the link to donate?</strong>}>
           <>
             Beginning on Monday morning, April 20, you'll see it at <a href="https://www.edsbscharitybowl.com" target="_blank" style={link}>EDSBSCharityBowl.com</a>. If you're reading this before April 20, that link is currently hidden for a reason. Here is that reason, in very large letters:
-            <Box sx={{ textAlign: "center", padding: "1.5rem", backgroundColor: "#f5f5f5", borderLeft: "3px solid #c00", marginBottom: "1rem" }}>
+            <Box sx={{ textAlign: "center", padding: "1.5rem", backgroundColor: "#f5f5f5", borderLeft: "3px solid #c00", marginTop: "1rem", marginBottom: "1rem" }}>
               <Typography variant="h6" sx={{ fontWeight: "bold", color: "#c00" }}>
                 IF YOU WANT YOUR DONATION TO COUNT TOWARDS THE 2026 CHARITY BOWL, DO NOT DONATE EARLY.
               </Typography>
@@ -328,7 +328,7 @@ export default function FaqPage() {
         <Section id="recurring-gifts" emoji="❌" title={<strong>RECURRING GIFTS DO NOT ROLL OVER.</strong>}>
           <>
             Some of you will remember from last year that, on the donation platform New AP uses, we have no way of rolling a recurring donation over from last year's contest to the 2026 campaign. Yes, it's a pain in the ass for us too. So. What does this mean for you?
-            <Box sx={{ textAlign: "center", padding: "1.5rem", backgroundColor: "#f5f5f5", borderLeft: "3px solid #c00", marginBottom: "1rem" }}>
+            <Box sx={{ textAlign: "center", padding: "1.5rem", backgroundColor: "#f5f5f5", borderLeft: "3px solid #c00", marginTop: "1rem", marginBottom: "1rem" }}>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 IF YOU SET UP A 2025 RECURRING GIFT AND WANT IT SCORED FOR 2026, YOU HAVE TO CANCEL IT AND MAKE A NEW PLEDGE.
               </Typography>
