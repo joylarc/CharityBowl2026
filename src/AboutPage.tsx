@@ -38,7 +38,7 @@ export default function AboutPage() {
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question={'"Live-ish"?'}>
-          Corporate matching gifts, paper checks, and other donations that aren't entered via the GiveSmart portal have to be added manually, which can sometimes take us a couple days depending on volume/speed of donations.
+          Online donations via GiveSmart take about 20 minutes to be reflected in the Money Cannon totals. Corporate matching gifts, paper checks, and other donations that aren't entered via the GiveSmart portal have to be added manually, which can sometimes take us a couple days depending on volume/speed of donations.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
