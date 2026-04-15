@@ -34,12 +34,13 @@ function SocialIcons({ size = 24 }: { size?: number }) {
   );
 }
 
-function GreenButton({ children, href }: { children: React.ReactNode; href: string }) {
+function GreenButton({ children, href }: { children: React.ReactNode; href?: string }) {
   return (
     <Button
       variant="contained"
       href={href}
-      target="_blank"
+      target={href ? "_blank" : undefined}
+      disabled={!href}
       sx={{
         backgroundColor: "#6ab648",
         color: "#fff",
@@ -47,6 +48,7 @@ function GreenButton({ children, href }: { children: React.ReactNode; href: stri
         textTransform: "uppercase",
         borderRadius: 0,
         "&:hover": { backgroundColor: "#5a9e3e" },
+        "&.Mui-disabled": { backgroundColor: "#6ab648", color: "#fff", opacity: 0.7 },
       }}
     >
       {children}
@@ -115,7 +117,7 @@ export default function LandingPage() {
         />
         <Box sx={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
           <SocialIcons size={20} />
-          <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+          <GreenButton>Donate Starting April 20</GreenButton>
         </Box>
       </Box>
 
@@ -169,7 +171,7 @@ export default function LandingPage() {
           </a>
           .
         </Typography>
-        <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+        <GreenButton>Donate Starting April 20</GreenButton>
       </Section>
 
       {/* Section 3: Where is the Leaderboard */}
@@ -225,7 +227,7 @@ export default function LandingPage() {
       >
         <Container maxWidth="lg" sx={{ padding: "0 2rem" }}>
           <Box sx={{ marginBottom: "2rem" }}>
-            <GreenButton href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113">Donate</GreenButton>
+            <GreenButton>Donate Starting April 20</GreenButton>
           </Box>
           <Typography variant={isSmall ? "h5" : "h4"} sx={{ fontWeight: "bold", fontSize: isSmall ? "1.875rem" : "2.625rem", marginBottom: "1.5rem" }}>
             It begins with spite and ends with hugs (and spite).

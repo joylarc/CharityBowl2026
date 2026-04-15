@@ -22,7 +22,8 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 ### Go Live
 
 - [ ] Set `PRE_EVENT = false` in `src/constants.ts` and push
-- [ ] Uncomment the cron schedule in `.github/workflows/update-data.yml` and push
+- [ ] Uncomment the cron schedule in `.github/workflows/deploy.yml` and push
+- [ ] Re-enable donate buttons on edsbscharitybowl.com: restore GiveSmart href on all `GreenButton` instances in `src/LandingPage.tsx` and change text back to "Donate"
 
 ### During the Event
 
