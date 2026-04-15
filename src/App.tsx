@@ -187,7 +187,7 @@ function Content() {
             <br />
             <strong>GO GO GO GO GO GO GO</strong>
             <br />
-            <a href="http://edsbscharitybowl.com" target="_blank">
+            <a href="https://www.edsbscharitybowl.com" target="_blank">
               EDSBSCHARITYBOWL.COM
             </a>
           </DialogContentText>
