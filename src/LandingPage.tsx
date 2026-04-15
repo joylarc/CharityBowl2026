@@ -168,7 +168,7 @@ export default function LandingPage() {
           <strong>pre-set field of teams</strong>. This field will consist of all 138 schools scheduled to field FBS programs in 2026,
           a handful of mid-major schools with longstanding community ties to the Charity Bowl, and a few legacy programs that
           are, strictly speaking, imaginary. You can view the full list of eligible teams for 2026{" "}
-          <a href={import.meta.env.BASE_URL + "teams.html"} style={{ color: "#6ab648" }}>
+          <a href="https://www.moneycannon.org/teams.html" target="_blank" style={{ color: "#6ab648" }}>
             here
           </a>
           .
