@@ -17,8 +17,7 @@ build
 # Raw API data (do not commit)
 transactions_2025.json
 
-# Generated donation data (fetched fresh each deploy)
-donations.csv
+# Transaction data contains PII — do not commit
 transactions.csv
 
 # Editor directories and files
