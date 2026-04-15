@@ -295,7 +295,7 @@ export default function FaqPage() {
 
         <Section id="no-team" emoji="❌" title={<strong>I DON'T SEE MY TEAM IN THE DROPDOWN! BIAS!! HATERS!!! P E R F I D Y</strong>}>
           <>
-            A reminder that for this 20th edition of the Bowl, we're working with a new game format. You'll need to select an FBS football team or a team from our list of selected mid-majors along with your donation.</p>
+            A reminder that for this 20th edition of the Bowl, we're working with a new game format. You'll need to select an FBS football team or a team from our list of selected mid-majors along with your donation.
             <p>If you don't see your FBS football team on the first scroll through the menu, remember to check other likely places on the list. (Look for Southern California under USC, etc.) If you still can't find your team, email Dan at our help desk at <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a> for assistance.</p>
             <p>If you don't HAVE an FBS rooting interest, first of all: Congratulations! You will easily outlive the rest of us without an emotional attachment to an upper-division college football program. And you've got an array of available options for participation in this year's Bowl:</p>
             <ul>
@@ -311,7 +311,7 @@ export default function FaqPage() {
 
         <Section id="not-updating" emoji="⁉️" title={<strong>I just donated but GiveSmart and/or Money Cannon isn't updating.</strong>}>
           <>
-            Be not afraid! The thermometer on the GiveSmart page and the leaderboards on Money Cannon are nearly always going to be under-counting team totals. There's a couple reasons for this: First, y'all donate at such a rampaging pace that every once in a while we will <em>crash</em> the GiveSmart site. Second – and this accounts for most of the lag – is <strong>monthly/quarterly pledges, corporate matching donations, and offline donations that come in from overseas/wire transfers/etc. all have to be added manually</strong> by New AP staff and Bowl volunteers. Thanks in advance for your patience, and your money, and your bosses' money.</p>
+            Be not afraid! The thermometer on the GiveSmart page and the leaderboards on Money Cannon are nearly always going to be under-counting team totals. There's a couple reasons for this: First, y'all donate at such a rampaging pace that every once in a while we will <em>crash</em> the GiveSmart site. Second – and this accounts for most of the lag – is <strong>monthly/quarterly pledges, corporate matching donations, and offline donations that come in from overseas/wire transfers/etc. all have to be added manually</strong> by New AP staff and Bowl volunteers. Thanks in advance for your patience, and your money, and your bosses' money.
             <p>(And if that scoreboard lag time makes you nervous, well, better get some friends and family to donate too, just to be sure.)</p>
           </>
         </Section>
@@ -327,7 +327,7 @@ export default function FaqPage() {
 
         <Section id="recurring-gifts" emoji="❌" title={<strong>RECURRING GIFTS DO NOT ROLL OVER.</strong>}>
           <>
-            Some of you will remember from last year that, on the donation platform New AP uses, we have no way of rolling a recurring donation over from last year's contest to the 2026 campaign. Yes, it's a pain in the ass for us too. So. What does this mean for you?</p>
+            Some of you will remember from last year that, on the donation platform New AP uses, we have no way of rolling a recurring donation over from last year's contest to the 2026 campaign. Yes, it's a pain in the ass for us too. So. What does this mean for you?
             <Box sx={{ textAlign: "center", padding: "1.5rem", backgroundColor: "#f5f5f5", borderLeft: "3px solid #c00", marginBottom: "1rem" }}>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 IF YOU SET UP A 2025 RECURRING GIFT AND WANT IT SCORED FOR 2026, YOU HAVE TO CANCEL IT AND MAKE A NEW PLEDGE.
