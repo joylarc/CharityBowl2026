@@ -178,7 +178,7 @@ export default function FaqPage() {
               ✅ You'll also have the option to make this one-time gift a quarterly or monthly recurring donation, <strong>which will earn a year's worth of multiplier points for scoring purposes.</strong> Example: You're donating $100 on behalf of Vanderbilt (Diego Pavia party!). If you make that donation a $100 quarterly pledge instead, Vanderbilt will be awarded a full year's worth of donations to their team score – in this case, $400. A $100 monthly pledge will add $1,200 to your team score. <em>(Note that recurring gifts, as well as corporate matching gifts, are not going to show up on the splash page running total right away, since we have to enter those manually.)</em>
             </Typography>
             <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-              ✅ <strong>New this year: Tell us your story!</strong><br />
+              ✅ <strong>New this year: Tell us your story!</strong>{" "}
               You'll also see a dedication box on the donation page. We'd love to hear more about what brought you to the Bowl, and why helping refugees rebuild their lives matters to you, whether you're a former refugee yourself, have loved ones in refugee communities, or simply want to beat Texas (who doesn't?). We'll be highlighting our favorite dedication messages all week long on New AP's social channels.
             </Typography>
             <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
