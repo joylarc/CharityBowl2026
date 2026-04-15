@@ -35,22 +35,24 @@ function SocialIcons({ size = 24 }: { size?: number }) {
 }
 
 function GreenButton({ children, href }: { children: React.ReactNode; href?: string }) {
+  const sx = {
+    backgroundColor: "#6ab648",
+    color: "#fff",
+    fontWeight: "bold",
+    textTransform: "uppercase" as const,
+    borderRadius: 0,
+    "&:hover": { backgroundColor: href ? "#5a9e3e" : "#6ab648" },
+    opacity: href ? 1 : 0.7,
+  };
+  if (href) {
+    return (
+      <Button variant="contained" href={href} target="_blank" sx={sx}>
+        {children}
+      </Button>
+    );
+  }
   return (
-    <Button
-      variant="contained"
-      href={href}
-      target={href ? "_blank" : undefined}
-      disabled={!href}
-      sx={{
-        backgroundColor: "#6ab648",
-        color: "#fff",
-        fontWeight: "bold",
-        textTransform: "uppercase",
-        borderRadius: 0,
-        "&:hover": { backgroundColor: "#5a9e3e" },
-        "&.Mui-disabled": { backgroundColor: "#6ab648", color: "#fff", opacity: 0.7 },
-      }}
-    >
+    <Button variant="contained" disabled sx={sx}>
       {children}
     </Button>
   );
