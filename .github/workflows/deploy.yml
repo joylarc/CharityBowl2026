@@ -44,11 +44,22 @@ jobs:
       - name: Build site
         run: yarn build
 
-      - name: Prepare edsbscharitybowl dist
+      - name: Prepare site distributions
         run: |
-          cp -r dist dist-edsbs
-          cp dist-edsbs/testreplacement.html dist-edsbs/index.html
+          # Build edsbs dist first (before removing files from dist)
+          mkdir dist-edsbs
+          cp -r dist/assets dist-edsbs/
+          cp dist/testreplacement.html dist-edsbs/index.html
+          cp dist/faq.html dist-edsbs/
+          cp dist/2025impactreport.pdf dist-edsbs/
+          cp dist/donations.csv dist-edsbs/
+          cp dist/helmet.svg dist-edsbs/
+          cp dist/logo.png dist-edsbs/
+          cp dist/nap-logo-white.png dist-edsbs/
+          # Clean moneycannon dist (remove edsbs-only pages)
           rm -f dist/testreplacement.html
+          rm -f dist/faq.html
+          rm -f dist/2025impactreport.pdf
 
       - name: Deploy moneycannon to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

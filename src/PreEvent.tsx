@@ -111,10 +111,11 @@ export default function PreEvent() {
             <Button
               variant="contained"
               size="large"
-              href={import.meta.env.BASE_URL + "about.html"}
+              href="https://www.edsbscharitybowl.com/faq.html"
+              target="_blank"
               sx={{ backgroundColor: "#000", color: "#00feff", "&:hover": { backgroundColor: "#333" } }}
             >
-              About Money Cannon
+              About #CharitibundiBowl
             </Button>
           </Box>
         </Container>
