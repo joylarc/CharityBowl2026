@@ -23,8 +23,8 @@ Colorado
 Colorado State
 
 Commonwealth Cup
-Virginia Tech
 Virginia (UVA)
+Virginia Tech
 
 Egg Charity Bowl
 Mississippi (Ole Miss)
@@ -35,8 +35,8 @@ Georgia Southern
 Georgia State
 
 Georgia-Georgia Tech
-Georgia Tech
 Georgia
+Georgia Tech
 
 Holy War
 BYU
@@ -55,8 +55,8 @@ Kansas
 Kansas State
 
 Marshall-WV
-West Virginia
 Marshall
+West Virginia
 
 New Mexico
 New Mexico
@@ -180,19 +180,19 @@ Virginia Tech
 Washington & Lee
 William & Mary
 
-New York's College Football Team
-Syracuse
-Buffalo
+New York's College Football Team™
 Army
-Rutgers
-Notre Dame
+Buffalo
 Delaware
-
-Chicago's College Football Team
 Notre Dame
-Northwestern
-Northern Illinois
+Rutgers
+Syracuse
+
+Chicago's College Football Team™
 Illinois
+Northern Illinois
+Northwestern
+Notre Dame
 Western Michigan
 Wisconsin
 
@@ -221,9 +221,9 @@ Schools With Large Aviation Programs
 Auburn
 Kansas State
 Kent State
-Purdue
 Ohio State
 Oklahoma State
+Purdue
 Western Michigan
 
 SWC
