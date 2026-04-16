@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       <Container maxWidth="md" sx={{ padding: isSmall ? "1.5rem" : "2rem" }}>
         <QA question="What am I looking at here?">
-          Money Cannon is a live-ish updating scoreboard of <a href="https://www.edsbscharitybowl.com" target="_blank" style={{ color: "#00bfbf" }}>EDSBS Charity Bowl</a> (or #CharitibundiBowl) donations by team.
+          Money Cannon is a live-ish updating scoreboard of <a href="https://www.edsbscharitybowl.com" target="_blank" style={{ color: "#1a73e8" }}>EDSBS Charity Bowl</a> (or #CharitibundiBowl) donations by team.
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
@@ -56,7 +56,7 @@ export default function AboutPage() {
             </p>
             <p>
               Teams are listed by the names shown{" "}
-              <a href="/teams.html" style={{ color: "#00bfbf" }}>here</a>
+              <a href="/teams.html" style={{ color: "#1a73e8" }}>here</a>
               , and correspond to the drop-down menu options on GiveSmart. If you can't find your team, Money Cannon has a handy search bar on the <strong>Leaderboard</strong>, <strong>Conferences</strong> and <strong>Rivalries</strong> tabs.
             </p>
           </>
@@ -90,9 +90,9 @@ export default function AboutPage() {
 
         <QA question="I have a question not addressed here!">
           You can get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk, manned by local Atlanta hero JacketDan. You can reach him{" "}
-          <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={{ color: "#00bfbf" }}>on Bluesky</a>
+          <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={{ color: "#1a73e8" }}>on Bluesky</a>
           {" "}or by emailing{" "}
-          <a href="mailto:dannewampathway@gmail.com" style={{ color: "#00bfbf" }}>dannewampathway@gmail.com</a>.
+          <a href="mailto:dannewampathway@gmail.com" style={{ color: "#1a73e8" }}>dannewampathway@gmail.com</a>.
         </QA>
       </Container>
     </Box>
