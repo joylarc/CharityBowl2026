@@ -53,11 +53,13 @@ export default function FaqPage() {
     <Box sx={{ minHeight: "100vh", backgroundColor: "#fff" }}>
       {/* Header */}
       <Box sx={{ backgroundColor: "#00feff", textAlign: "center", padding: isSmall ? "1.5rem" : "2rem" }}>
-        <img
-          src={import.meta.env.BASE_URL + "logo.png"}
-          alt="Charity Bowl 2026"
-          style={{ maxWidth: isSmall ? "200px" : "300px", height: "auto" }}
-        />
+        <a href="https://www.edsbscharitybowl.com">
+          <img
+            src={import.meta.env.BASE_URL + "logo.png"}
+            alt="Charity Bowl 2026"
+            style={{ maxWidth: isSmall ? "200px" : "300px", height: "auto" }}
+          />
+        </a>
       </Box>
       <Box sx={{ textAlign: "center", padding: isSmall ? "1rem" : "1.5rem" }}>
         <Typography variant={isSmall ? "h5" : "h4"} fontWeight="bold" color="#000">
