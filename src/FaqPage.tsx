@@ -38,6 +38,17 @@ function TOCLink({ href, children }: { href: string; children: React.ReactNode }
 export default function FaqPage() {
   const isSmall = useMediaQuery("(max-width:600px)");
 
+  React.useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.slice(1);
+      // Delay to let page render before scrolling
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
+      }, 100);
+    }
+  }, []);
+
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "#fff" }}>
       {/* Header */}
