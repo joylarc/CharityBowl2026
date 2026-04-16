@@ -371,6 +371,17 @@ export default function FaqPage() {
         </Typography>
 
       </Container>
+
+      {/* Footer: cyan bar with logo linked to edsbscharitybowl.com */}
+      <Box sx={{ backgroundColor: "#00feff", textAlign: "center", padding: isSmall ? "1.5rem" : "2rem" }}>
+        <a href="https://www.edsbscharitybowl.com">
+          <img
+            src={import.meta.env.BASE_URL + "logo.png"}
+            alt="Charity Bowl 2026"
+            style={{ maxWidth: isSmall ? "200px" : "300px", height: "auto" }}
+          />
+        </a>
+      </Box>
     </Box>
   );
 }
