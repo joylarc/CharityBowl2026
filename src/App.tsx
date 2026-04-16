@@ -85,7 +85,7 @@ function Content() {
   const theme = useTheme();
   const isSmall = useMediaQuery("(max-width:500px)");
   const [tab, setTab] = useState<TabType>(tQuery);
-  const { rivalries, conferences, timestamp } = useAppState();
+  const { rivalries, conferences } = useAppState();
   const [showLightsOutDialog, setShowLightsOutDialog] = useState(LIGHTS_OUT);
   const [query, setQueryState] = useState<string>(
     url.searchParams.get("q") || ""
@@ -122,13 +122,28 @@ function Content() {
       >
         <Box
           sx={{
-            textAlign: "right",
+            textAlign: "center",
             width: "100%",
-            fontSize: "0.8rem",
-            color: theme.palette.error.main,
+            padding: "0.75rem 0",
           }}
         >
-          <strong>Last updated: {timestamp}</strong>
+          <a
+            href="/about.html"
+            style={{
+              display: "inline-block",
+              color: "#666",
+              textDecoration: "none",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              textTransform: "uppercase",
+              letterSpacing: "0.02857em",
+              padding: "0.5rem 1.25rem",
+              border: "1px solid #999",
+              borderRadius: "4px",
+            }}
+          >
+            About Money Cannon
+          </a>
         </Box>
         <Navigation tab={tab} setTab={setTab} />
         <CustomTabPanel value={tab} index="leaderboard">
