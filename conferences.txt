@@ -85,17 +85,6 @@ Sam Houston State
 UTEP
 Western Kentucky
 
-EDSBS Extended Universe
-Hand in the Dirt University
-Jetski Police Academy
-Make Spencer Eat Cheese University
-Naropa University
-Pay Them Kids Their Money
-Protect Trans Kids University
-Soviet Cat University
-University of Night Ham
-Vacation Bible School
-
 Independent
 Army
 Connecticut (UConn)
@@ -177,3 +166,14 @@ Villanova
 Washington & Lee
 Washington University in St. Louis (WashU)
 William & Mary
+
+EDSBS Extended Universe
+Hand in the Dirt University
+Jetski Police Academy
+Make Spencer Eat Cheese University
+Naropa University
+Pay Them Kids Their Money
+Protect Trans Kids University
+Soviet Cat University
+University of Night Ham
+Vacation Bible School
