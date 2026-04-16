@@ -82,7 +82,6 @@ function DialogBody(props: PaperProps) {
 function Content() {
   const url = new URL(window.location.href);
   const tQuery = (url.searchParams.get("t") || "leaderboard") as TabType;
-  const theme = useTheme();
   const isSmall = useMediaQuery("(max-width:500px)");
   const [tab, setTab] = useState<TabType>(tQuery);
   const { rivalries, conferences } = useAppState();
