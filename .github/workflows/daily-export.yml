@@ -23,9 +23,15 @@ jobs:
           GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2026' }}
         run: python scripts/fetch_givesmart.py
 
-      - name: Upload transactions.csv as artifact
+      - name: Rename with timestamp
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d-%H%M")
+          mv transactions.csv "transactions_${TIMESTAMP}.csv"
+          echo "FILENAME=transactions_${TIMESTAMP}.csv" >> $GITHUB_ENV
+
+      - name: Upload transactions as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: transactions-${{ github.run_id }}
-          path: transactions.csv
+          name: ${{ env.FILENAME }}
+          path: ${{ env.FILENAME }}
           retention-days: 30
