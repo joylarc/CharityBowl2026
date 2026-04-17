@@ -23,6 +23,7 @@ REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 DONATIONS_CSV_PATH = os.path.join(REPO_ROOT, "donations.csv")
 TRANSACTIONS_CSV_PATH = os.path.join(REPO_ROOT, "transactions.csv")
 CONFERENCES_PATH = os.path.join(REPO_ROOT, "conferences.txt")
+MANUAL_ADDITIONS_PATH = os.path.join(REPO_ROOT, "manual_additions.csv")
 
 # How long to wait for the async report (seconds)
 REPORT_TIMEOUT = 600
@@ -65,6 +66,32 @@ def compute_total(amount, frequency):
         return amount
     # Unknown frequency — return the single amount
     return amount
+
+
+def load_manual_additions():
+    """Load manual_additions.csv and return list of {team, amount, type, note} dicts."""
+    additions = []
+    if not os.path.exists(MANUAL_ADDITIONS_PATH):
+        return additions
+    with open(MANUAL_ADDITIONS_PATH, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            team = row.get("team", "").strip()
+            amount_str = row.get("amount", "").strip()
+            if not team or not amount_str:
+                continue
+            try:
+                amount = float(amount_str.replace("$", "").replace(",", ""))
+            except ValueError:
+                print(f"Warning: invalid amount '{amount_str}' for team '{team}' in manual_additions.csv")
+                continue
+            additions.append({
+                "team": team,
+                "amount": amount,
+                "type": row.get("type", "").strip(),
+                "note": row.get("note", "").strip(),
+            })
+    return additions
 
 
 def api_get(url, params=None):
@@ -226,6 +253,27 @@ def main():
             "conference": conf,
             "message": txn.get("message") or txn.get("comment") or "",
         })
+
+    # Merge manual additions (offline gifts, corporate matches)
+    manual = load_manual_additions()
+    for entry in manual:
+        team_totals[entry["team"]] = team_totals.get(entry["team"], 0) + entry["amount"]
+        # Add to transaction rows for the combined export
+        conf = conferences.get(entry["team"].lower(), "")
+        txn_rows.append({
+            "transaction_date": "",
+            "first_name": "",
+            "last_name": "",
+            "zip_code": "",
+            "frequency": "",
+            "amount": f"{entry['amount']:.2f}",
+            "total": f"{entry['amount']:.2f}",
+            "school_team": entry["team"],
+            "conference": conf,
+            "message": f"[{entry['type']}] {entry['note']}".strip(),
+        })
+    if manual:
+        print(f"  Manual additions merged: {len(manual)} entries")
 
     # Write donations.csv
     timestamp = datetime.now(timezone.utc).strftime("%m-%d-%Y %H:%M UTC")
