@@ -1,20 +1,18 @@
 # CharityBowl 2026
 
-Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatically pulls donation data from GiveSmart every 5 minutes and deploys to GitHub Pages.
+Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatically pulls donation data from GiveSmart every 15 minutes and deploys to Cloudflare Pages.
 
 ## To Do
 
 - [x] Add `GIVESMART_API_TOKEN` as a repository secret (Settings > Secrets and variables > Actions)
-- [ ] Add `GIVESMART_CAMPAIGN` as a repository variable with this year's campaign name
-- [x] Enable GitHub Pages (Settings > Pages > Source: GitHub Actions)
+- [x] Add `GIVESMART_CAMPAIGN` as a repository variable with this year's campaign name
 - [x] Replace `public/logo.png` with the 2026 event logo
-- [ ] Update donation link (`edsbscharitybowl.com`) in `src/App.tsx` and `src/HeadToHead.tsx`
-- [ ] Update `rivalries.txt` if rivalry matchups change for 2026
+- [x] Update donation link (`edsbscharitybowl.com`) in `src/App.tsx` and `src/HeadToHead.tsx`
+- [x] Update `rivalries.txt` if rivalry matchups change for 2026
 - [x] Update `conferences.txt` if conference groupings change for 2026
-- [ ] Review `data/harmonization.csv` — add any new team name mappings needed for 2026
-- [x] Update DNS to point custom domain to GitHub Pages
-- [ ] Confirm pre-event landing page looks correct once deployed
-- [ ] Update info page with feedback
+- [x] Update DNS to point custom domain to Cloudflare Pages
+- [x] Confirm pre-event landing page looks correct once deployed
+- [x] Update info page (replaced with FAQ page)
 - [x] Update edsbscharitybowl.com DNS to point to landing page
 - [x] Update donate link on moneycannon head-to-head page
 - [x] Re-link logo to edsbscharitybowl.com
@@ -31,9 +29,7 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 
 ### During the Event
 
-- [ ] Check `unmapped.json` periodically for new write-in entries that need mappings
-- [ ] Add new mappings to `data/harmonization.csv` as needed
-- [ ] Add offline/corporate match donations to `data/manual_additions.json` as they come in
+- [ ] Add offline/corporate match donations to `manual_additions.csv` as they come in
 - [ ] When ready for "lights out" mode, set `LIGHTS_OUT = true` in `src/constants.ts`
 
 ## Local Development
