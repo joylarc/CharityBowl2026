@@ -30,7 +30,7 @@ function SectionHeader({ title, id }: { title: string; id?: string }) {
 function TOCLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li style={{ marginBottom: "0.25rem" }}>
-      <a href={href} style={link}>{children}</a>
+      <a href={href} style={{ ...link, fontWeight: "bold" }}>{children}</a>
     </li>
   );
 }
