@@ -1,4 +1,4 @@
-name: Daily transaction export to Google Drive
+name: Daily transaction export
 
 on:
   schedule:
@@ -23,40 +23,9 @@ jobs:
           GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2026' }}
         run: python scripts/fetch_givesmart.py
 
-      - name: Install Google Drive dependencies
-        run: pip install google-auth google-api-python-client
-
-      - name: Upload transactions.csv to Google Drive
-        env:
-          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-        run: |
-          python3 -c "
-          import json, os
-          from datetime import datetime, timezone
-          from google.oauth2 import service_account
-          from googleapiclient.discovery import build
-          from googleapiclient.http import MediaFileUpload
-
-          # Authenticate
-          key_json = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_KEY'])
-          creds = service_account.Credentials.from_service_account_info(
-              key_json, scopes=['https://www.googleapis.com/auth/drive.file']
-          )
-          service = build('drive', 'v3', credentials=creds)
-
-          folder_id = '1WPMJK6Uwcp-O_ap1gk3nJNsphhJiO2G2'
-          timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H%M')
-          filename = f'transactions_{timestamp}.csv'
-
-          media = MediaFileUpload('transactions.csv', mimetype='text/csv')
-          file_metadata = {
-              'name': filename,
-              'parents': [folder_id],
-          }
-          uploaded = service.files().create(
-              body=file_metadata,
-              media_body=media,
-              fields='id,name',
-          ).execute()
-          print(f'Uploaded {uploaded[\"name\"]} (ID: {uploaded[\"id\"]})')
-          "
+      - name: Upload transactions.csv as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: transactions-${{ github.run_id }}
+          path: transactions.csv
+          retention-days: 30
