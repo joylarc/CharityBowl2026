@@ -25,7 +25,7 @@ jobs:
 
       - name: Rename with timestamp
         run: |
-          TIMESTAMP=$(date -u +"%Y-%m-%d-%H%M")
+          TIMESTAMP=$(TZ='America/New_York' date +"%Y-%m-%d-%H%M")
           mv transactions.csv "transactions_${TIMESTAMP}.csv"
           echo "FILENAME=transactions_${TIMESTAMP}.csv" >> $GITHUB_ENV
 
