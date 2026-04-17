@@ -31,6 +31,7 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 
 - [ ] Add offline/corporate match donations to `manual_additions.csv` as they come in
 - [ ] When ready for "lights out" mode, set `LIGHTS_OUT = true` in `src/constants.ts`
+- [ ] Confirm lights-out dialog text and timing are correct before activating
 
 ## Local Development
 
