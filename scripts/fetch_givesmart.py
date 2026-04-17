@@ -90,6 +90,11 @@ def load_manual_additions():
                 "amount": amount,
                 "type": row.get("type", "").strip(),
                 "note": row.get("note", "").strip(),
+                "first_name": row.get("first_name", "").strip(),
+                "last_name": row.get("last_name", "").strip(),
+                "email": row.get("email", "").strip(),
+                "date": row.get("date", "").strip(),
+                "message": row.get("message", "").strip(),
             })
     return additions
 
@@ -262,17 +267,17 @@ def main():
         # Add to transaction rows for the combined export
         conf = conferences.get(entry["team"].lower(), "")
         txn_rows.append({
-            "transaction_date": "",
-            "first_name": "",
-            "last_name": "",
+            "transaction_date": entry.get("date", ""),
+            "first_name": entry.get("first_name", ""),
+            "last_name": entry.get("last_name", ""),
             "zip_code": "",
-            "email": "",
+            "email": entry.get("email", ""),
             "frequency": "",
             "amount": f"{entry['amount']:.2f}",
             "total": f"{entry['amount']:.2f}",
             "school_team": entry["team"],
             "conference": conf,
-            "message": f"[{entry['type']}] {entry['note']}".strip(),
+            "message": entry.get("message", ""),
         })
     if manual:
         print(f"  Manual additions merged: {len(manual)} entries")
