@@ -1,0 +1,62 @@
+name: Test GiveSmart field names
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch one transaction and print field names
+        env:
+          GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
+        run: |
+          python3 -c "
+          import json, subprocess, time
+
+          TOKEN = '${{ secrets.GIVESMART_API_TOKEN }}'
+          BASE = 'https://fundraise.givesmart.com/api/v2'
+
+          def api_get(url):
+              result = subprocess.run([
+                  'curl', '-s', '--fail-with-body',
+                  '-H', f'Authorization: Token token=\"{TOKEN}\"',
+                  '-H', 'Accept: application/json',
+                  '-H', 'Content-type: application/json',
+                  url,
+              ], capture_output=True, text=True)
+              return result.stdout
+
+          # Request report for 2025 campaign
+          from urllib.parse import urlencode
+          params = urlencode({'campaign': 'Charity Bowl 2025', 'status': 'collected,pending'})
+          text = api_get(f'{BASE}/reports/transactions.json?{params}')
+          report_id = json.loads(text)['id']
+          print(f'Report ID: {report_id}')
+
+          # Poll for results
+          for i in range(30):
+              print(f'Polling... ({i*10}s)')
+              text = api_get(f'{BASE}/reports/results.json?id={report_id}')
+              text = text.strip()
+              if text.startswith('Request#') and 'not yet complete' in text:
+                  time.sleep(10)
+                  continue
+              data = json.loads(text)
+              if isinstance(data, list) and len(data) > 0:
+                  print(f'Got {len(data)} transactions')
+                  print()
+                  print('=== ALL FIELD NAMES ===')
+                  for key in sorted(data[0].keys()):
+                      print(f'  {key}: {repr(data[0][key])}')
+                  break
+              time.sleep(10)
+          "
