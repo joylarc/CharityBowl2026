@@ -246,6 +246,7 @@ def main():
             "first_name": txn.get("first_name", ""),
             "last_name": txn.get("last_name", ""),
             "zip_code": txn.get("zip") or txn.get("zip_code") or txn.get("postal_code") or "",
+            "email": txn.get("email") or txn.get("email_address") or "",
             "frequency": frequency,
             "amount": f"{amount:.2f}",
             "total": f"{total:.2f}",
@@ -265,6 +266,7 @@ def main():
             "first_name": "",
             "last_name": "",
             "zip_code": "",
+            "email": "",
             "frequency": "",
             "amount": f"{entry['amount']:.2f}",
             "total": f"{entry['amount']:.2f}",
@@ -284,7 +286,7 @@ def main():
 
     # Write transactions.csv
     txn_fields = [
-        "transaction_date", "first_name", "last_name", "zip_code",
+        "transaction_date", "first_name", "last_name", "zip_code", "email",
         "frequency", "amount", "total",
         "school_team", "conference", "message",
     ]
