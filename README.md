@@ -15,9 +15,13 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 - [x] Update DNS to point custom domain to GitHub Pages
 - [ ] Confirm pre-event landing page looks correct once deployed
 - [ ] Update info page with feedback
-- [ ] Update edsbscharitybowl.com DNS to point to info page
-- [ ] Update donate link on moneycannon head-to-head page
-- [ ] Re-link logo to edsbscharitybowl.com
+- [x] Update edsbscharitybowl.com DNS to point to landing page
+- [x] Update donate link on moneycannon head-to-head page
+- [x] Re-link logo to edsbscharitybowl.com
+
+### Known Limitations
+
+- **edsbscharitybowl.com non-www subpages don't work.** GoDaddy forwarding redirects `edsbscharitybowl.com` to `www.edsbscharitybowl.com` but does not preserve subpage paths (e.g., `edsbscharitybowl.com/faq.html` fails). Always share links with `www.` prefix. Not fixable without moving DNS away from GoDaddy.
 
 ### Go Live
 
