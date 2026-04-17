@@ -18,6 +18,7 @@ const MID_MAJORS = new Set([
 ]);
 
 const EDSBS_EXTENDED_UNIVERSE = new Set([
+  "Ireland Rugby",
   "Jetski Police Academy",
   "Make Spencer Eat Cheese University",
   "Naropa University",
