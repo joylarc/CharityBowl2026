@@ -27,11 +27,19 @@ jobs:
         run: |
           TIMESTAMP=$(TZ='America/New_York' date +"%Y-%m-%d-%H%M")
           mv transactions.csv "transactions_${TIMESTAMP}.csv"
-          echo "FILENAME=transactions_${TIMESTAMP}.csv" >> $GITHUB_ENV
+          mv donations.csv "donations_${TIMESTAMP}.csv"
+          echo "TIMESTAMP=${TIMESTAMP}" >> $GITHUB_ENV
 
       - name: Upload transactions as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FILENAME }}
-          path: ${{ env.FILENAME }}
+          name: transactions_${{ env.TIMESTAMP }}
+          path: transactions_${{ env.TIMESTAMP }}.csv
+          retention-days: 30
+
+      - name: Upload donations as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: donations_${{ env.TIMESTAMP }}
+          path: donations_${{ env.TIMESTAMP }}.csv
           retention-days: 30
