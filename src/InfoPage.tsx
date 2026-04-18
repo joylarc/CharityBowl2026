@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const { useState, useEffect } = React;
 
-const EVENT_START = new Date("2026-04-20T10:00:00-05:00");
+const EVENT_START = new Date("2026-04-20T10:00:00-04:00");
 
 function getTimeLeft() {
   const now = Date.now();
