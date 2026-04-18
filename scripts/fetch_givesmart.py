@@ -226,7 +226,7 @@ def main():
             continue
 
         # Team name comes directly from the dropdown — no harmonization needed
-        team = (txn.get("name_of_school/team_(dropdown)") or "").strip()
+        team = (txn.get("name_of_team_(dropdown)") or txn.get("name_of_school/team_(dropdown)") or "").strip()
         if not team:
             errors.append(f"[{label}] Missing school/team name")
             continue
