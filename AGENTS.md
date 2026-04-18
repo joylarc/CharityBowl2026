@@ -2,9 +2,11 @@
 
 ## What This Project Is
 
-A live donation leaderboard for the **CharitiBundi Bowl**, a college football charity fundraising event benefiting **New American Pathways**, an Atlanta-based refugee resettlement nonprofit. Donors contribute through GiveSmart in the name of college football teams over 7-10 days. The website shows real-time donation totals per team, updated automatically every 5 minutes during the event.
+A live donation leaderboard for the **CharitiBundi Bowl**, a college football charity fundraising event benefiting **New American Pathways**, an Atlanta-based refugee resettlement nonprofit. Donors contribute through GiveSmart in the name of college football teams over 7-10 days. The website shows real-time donation totals per team, updated automatically every 15 minutes during the event.
 
-The site is hosted at **moneycannon.org** via GitHub Pages with a custom domain.
+Two sites are deployed from this repo:
+- **moneycannon.org** — the leaderboard site (via Cloudflare Pages, project `2026moneycannon`)
+- **www.edsbscharitybowl.com** — the donation landing page (via Cloudflare Pages, project `2026edsbs`)
 
 ## Architecture
 
@@ -16,66 +18,68 @@ Every 15 minutes (during event):
   Python script (scripts/fetch_givesmart.py)
       |-- Calls GiveSmart Transactions API (async 2-step pattern)
       |-- Team name taken directly from dropdown (no harmonization needed)
+      |-- Merges manual_additions.csv (offline gifts, corporate matches)
       |-- Writes donations.csv (leaderboard data)
       |-- Writes transactions.csv (detailed per-transaction data, NOT deployed)
+      |-- Writes stats.json (unique donor count)
       v
   Vite builds the React app (yarn build)
       |
       v
-  Deploys static files to GitHub Pages at moneycannon.org
+  Deploys to two Cloudflare Pages projects:
+    - moneycannon.org (leaderboard, about, teams, 2025 results)
+    - edsbscharitybowl.com (landing page, FAQ, impact report)
 ```
 
 The frontend is a React + TypeScript + Vite + MUI app. It reads `donations.csv` at page load and renders the leaderboard client-side. There is no backend server — the site is entirely static files.
 
 ## Hosting & Domain
 
-- **GitHub Pages** serves the site from the `dist/` folder
-- **Custom domain:** moneycannon.org (configured via `public/CNAME`)
-- **Base path:** `/` in vite.config.ts (since we use a custom domain, not the `username.github.io/repo` path)
+- **Cloudflare Pages** serves both sites from the `dist/` folder (two projects, one build)
+- **Base path:** `/` in vite.config.ts
+- The deploy workflow builds once, then creates separate distributions for each domain
 - All asset references use `import.meta.env.BASE_URL + "filename"` for base path compatibility
 
-### DNS Configuration (Gandi.net)
+### DNS Configuration
 
-The domain `moneycannon.org` is managed at Gandi.net. The following DNS records are required:
+**moneycannon.org** (managed at Gandi.net):
+- `www` CNAME → `2026moneycannon.pages.dev.`
+- Apex domain forwarding configured at Gandi
 
-| Type | Name | Value | TTL |
-|------|------|-------|-----|
-| A | @ | 185.199.108.153 | 10800 |
-| A | @ | 185.199.109.153 | 10800 |
-| A | @ | 185.199.110.153 | 10800 |
-| A | @ | 185.199.111.153 | 10800 |
-| CNAME | www | joylarc.github.io. | 10800 |
-
-**Important notes:**
-- The four A records point the apex domain (moneycannon.org) to GitHub Pages' IPs
-- The `www` CNAME must use a trailing dot (`joylarc.github.io.`) to prevent Gandi from appending `.moneycannon.org` to it
-- Do not delete the existing MX/mail-related DNS records (gm1._domainkey, gm2._domainkey, gm3._domainkey CNAME records for Gandi mail)
-- **Custom domain in GitHub Pages Settings is set to `www.moneycannon.org`** — GitHub handles redirecting the apex to www and provisions certs for both
-- "Enforce HTTPS" should be checked in GitHub repo Settings > Pages (it gets unchecked automatically when the custom domain is changed — re-enable after cert provisioning)
-- After DNS changes, propagation can take up to the TTL (10800s = 3 hours)
+**edsbscharitybowl.com** (managed at GoDaddy):
+- `www` CNAME → `2026edsbs.pages.dev`
+- Apex domain forwarding → `www.edsbscharitybowl.com` (permanent 301)
+- **Known limitation:** GoDaddy forwarding does not preserve subpage paths — always share links with `www.` prefix
 
 ## Multi-Page App Structure
 
-The site has three separate HTML entry points, each with its own React root and theme:
+The site has multiple HTML entry points, each with its own React root and theme:
 
-| Page | URL | Entry HTML | Entry TSX | Component | Font |
-|------|-----|-----------|-----------|-----------|------|
+| Page | Domain | Entry HTML | Entry TSX | Component | Font |
+|------|--------|-----------|-----------|-----------|------|
 | Main (leaderboard + pre-event) | moneycannon.org | `index.html` | `src/main.tsx` | `src/App.tsx` | Roboto |
-| Info page | moneycannon.org/info.html | `info.html` | `src/info.tsx` | `src/InfoPage.tsx` | Montserrat |
+| About Money Cannon | moneycannon.org/about.html | `about.html` | `src/aboutEntry.tsx` | `src/AboutPage.tsx` | Montserrat |
+| Eligible teams | moneycannon.org/teams.html | `teams.html` | `src/schoolsEntry.tsx` | `src/SchoolsPage.tsx` | Montserrat |
 | 2025 results | moneycannon.org/results2025.html | `results2025.html` | `src/results2025entry.tsx` | `src/Results2025.tsx` | Roboto |
+| Landing page | edsbscharitybowl.com | `testreplacement.html` | `src/landingEntry.tsx` | `src/LandingPage.tsx` | Montserrat |
+| Game Guide & FAQ | edsbscharitybowl.com/faq.html | `faq.html` | `src/faqEntry.tsx` | `src/FaqPage.tsx` | Montserrat |
 
-Vite is configured with multiple `rollupOptions.input` entries in `vite.config.ts` to build all three pages.
+Info page (`info.html` / `src/InfoPage.tsx`) has been removed from the build but source files remain for reference.
+
+Vite is configured with multiple `rollupOptions.input` entries in `vite.config.ts` to build all pages.
 
 ## Design Decisions
 
 ### Fonts
 - **Leaderboard / main app / 2025 results:** Roboto (MUI default)
-- **Pre-event landing page and info page:** Montserrat — applied via scoped `ThemeProvider` in `PreEvent.tsx` and via the `info.tsx` entry point theme. The font is NOT applied globally to avoid affecting the leaderboard.
+- **Pre-event page, landing page, FAQ, about, teams:** Montserrat — applied via scoped `ThemeProvider` or per-entry-point theme. NOT applied globally to avoid affecting the leaderboard.
+- **Landing page (edsbscharitybowl.com):** Montserrat with 0.1em letter-spacing on headings
 
 ### Color Palette
-- **Primary:** Cyan (#00ffff) — used for header backgrounds, accents, dividers
-- **Pre-event page:** Full cyan background (#00ffff) with black text, black buttons with cyan text
-- **Info page:** Cyan hero header area with black text, white body area with dark grey (#333) section headers and cyan (#00bfbf) links, cyan dividers between sections
+- **Primary:** Cyan (#00feff) — used for header backgrounds, accents, dividers. NOTE: This is #00feff NOT #00ffff. All logos must have ICC profiles stripped to match this color exactly.
+- **Pre-event page:** Full cyan background (#00feff) with black text, black buttons with cyan text
+- **Landing page (edsbscharitybowl.com):** Dark theme (#333/#444 backgrounds), green (#6ab648) buttons and accents, blue (#1a73e8) links, #326295 nav bar
+- **About/FAQ/Teams pages:** Cyan header bar, white body, blue (#1a73e8) links
 - **Leaderboard:** Cyan header bar with logo, standard MUI light/dark mode for the body
 - **Lights-out mode:** Forces dark mode, gold (#fed426) accent text
 
@@ -122,43 +126,55 @@ Vite is configured with multiple `rollupOptions.input` entries in `vite.config.t
 ```
 CharityBowl2026/
 ├── .github/workflows/
-│   ├── build.yml                  # Builds on push (creates release zip)
-│   └── update-data.yml           # Scheduled: fetch data, build, deploy to Pages
+│   ├── deploy.yml                # Builds + deploys to both Cloudflare Pages projects
+│   └── daily-export.yml          # 3 PM ET daily: fetches data, uploads transactions.csv artifact
 ├── scripts/
-│   └── fetch_givesmart.py        # GiveSmart API -> donations.csv + transactions.csv
-├── data/                          # (empty — harmonization no longer needed for 2026)
+│   └── fetch_givesmart.py        # GiveSmart API -> donations.csv + transactions.csv + stats.json
 ├── archive/
 │   ├── harmonization.csv         # 2025 team name mapping (1,877 rows) — kept for rollback
 │   ├── manual_additions.json     # 2025 manual additions format — kept for rollback
 │   └── unmapped.json             # 2025 unmapped write-ins — kept for rollback
 ├── src/
-│   ├── App.tsx                   # Main app: header, search, tab routing, PRE_EVENT gate
+│   ├── App.tsx                   # Main app: header, search, tab routing, auto PRE_EVENT gate
 │   ├── PreEvent.tsx              # Pre-event landing page with countdown (Montserrat font)
-│   ├── InfoPage.tsx              # Info page about the event and charity (Montserrat font)
+│   ├── LandingPage.tsx           # edsbscharitybowl.com landing page with progress tracker
+│   ├── FaqPage.tsx               # Game Guide & FAQ page
+│   ├── AboutPage.tsx             # About Money Cannon FAQ
+│   ├── SchoolsPage.tsx           # Eligible teams list (3 columns)
+│   ├── InfoPage.tsx              # (removed from build, source kept for reference)
 │   ├── Results2025.tsx           # 2025 final standings (frozen data)
-│   ├── Leaderboard.tsx           # Ranked table of all schools
+│   ├── Leaderboard.tsx           # Ranked table of all teams
 │   ├── Rivalries.tsx             # Predefined rivalry/conference matchups
-│   ├── HeadToHead.tsx            # Custom school comparison tool
+│   ├── HeadToHead.tsx            # Custom team comparison tool (short numeric URLs)
 │   ├── Navigation.tsx            # Tab bar (desktop) / bottom nav (mobile)
 │   ├── StripedTableRow.tsx       # Alternating row styling
-│   ├── state.ts                  # Data loading: reads donations.csv, rivalries.txt, conferences.txt
+│   ├── state.ts                  # Data loading: donations.csv, rivalries.txt, conferences.txt, schools.txt
 │   ├── constants.ts              # PRE_EVENT and LIGHTS_OUT flags
 │   ├── main.tsx                  # Main entry point (Roboto, leaderboard theme)
-│   ├── info.tsx                  # Info page entry point (Montserrat theme)
+│   ├── landingEntry.tsx           # Landing page entry point (Montserrat, dark theme)
+│   ├── faqEntry.tsx              # FAQ entry point (Montserrat theme)
+│   ├── aboutEntry.tsx            # About entry point (Montserrat theme)
+│   ├── schoolsEntry.tsx          # Teams page entry point (Montserrat theme)
 │   └── results2025entry.tsx      # 2025 results entry point (Roboto, leaderboard theme)
-├── donations.csv                 # Auto-generated: timestamp + "school","amount" rows
+├── donations.csv                 # Zeroed pre-event; auto-generated during event
 ├── donations-2025.csv            # Frozen 2025 final data (not regenerated)
 ├── transactions.csv              # Auto-generated: detailed per-transaction data (GITIGNORED — contains PII)
+├── stats.json                    # Auto-generated: unique donor count
+├── manual_additions.csv          # Offline gifts and corporate matches (manually maintained)
+├── schools.txt                   # Master list of eligible teams (append-only for URL stability)
 ├── rivalries.txt                 # Rivalry groupings (name + school list, blank-line separated)
 ├── conferences.txt               # Conference groupings (same format as rivalries.txt)
 ├── index.html                    # Main Vite entry point
-├── info.html                     # Info page entry point
+├── testreplacement.html          # Landing page entry point (becomes index.html on edsbs deploy)
+├── about.html                    # About Money Cannon entry point
+├── teams.html                    # Eligible teams entry point
+├── faq.html                      # FAQ entry point
 ├── results2025.html              # 2025 results entry point
-├── vite.config.ts                # Vite config: 3 entry points, copies donations*.csv and *.txt to dist/
+├── vite.config.ts                # Vite config: multiple entry points, copies data files to dist/
 ├── package.json                  # Dependencies: React 19, MUI v7, Vite
 └── public/
-    ├── CNAME                     # Custom domain: moneycannon.org
-    ├── logo.png                  # 2026 event logo (displayed in main header)
+    ├── logo.png                  # 2026 event logo (ICC profile stripped, #00feff background)
+    ├── nap-logo-white.png        # New American Pathways white logo (landing page nav/footer)
     ├── 2025results.png           # 2025 money bag logo (used on results page)
     ├── IMG_1107.jpg              # Photo for info page "highlights" section
     ├── IMG_1109.jpg              # Photo for info page "where is your money going" section
@@ -272,34 +288,34 @@ School names must match the canonical names used in donations.csv.
 - `?mode=live` — bypasses `PRE_EVENT` flag, shows leaderboard even before go-live (for testing)
 - `?q=<search>` — persists search query across tab navigation
 - `?t=<tab>` — persists tab selection (leaderboard, rivalries, conferences, head-to-head)
-- `?c=<schools>` — persists head-to-head school selections
+- `?c=<ids>` — persists head-to-head team selections (numeric IDs from schools.txt line positions; old pipe-separated name format also supported for backwards compatibility)
 
 ## GitHub Actions Workflows
 
-### update-data.yml (every 15 minutes during event)
+### deploy.yml (on push to main + scheduled during event)
 - Cron schedule is **commented out** until go-live — uncomment when the event starts
+- API fetch step is also **commented out** until go-live
 - Also has `workflow_dispatch` for manual triggering
-- Steps:
-  1. Checkout repo
-  2. Set up Python 3.12
-  3. Run `fetch_givesmart.py` (generates `donations.csv` and `transactions.csv`)
-  4. Set up Node, `yarn install --frozen-lockfile`, `yarn build`
-  5. Deploy `dist/` to GitHub Pages
+- Builds once, then creates separate distributions for moneycannon and edsbs
+- **CRITICAL:** The `if: schedule` guards on the API fetch step have been accidentally removed multiple times by external edits. Always verify these guards are present after any workflow changes.
 
-### build.yml (on push to main)
-Builds the site and creates a GitHub release with the zipped `dist/` folder.
+### daily-export.yml (3 PM ET daily)
+- Fetches GiveSmart data + merges manual_additions.csv
+- Uploads `transactions.csv` as a GitHub Actions artifact (timestamped in ET)
+- For social media team to review donor messages, names, etc.
 
-## Go-Live Checklist
+## Go-Live Checklist (April 20, 10 AM ET)
 
-1. Set `PRE_EVENT = false` in `src/constants.ts` and push
-2. Uncomment the cron schedule in `.github/workflows/update-data.yml` and push
-3. Set `GIVESMART_CAMPAIGN` repository variable to the 2026 campaign name
-4. Delete `.github/workflows/deploy.yml` (the push-triggered deploy-only workflow) so it doesn't race with `update-data.yml`
-5. Ensure DNS for both `moneycannon.org` and `edsbscharitybowl.com` point to Cloudflare Pages
+1. Uncomment the cron schedule AND the API fetch step in `.github/workflows/deploy.yml` and push
+2. Re-enable donate buttons on edsbscharitybowl.com: restore GiveSmart href on all `GreenButton` instances in `src/LandingPage.tsx` and change text back to "Donate"
+3. Reactivate the campaign keyword in GiveSmart
+4. PRE_EVENT auto-switches to leaderboard at 10 AM ET April 20 — no code change needed (manual override: set `PRE_EVENT = false` in `src/constants.ts`)
 
 ## During the Event
 
-- **"Lights out" mode**: Set `LIGHTS_OUT = true` in `src/constants.ts` to hide scores and show a dialog
+- **Manual additions**: Add offline gifts and corporate matches to `manual_additions.csv` and push — they merge into leaderboard totals on the next API run
+- **"Lights out" mode**: Set `LIGHTS_OUT = true` in `src/constants.ts` to hide scores and show a dialog — confirm dialog text and timing before activating
+- **Daily export**: `transactions.csv` available as GitHub Actions artifact daily at 3 PM ET
 
 ## Local Development
 
