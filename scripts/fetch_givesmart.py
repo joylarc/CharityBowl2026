@@ -24,6 +24,7 @@ DONATIONS_CSV_PATH = os.path.join(REPO_ROOT, "donations.csv")
 TRANSACTIONS_CSV_PATH = os.path.join(REPO_ROOT, "transactions.csv")
 CONFERENCES_PATH = os.path.join(REPO_ROOT, "conferences.txt")
 MANUAL_ADDITIONS_PATH = os.path.join(REPO_ROOT, "manual_additions.csv")
+STATS_PATH = os.path.join(REPO_ROOT, "stats.json")
 
 # How long to wait for the async report (seconds)
 REPORT_TIMEOUT = 600
@@ -299,6 +300,22 @@ def main():
         writer = csv.DictWriter(f, fieldnames=txn_fields)
         writer.writeheader()
         writer.writerows(txn_rows)
+
+    # Count unique donors by email (fall back to first+last name if no email)
+    seen_donors = set()
+    for row in txn_rows:
+        email = row.get("email", "").strip().lower()
+        if email:
+            seen_donors.add(email)
+        else:
+            name = f"{row.get('first_name', '')} {row.get('last_name', '')}".strip().lower()
+            if name:
+                seen_donors.add(name)
+
+    # Write stats.json
+    stats = {"unique_donors": len(seen_donors)}
+    with open(STATS_PATH, "w", encoding="utf-8") as f:
+        json.dump(stats, f)
 
     # Report errors
     if errors:

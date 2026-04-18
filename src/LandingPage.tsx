@@ -85,19 +85,22 @@ export default function LandingPage() {
         const lines = text.split("\n");
         lines.shift(); // skip timestamp
         let total = 0;
-        let donors = 0;
         for (const line of lines) {
           const parts = line.split(",");
           if (parts.length !== 2) continue;
           const amount = parseFloat(parts[1].replace(/"/g, "").trim());
           if (!isNaN(amount) && amount > 0) {
             total += amount;
-            donors++;
           }
         }
         setTotalRaised(total);
-        setTotalDonors(donors);
       });
+    fetch(import.meta.env.BASE_URL + "stats.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setTotalDonors(data.unique_donors || 0);
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -236,45 +239,48 @@ export default function LandingPage() {
           </Typography>
 
           {/* Progress circle */}
-          <Box
-            sx={{
-              width: isSmall ? 320 : 450,
-              height: isSmall ? 320 : 450,
-              borderRadius: "50%",
-              border: "8px solid #666",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "2rem auto",
-              gap: "0.5rem",
-            }}
-          >
-            <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
-              Raised so far
-            </Typography>
-            <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
-              ${Math.round(totalRaised).toLocaleString()}
-            </Typography>
-            <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: "0.5rem", paddingTop: "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
-              <Box sx={{ textAlign: "center" }}>
-                <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem" }}>
-                  Our Goal
-                </Typography>
-                <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
-                  ${goal.toLocaleString()}
-                </Typography>
+          {(() => {
+            const size = isSmall ? 320 : 450;
+            const strokeWidth = 14;
+            const radius = (size - strokeWidth) / 2;
+            const circumference = 2 * Math.PI * radius;
+            const progress = Math.min(totalRaised / goal, 1);
+            const offset = circumference * (1 - progress);
+            return (
+              <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
+                <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
+                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
+                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                </svg>
+                <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "0.5rem" }}>
+                  <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
+                    Raised so far
+                  </Typography>
+                  <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
+                    ${Math.round(totalRaised).toLocaleString()}
+                  </Typography>
+                  <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: "0.5rem", paddingTop: "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem" }}>
+                        Our Goal
+                      </Typography>
+                      <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                        ${goal.toLocaleString()}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ textAlign: "center" }}>
+                      <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
+                        Total Donors
+                      </Typography>
+                      <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                        {totalDonors}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
-              <Box sx={{ textAlign: "center" }}>
-                <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
-                  Total Donors
-                </Typography>
-                <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
-                  {totalDonors}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
+            );
+          })()}
         </Container>
       </Box>
 

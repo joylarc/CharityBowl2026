@@ -53,6 +53,7 @@ jobs:
           cp dist/faq.html dist-edsbs/
           cp dist/2025impactreport.pdf dist-edsbs/
           cp dist/donations.csv dist-edsbs/
+          cp dist/stats.json dist-edsbs/
           cp dist/helmet.svg dist-edsbs/
           cp dist/logo.png dist-edsbs/
           cp dist/nap-logo-white.png dist-edsbs/

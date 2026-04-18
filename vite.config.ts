@@ -29,6 +29,10 @@ export default defineConfig({
           src: "donations*.csv",
           dest: ".",
         },
+        {
+          src: "stats.json",
+          dest: ".",
+        },
       ],
     }),
   ],
