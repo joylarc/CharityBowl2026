@@ -12,7 +12,7 @@ import "@fontsource/montserrat/700.css";
 
 const { useState, useEffect } = React;
 
-const EVENT_START = new Date("2026-04-20T10:00:00-05:00");
+const EVENT_START = new Date("2026-04-20T10:00:00-04:00");
 
 const preEventTheme = createTheme({
   typography: {
