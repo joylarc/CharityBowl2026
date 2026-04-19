@@ -163,7 +163,7 @@ export default function LandingPage() {
         </Typography>
         <GreenBar />
         <Typography variant="body1" sx={{ marginBottom: "1rem", fontWeight: "bold" }}>
-          Give to New American Pathways in the name of your favorite college football team to win the 2026 EDSBS Charity Bowl and bragging
+          Give to New American Pathways in the name of your favorite college football team to win the 2026 EDSBS Charity Bowl — and bragging
           rights as the most generous fanbase in the country.
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: "1.5rem" }}>
@@ -186,7 +186,7 @@ export default function LandingPage() {
         </Typography>
         <GreenBar />
         <Typography variant="body1">
-          You can learn almost everything there is to know about the Charity Bowl with our FAQs{" "}
+          Learn about the history of the Charity Bowl, as well as how to play, at our handy FAQ{" "}
           <a href={import.meta.env.BASE_URL + "faq.html"} style={{ color: "#6ab648" }}>
             here
           </a>
@@ -201,7 +201,7 @@ export default function LandingPage() {
         </Typography>
         <GreenBar />
         <Typography variant="body1">
-          You can see how your team stacks up against its conference and non-conference rivals AND create custom rivalry leaderboards{" "}
+          See how your team stacks up against its conference and non-conference rivals AND create custom rivalry leaderboards{" "}
           <a href="https://www.moneycannon.org" style={{ color: "#6ab648" }}>
             here
           </a>
