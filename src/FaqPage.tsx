@@ -152,14 +152,14 @@ export default function FaqPage() {
         <Box sx={{ marginBottom: "3rem" }} />
 
         {/* KEYS TO THE GAME */}
-        <SectionHeader title="KEYS TO THE GAME [FOOTBALL TERM]" id="keys-to-the-game" />
+        <SectionHeader title="KEYS TO THE GAME" id="keys-to-the-game" />
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
           🔑 <strong>The 2026 EDSBS Charity Bowl will kick off (football term) on Monday morning, April 20, at 10 a.m. ET,</strong> with regular updates to follow on the New American Pathways <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>Bluesky</a> and <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={link}>Instagram</a> accounts. The game officially concludes on Friday evening, April 24 (although we have been known to extend the contest into the weekend in pursuit of stretch goals – stay tuned).
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong><a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>New AP Bluesky feed</a> serves as trash talk central between competing fanbases during Bowl week.</strong> Our team of volunteers will be camped out there for a minimum of 12 hours each day to deliver scoring updates and interesting game stats, as well as celebrating especially creative donations and dedications from coast to coast.
+          🔑 <strong>New AP's <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>Bluesky feed</a> serves as trash talk central between competing fanbases during Bowl week.</strong> Our team of volunteers will be camped out there for a minimum of 12 hours each day to deliver scoring updates and interesting game stats, as well as celebrating especially creative donations and dedications from coast to coast.
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
@@ -278,7 +278,7 @@ export default function FaqPage() {
         </Section>
 
         <Section id="matching-gifts" emoji="⁉️" title={<strong>Do you accept corporate matching gifts?</strong>}>
-          We will happily take your bosses' money! All matching donations that can be verified by your employer before the end of the Bowl will be added to the leaderboard. To have your matching gift verified and scored, contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a>.
+          We will happily take your bosses' money! <strong>All matching donations that can be verified by your employer before the end of the Bowl will be added to the leaderboard.</strong> To have your matching gift verified and scored, contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a>.
         </Section>
 
         <Section id="donate-another-way" emoji="⁉️" title={<strong>I'm trying to donate another way. Help?</strong>}>
@@ -358,7 +358,7 @@ export default function FaqPage() {
         </Section>
 
         <Section id="paypal" emoji="❌" title={<strong>PAYPAL IS NOT OUR FRIEND.</strong>}>
-          We've run into a ton of problems in the past trying to get recurring gifts to process via PayPal. If you want to make a recurring (monthly or quarterly) gift, the best way to do that is via credit card. If that method doesn't work for you for any reason, please contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a> to make alternate arrangements.
+          We've run into a ton of problems in the past trying to get donations to process via PayPal. The GiveSmart donation form currently accepts credit cards, Apple Pay, and Google Pay. If these methods won't work for you for any reason, please contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a> to make alternate arrangements.
         </Section>
 
         <Section id="bearded-man" emoji="❌" title={<strong>THERE IS A LARGE BEARDED MAN ON MY DONATION CONFIRMATION SCREEN.</strong>}>
