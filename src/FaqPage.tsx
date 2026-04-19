@@ -78,7 +78,7 @@ export default function FaqPage() {
         {/* TABLE OF CONTENTS */}
         <Box sx={{ marginBottom: "2rem" }}>
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.5rem" }}>GAME GUIDE</Typography>
-          <ul style={{ listStyle: "none", paddingLeft: "0.5rem" }}>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
             <TOCLink href="#what-am-i-looking-at">What am I looking at here?</TOCLink>
             <TOCLink href="#whats-edsbs">What's EDSBS?</TOCLink>
             <TOCLink href="#why-new-ap">Why New American Pathways?</TOCLink>
@@ -87,36 +87,42 @@ export default function FaqPage() {
           </ul>
 
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.5rem", marginTop: "1rem" }}>FREQUENTLY ASKED QUESTIONS</Typography>
-          <ul style={{ listStyle: "none", paddingLeft: "0.5rem" }}>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
             <TOCLink href="#where-is-link">Where is the link to donate?</TOCLink>
             <TOCLink href="#donate-more-than-once">Can I donate more than once?</TOCLink>
             <TOCLink href="#donate-mobile">How do I donate via mobile?</TOCLink>
             <TOCLink href="#donated-early">I donated early. Can you go find it and add it to this year's board?</TOCLink>
             <TOCLink href="#money-cannon">How does Money Cannon work?</TOCLink>
             <TOCLink href="#new-format">Why is there a new game format this year?</TOCLink>
+          </ul>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", marginTop: "0.75rem" }}>
             <TOCLink href="#charitibundibowl">What is #CharitibundiBowl?</TOCLink>
             <TOCLink href="#what-does-new-ap-do">What does New American Pathways do?</TOCLink>
             <TOCLink href="#whats-a-refugee">What's a refugee?</TOCLink>
             <TOCLink href="#where-from">Where do New AP refugees come from?</TOCLink>
             <TOCLink href="#executive-orders">What's happening with New AP and refugees in the wake of recent executive orders?</TOCLink>
+          </ul>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", marginTop: "0.75rem" }}>
             <TOCLink href="#matching-gifts">Do you accept corporate matching gifts?</TOCLink>
             <TOCLink href="#donate-another-way">I'm trying to donate another way. Help?</TOCLink>
+            <TOCLink href="#own-contest">Can I run my own Charity Bowl contest just for my school/office/etc.?</TOCLink>
             <TOCLink href="#last-year-total">How much money did we raise last year?</TOCLink>
             <TOCLink href="#who-won">Who won last year's Bowl?</TOCLink>
+          </ul>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", marginTop: "0.75rem" }}>
             <TOCLink href="#should-i-bother">I can't afford to make a big donation, and/or my school is never going to catch Michigan. Should I even bother competing?</TOCLink>
             <TOCLink href="#michigan-winning">So how does Michigan keep winning?</TOCLink>
-            <TOCLink href="#own-contest">Can I run my own Charity Bowl contest just for my school/office/etc.?</TOCLink>
           </ul>
 
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.5rem", marginTop: "1rem" }}>TROUBLESHOOTING</Typography>
-          <ul style={{ listStyle: "none", paddingLeft: "0.5rem" }}>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
             <TOCLink href="#no-team">I DON'T SEE MY TEAM IN THE DROPDOWN!</TOCLink>
             <TOCLink href="#not-updating">I just donated but GiveSmart and/or Money Cannon isn't updating.</TOCLink>
             <TOCLink href="#another-question">I've got another question or issue I can't resolve after carefully reading this document!</TOCLink>
           </ul>
 
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.5rem", marginTop: "1rem" }}>KNOWN ISSUES</Typography>
-          <ul style={{ listStyle: "none", paddingLeft: "0.5rem" }}>
+          <ul style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
             <TOCLink href="#recurring-gifts">RECURRING GIFTS DO NOT ROLL OVER</TOCLink>
             <TOCLink href="#paypal">PAYPAL IS NOT OUR FRIEND</TOCLink>
           </ul>
@@ -278,6 +284,10 @@ export default function FaqPage() {
           If you want to pitch in, we'll do whatever we can to make it work. If you're making a donation via a family foundation/donor advised fund/trust account, donating over $1000 and trying to avoid credit card processing fees, donating from overseas, donating via wire transfer, want to make a gift of stock or other appreciated securities, or have any other questions, please contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a> for assistance.
         </Section>
 
+        <Section id="own-contest" emoji="⁉️" title={<strong>Can I run my own Charity Bowl contest just for my school/office/etc.?</strong>}>
+          Absolutely. Cal rocketed into the top ten in 2023 thanks entirely to a small group of alumni trying to one-up each other. As long as your donations are recorded after our official launch on April 20 (Monday morning) and before midnight ET on April 24 (Friday night), they'll be counted.
+        </Section>
+
         <Section id="last-year-total" emoji="⁉️" title={<strong>How much money did we raise last year?</strong>}>
           The 2025 #CharitibundiBowl raised $1,370,251. <strong>Wow, what else has this extremely normal college football collective done?</strong> Several years ago, thanks to your rampaging generosity, we were able to establish the <a href="https://www.youtube.com/watch?v=YiBm13ATFBY&ab_channel=NewAmericanPathways" target="_blank" style={link}>EDSBS Empowerment Fund</a>. This fund covers a range of smaller needs that arise for refugees and their families outside the major programs offered by New AP. A typical use might involve paying for driving lessons so that parents can commute to their new jobs, and covering childcare during those lessons.
         </Section>
@@ -295,10 +305,6 @@ export default function FaqPage() {
             The schools at the top of the leaderboard all tend to have one or two big-money donors bumping them up the ranks, but even at Michigan, <strong>the $20 donors outstrip everybody else by volume.</strong> The Wolverines keep winning because they have HORDES of donors. Wanna topple them this year? Do what they do: <em>Get your friends involved.</em>
             <p>We also understand that given the current state of upheaval both at home and abroad, you may not be able to make your planned contributions to the Bowl this year. If you can still share news about the Bowl with your families, coworkers, alumni clubs? That's fantastic. Again: It all helps. Every bit of it. Every one of you. We're just a loose collective of football idiots yelling into the internet. None of this is possible without y'all.</p>
           </>
-        </Section>
-
-        <Section id="own-contest" emoji="⁉️" title={<strong>Can I run my own Charity Bowl contest just for my school/office/etc.?</strong>}>
-          Absolutely. Cal rocketed into the top ten in 2023 thanks entirely to a small group of alumni trying to one-up each other. As long as your donations are recorded after our official launch on April 20 (Monday morning) and before midnight ET on April 24 (Friday night), they'll be counted.
         </Section>
 
         <Box sx={{ marginBottom: "3rem" }} />
