@@ -52,20 +52,20 @@ export default function AboutPage() {
         <QA question="How do I navigate Money Cannon?">
           <>
             <p>
-              The default view is the complete leaderboard, with all 152 eligible teams for the 2026 #CharitibundiBowl. You can also view standings by conference on the <strong>Conferences</strong> tab, and use the <strong>Rivalries</strong> tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
+              The default view is the complete leaderboard, with all 152 eligible teams for the 2026 #CharitibundiBowl. You can also view the standings by conference on the <strong>Conferences</strong> tab, and use the <strong>Rivalries</strong> tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
             </p>
             <p>
               Teams are listed by the names shown{" "}
               <a href="/teams.html" style={{ color: "#1a73e8" }}>here</a>
-              , and correspond to the drop-down menu options on GiveSmart. If you can't find your team, Money Cannon has a handy search bar on the <strong>Leaderboard</strong>, <strong>Conferences</strong> and <strong>Rivalries</strong> tabs.
+              , which also correspond to the drop-down menu options on GiveSmart. You can also find your team via search bar on the <strong>Leaderboard</strong>, <strong>Conferences</strong> and <strong>Rivalries</strong> tabs.
             </p>
           </>
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
-        <QA question="What if my incredibly specific grudge-match rivalry is not listed? Concierge Spencer assigned me to Louisiana Tech and I want to ensure we are crushing Louisiana-Monroe.">
-          We got you, cher. Click on over to the <strong>Head-to-Head</strong> tab. Type the team name into the search bar and click to add any team to your custom leaderboard. To remove a team, mouse over the team name and click the red trash can on the right. (On mobile, click on the team name, then click the trash can.)
+        <QA question="What if my incredibly specific grudge-match rivalry is not listed? Concierge Spencer assigned me to Louisiana Tech and I want to ensure we are crushing Louisiana Monroe.">
+          We got you, cher. Click on over to the <strong>Head-to-Head</strong> tab. Type the team name into the search bar, then click to add that team to your custom leaderboard. To remove, mouse over the team name and click the red trash can on the right. (On mobile, click on the team name, then click the trash can.)
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
@@ -83,7 +83,7 @@ export default function AboutPage() {
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
 
         <QA question={<>What if, once I've created my perfect custom leaderboard, I discover my team is <em>losing</em>?</>}>
-          Hit that donate button to head on over to GiveSmart and make a contribution, wait about 20 minutes, then reload to see the impact your gift is having on the race. Feel free to spend your idle time while waiting for your donation to percolate through our system to brag online about your generosity of spirit.
+          Hit that donate button, make a contribution, wait about 20 minutes, then reload to see the impact your gift is having on the race. (And as always, feel free to spend your idle time while waiting for your donation to percolate through our system to brag online about your generosity of spirit.)
         </QA>
 
         <Divider sx={{ borderColor: "#00feff", borderWidth: 1.5, marginBottom: "2rem" }} />
