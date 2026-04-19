@@ -99,7 +99,7 @@ export default function FaqPage() {
             <TOCLink href="#charitibundibowl">What is #CharitibundiBowl?</TOCLink>
             <TOCLink href="#what-does-new-ap-do">What does New American Pathways do?</TOCLink>
             <TOCLink href="#whats-a-refugee">What's a refugee?</TOCLink>
-            <TOCLink href="#where-from">Where do New AP refugees come from?</TOCLink>
+            <TOCLink href="#where-from">Where do refugees in Atlanta come from?</TOCLink>
             <TOCLink href="#executive-orders">What's happening with New AP and refugees in the wake of recent executive orders?</TOCLink>
           </ul>
           <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", marginTop: "0.75rem" }}>
@@ -125,6 +125,7 @@ export default function FaqPage() {
           <ul style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
             <TOCLink href="#recurring-gifts">RECURRING GIFTS DO NOT ROLL OVER</TOCLink>
             <TOCLink href="#paypal">PAYPAL IS NOT OUR FRIEND</TOCLink>
+            <TOCLink href="#bearded-man">THERE IS A LARGE BEARDED MAN ON MY DONATION CONFIRMATION SCREEN</TOCLink>
           </ul>
         </Box>
 
@@ -136,7 +137,7 @@ export default function FaqPage() {
         <Section id="what-am-i-looking-at" emoji="❓" title={<strong>What am I looking at here?</strong>}>
           The <a href="https://www.edsbscharitybowl.com" target="_blank" style={link}>Charity Bowl</a> (known online as the #CharitibundiBowl) is an annual fundraising contest staged by the EDSBS extended universe in aid of <a href="https://newamericanpathways.org/" target="_blank" style={link}>New American Pathways</a>, a full-service refugee resettlement nonprofit based in Atlanta. This year marks the 20th (TWENTIETH) edition of the Charity Bowl, in which teams of rival football fans compete to see who can bring in the most money to aid our most vulnerable neighbors.
           <Box sx={{ backgroundColor: "#f5f5f5", padding: "1rem", borderLeft: "3px solid #00feff", marginTop: "1rem" }}>
-            <strong>NOTE: If you've competed in the Bowl before, you might want to read on anyway; we're celebrating the 20th edition with a brand-new leaderboard system. More about that shortly!</strong>
+            <strong>NOTE: If you've competed in the Bowl before, and are wondering what's new this year, we're celebrating the 20th edition with a brand-new leaderboard system. Find out more in our revamped <a href="#how-to-play" style={link}>rules section</a>.</strong>
           </Box>
         </Section>
 
@@ -145,7 +146,7 @@ export default function FaqPage() {
         </Section>
 
         <Section id="why-new-ap" emoji="❓" title={<strong>Why New American Pathways?</strong>}>
-          A couple career changes and several mergers ago, young Spencer Hall worked at one of New AP's predecessor orgs. You can read more about that time, and what still moves us to work with these communities today, <a href="https://channel-6.ghost.io/how-we-got-here/" target="_blank" style={link}>right here</a>.
+          A couple career changes and several mergers ago, a young Spencer Hall worked at one of New AP's predecessor orgs. You can read more about that time, and what still moves us to work with these communities today, <a href="https://channel-6.ghost.io/how-we-got-here/" target="_blank" style={link}>right here</a>.
         </Section>
 
         <Box sx={{ marginBottom: "3rem" }} />
@@ -154,11 +155,11 @@ export default function FaqPage() {
         <SectionHeader title="KEYS TO THE GAME [FOOTBALL TERM]" id="keys-to-the-game" />
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong>The 2026 EDSBS Charity Bowl will kick off (football term) on Monday morning, April 20, at 10 a.m. ET,</strong> with regular updates to follow on the New American Pathways <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>Bluesky feed</a> and <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={link}>Instagram grid</a>. The game officially concludes on Friday evening, April 24 (although we have been known to extend the contest into the weekend in pursuit of stretch goals).
+          🔑 <strong>The 2026 EDSBS Charity Bowl will kick off (football term) on Monday morning, April 20, at 10 a.m. ET,</strong> with regular updates to follow on the New American Pathways <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>Bluesky</a> and <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={link}>Instagram</a> accounts. The game officially concludes on Friday evening, April 24 (although we have been known to extend the contest into the weekend in pursuit of stretch goals – stay tuned).
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong>The <a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>New AP Bluesky feed</a> will have the most up-to-date information during Bowl week</strong> regarding official stop/start times and scores. Our team of volunteers will be camped out there for a minimum of 12 hours each day to deliver scoring updates and celebrate especially creative donations and dedications from coast to coast.
+          🔑 <strong><a href="https://bsky.app/profile/newap-georgia.bsky.social" target="_blank" style={link}>New AP Bluesky feed</a> serves as trash talk central between competing fanbases during Bowl week.</strong> Our team of volunteers will be camped out there for a minimum of 12 hours each day to deliver scoring updates and interesting game stats, as well as celebrating especially creative donations and dedications from coast to coast.
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
@@ -166,15 +167,15 @@ export default function FaqPage() {
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong>The Bowl Help Desk is back!</strong> You can get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk, manned by local Atlanta hero JacketDan. You can reach him <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a>.
+          🔑 <strong>Help Desk Dan is back!</strong> Get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk manned by local Atlanta hero JacketDan. You can reach him <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a>.
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong>New this year: Concierge team assignment services!</strong> Don't have a college football team? Spencer Hall is here <em>for you</em>, neighbor. Tell him a little bit about yourself, and he'll assign you a college football rooting interest. You can reach him <a href="https://bsky.app/profile/edsbs.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:harumphharumph@gmail.com" style={link}>harumphharumph@gmail.com</a>. That's right: Spencer cares so much about this contest that he's agreed to read his own emails. Truly, we live in unprecedented times.
+          🔑 <strong>New for 2026: Concierge team assignment services!</strong> Don't have an eligible college football team to compete for? Spencer Hall is here <em>for you</em>, neighbor. Tell him a little bit about yourself, and he'll assign you a college football rooting interest. You can reach him <a href="https://bsky.app/profile/edsbs.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:harumphharumph@gmail.com" style={link}>harumphharumph@gmail.com</a>. <strong>That's right: Spencer cares so much about this contest that he's agreed to read his own emails.</strong> Truly, we live in unprecedented times.
         </Typography>
 
         <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          🔑 <strong>From Monday morning on, <a href="https://www.edsbscharitybowl.com" target="_blank" style={link}>EDSBSCharityBowl.com</a> will be your home for everything else:</strong> A portal to submit your actual donations, a running grand total display of all the money we've raised so far, and links where you can learn more about New AP and their work.
+          🔑 <strong>Beginning Monday morning, <a href="https://www.edsbscharitybowl.com" target="_blank" style={link}>EDSBSCharityBowl.com</a> will be your home for everything else:</strong> A portal to submit your actual donations, a running grand total display of all the money we've raised so far, and links where you can learn more about New AP and their work.
         </Typography>
 
         <Box sx={{ marginBottom: "3rem" }} />
@@ -197,8 +198,8 @@ export default function FaqPage() {
               ✅ You'll also have the option to make this one-time gift a quarterly or monthly recurring donation, <strong>which will earn a year's worth of multiplier points for scoring purposes.</strong> Example: You're donating $100 on behalf of Vanderbilt (Diego Pavia party!). If you make that donation a $100 quarterly pledge instead, Vanderbilt will be awarded a full year's worth of donations to their team score – in this case, $400. A $100 monthly pledge will add $1,200 to your team score. <em>(Note that recurring gifts, as well as corporate matching gifts, are not going to show up on the splash page running total right away, since we have to enter those manually.)</em>
             </Typography>
             <Typography variant="body1" sx={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-              ✅ <strong>New this year: Tell us your story!</strong>{" "}
-              You'll also see a dedication box on the donation page. We'd love to hear more about what brought you to the Bowl, and why helping refugees rebuild their lives matters to you, whether you're a former refugee yourself, have loved ones in refugee communities, or simply want to beat Texas (who doesn't?). We'll be highlighting our favorite dedication messages all week long on New AP's social channels.
+              ✅ <strong>New for 2026: Tell us your story!</strong>{" "}
+              You'll also see a dedication box on the donation page. We'd love to hear more about what brought you to the Bowl, and why helping refugees rebuild their lives matters to you, whether you're a former refugee yourself, have loved ones in refugee communities, or simply want to beat Texas (who doesn't?). We'll be highlighting our favorite dedication messages all week long on our social channels.
             </Typography>
             <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
               ✅ Now comes the fun part: <strong>TIME TO BRAG ABOUT YOUR GENEROSITY ONLINE.</strong> Post your donation receipt! <strong>(Don't forget to redact any identifying info!)</strong> Tag Spencer. Tag New AP. Tag your school and your school's famous alumni. Cheerfully bullying your friends and rivals into joining the game themselves is how we keep Bowl week festive and this operation growing.
@@ -251,18 +252,18 @@ export default function FaqPage() {
         </Section>
 
         <Section id="charitibundibowl" emoji="⁉️" title={<strong>What is #CharitibundiBowl?</strong>}>
-          The official contest hashtag. We've been doing this a while, and conversations around charitable giving have evolved in that time. So a few years back, we co-opted <a href="https://espnevents.com/press/event/boca-raton-bowl-announces-cheribundi-tart-cherry-new-title-sponsor/" target="_blank" style={link}>this fabulous, short-lived Boca Raton Bowl name</a> for our own purposes. Most people still call it the Charity Bowl. You are all welcome to fight about that amongst yourselves.
+          The official contest hashtag. We've been doing this a while, and conversations around charitable giving have evolved in that time. A few years back, we co-opted <a href="https://espnevents.com/press/event/boca-raton-bowl-announces-cheribundi-tart-cherry-new-title-sponsor/" target="_blank" style={link}>this fabulous albeit short-lived Boca Raton Bowl name</a> for our own purposes. Most people still call it the Charity Bowl. You are all welcome to fight about that amongst yourselves.
         </Section>
 
         <Section id="what-does-new-ap-do" emoji="⁉️" title={<strong>What does New American Pathways do?</strong>}>
-          <a href="https://newamericanpathways.org/" target="_blank" style={link}>New American Pathways</a> supports refugee families resettling in America from the day they touch down at the airport until the day they take their citizenship exams. As you might imagine, this encompasses a huge range of services, from finding safe housing, getting children enrolled in school and adults in job training, to language classes, legal aid, and after-school programs. You can read their latest <a href="/2025impactreport.pdf" target="_blank" style={link}>annual impact report</a>, and check out their <a href="https://www.facebook.com/NewAmericanPathways" target="_blank" style={link}>Facebook</a> and <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={link}>Instagram</a> pages to learn how their work shapes communities in and around Atlanta.
+          <a href="https://newamericanpathways.org/" target="_blank" style={link}>New American Pathways</a> supports refugee families resettling in America from the day they touch down at the airport until the day they take their citizenship oaths. As you might imagine, this encompasses a huge range of services, from finding safe housing, getting children enrolled in school and adults in job training, to language classes, legal aid, and after-school programs. You can read their latest <a href="/2025impactreport.pdf" target="_blank" style={link}>annual impact report</a>, and check out their <a href="https://www.facebook.com/NewAmericanPathways" target="_blank" style={link}>Facebook</a> and <a href="https://www.instagram.com/newamericanpathways/" target="_blank" style={link}>Instagram</a> pages to learn how their work shapes communities in and around Atlanta.
         </Section>
 
         <Section id="whats-a-refugee" emoji="⁉️" title={<strong>What's a refugee?</strong>}>
           A refugee has been forced to flee their home country because of war, violence, or a well-founded fear of persecution for reasons of race, religion, nationality, political opinion, or membership in a particular social group. Refugee status in the United States means that a refugee has applied for resettlement abroad and has been granted the opportunity to resettle here. Applicants undergo a lengthy 13-step screening process conducted by the U.S Department of State and U.S. Department of Homeland Security.
         </Section>
 
-        <Section id="where-from" emoji="⁉️" title={<strong>Where do New AP refugees come from?</strong>}>
+        <Section id="where-from" emoji="⁉️" title={<strong>Where do refugees in Atlanta come from?</strong>}>
           All over! In 2024, New AP welcomed refugees from Myanmar, The Democratic Republic of the Congo, Iraq, Afghanistan, Ukraine, Somalia, South Sudan, Sudan, Syria, Eritrea, Cuba, Haiti, and Venezuela.
         </Section>
 
@@ -272,7 +273,7 @@ export default function FaqPage() {
             <Typography variant="body1" component="blockquote" sx={{ fontStyle: "italic", borderLeft: "3px solid #00feff", paddingLeft: "1.5rem", marginLeft: 0, marginTop: "1rem", marginBottom: "1rem" }}>
               "Fiscal year 2025 was a year full of change and challenges for New American Pathways and the clients we serve. Over the course of the year, there were more than 500 executive actions issued from the current administration that negatively impacted refugee and immigrant communities. Many of those fundamentally changed the work we do, resulting in us pivoting multiple times to ensure we were responding to current needs."
             </Typography>
-            <p>For more about New AP's evolving mission in 2025 and beyond, see their <a href="/2025impactreport.pdf" target="_blank" style={link}>2025 impact report</a>. New AP's <a href="https://newamericanpathways.org/" target="_blank" style={link}>website</a> will be updated with the most current information regarding refugees entering America as events warrant.</p>
+            <p>For more about New AP's evolving mission, see their <a href="/2025impactreport.pdf" target="_blank" style={link}>2025 impact report</a>.</p>
           </>
         </Section>
 
@@ -297,13 +298,13 @@ export default function FaqPage() {
         </Section>
 
         <Section id="should-i-bother" emoji="⁉️" title={<strong>I can't afford to make a big donation, and/or my school is never going to catch Michigan. Should I even bother competing?</strong>}>
-          If there's anybody who understands this, it's a bunch of journalists and nonprofit volunteers. But! We say this every year, and it keeps on being true: The VAST majority of donations we receive every year are in the $20 range. $10 is welcome. $5 is welcome. It all helps.
+          We say this every year, and it keeps on being true: The VAST majority of donations we receive every year are in the $20 range. $10 is welcome. $5 is welcome. It all helps.
         </Section>
 
         <Section id="michigan-winning" emoji="⁉️" title={<strong>So how does Michigan keep winning?</strong>}>
           <>
-            The schools at the top of the leaderboard all tend to have one or two big-money donors bumping them up the ranks, but even at Michigan, <strong>the $20 donors outstrip everybody else by volume.</strong> The Wolverines keep winning because they have HORDES of donors. Wanna topple them this year? Do what they do: <em>Get your friends involved.</em>
-            <p>We also understand that given the current state of upheaval both at home and abroad, you may not be able to make your planned contributions to the Bowl this year. If you can still share news about the Bowl with your families, coworkers, alumni clubs? That's fantastic. Again: It all helps. Every bit of it. Every one of you. We're just a loose collective of football idiots yelling into the internet. None of this is possible without y'all.</p>
+            The schools at the top of the leaderboard all tend to have one or two big-money donors bumping them up the ranks, but even at Michigan, <strong>the $20 donors outstrip everybody else by volume.</strong> The Wolverines keep winning because they have HORDES of donors. Wanna topple them this year? Do what they do: <strong><em>Get your friends involved.</em></strong>
+            <p>We also understand that given the current state of upheaval both at home and abroad, you may not be able to make your planned contributions to the Bowl this year. If you can still share news about the Bowl with your families, coworkers, alumni clubs? That's fantastic. Again: <strong>It all helps. Every bit of it. Every one of you.</strong> We're just a loose collective of football idiots yelling into the internet. None of this is possible without y'all.</p>
           </>
         </Section>
 
@@ -314,8 +315,8 @@ export default function FaqPage() {
 
         <Section id="no-team" emoji="❌" title={<strong>I DON'T SEE MY TEAM IN THE DROPDOWN! BIAS!! HATERS!!! P E R F I D Y</strong>}>
           <>
-            A reminder that for this 20th edition of the Bowl, we're working with a new game format. You'll need to select an FBS football team or a team from our list of selected mid-majors along with your donation.
-            <p>If you don't see your FBS football team on the first scroll through the menu, remember to check other likely places on the list. (Look for Southern California under USC, etc.) If you still can't find your team, email Dan at our help desk at <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a> for assistance.</p>
+            A reminder that for this 20th edition of the Bowl, we're working with a new game format. You'll need to select from our <a href="https://www.moneycannon.org/teams.html" target="_blank" style={link}>list of eligible teams</a> to make your donation.
+            <p>If you don't see your team on the first scroll through the menu, remember to check other likely places on the list. (Look for Southern California under USC, etc.) If you still can't find your team, email Help Desk Dan at <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a> for assistance.</p>
             <p>If you don't HAVE an FBS rooting interest, first of all: Congratulations! You will easily outlive the rest of us without an emotional attachment to an upper-division college football program. And you've got an array of available options for participation in this year's Bowl:</p>
             <ul>
               <li>Pick a team at random</li>
@@ -324,7 +325,7 @@ export default function FaqPage() {
               <li>Contact the reason for the season himself, Spencer Hall, <a href="https://bsky.app/profile/edsbs.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:harumphharumph@gmail.com" style={link}>harumphharumph@gmail.com</a> and make him pick a team for you</li>
               <li>(Our favorite option) Adopt the team with the lowest current score on <a href="https://www.moneycannon.org" target="_blank" style={link}>Money Cannon</a> and bump it out of last place</li>
             </ul>
-            <p>Don't think of it as abandoning Wichita State. Think of it as being folded into the surly embrace of Louisiana-Monroe. Welcome, cousin!</p>
+            <p><strong>There's no relegation here, only promotion.</strong> Don't think of it as "I'm abandoning Wichita State." Think of it as "I'm being folded into the surly embrace of Western Michigan." Welcome, cousin!</p>
           </>
         </Section>
 
@@ -336,7 +337,7 @@ export default function FaqPage() {
         </Section>
 
         <Section id="another-question" emoji="⁉️" title={<strong>I've got another question or issue I can't resolve after carefully reading this document!</strong>}>
-          You can get answers to questions you can't find here, or flag any issues you run into, at our dedicated donor help desk, manned by local Atlanta hero JacketDan. You can reach him <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a>.
+          Intrepid Charity Bowl Help Desk captain Dan is here for you! You can reach him <a href="https://bsky.app/profile/jacketdan.bsky.social" target="_blank" style={link}>on Bluesky</a> or by emailing <a href="mailto:dannewampathway@gmail.com" style={link}>dannewampathway@gmail.com</a>.
         </Section>
 
         <Box sx={{ marginBottom: "3rem" }} />
@@ -352,12 +353,21 @@ export default function FaqPage() {
                 IF YOU SET UP A 2025 RECURRING GIFT AND WANT IT SCORED FOR 2026, YOU HAVE TO CANCEL IT AND MAKE A NEW PLEDGE.
               </Typography>
             </Box>
-            <p>This is tedious! We're sorry about that! Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSePI1hjch6TyjY2CF-qhBLcDwZPNgDCIxDtuelmaN3GkH1m9A/viewform" target="_blank" style={link}>complete this form</a> and the team at New AP will cancel future transactions you set up for the 2025 campaign. You will receive a confirmation email from New AP once it has been completed.</p>
+            <p>This is tedious! We're sorry about that! Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSePI1hjch6TyjY2CF-qhBLcDwZPNgDCIxDtuelmaN3GkH1m9A/viewform" target="_blank" style={link}>complete this form</a> and the team at New AP will cancel future transactions you set up for the 2025 campaign. You'll receive a confirmation email from New AP once the cancellation has been completed.</p>
           </>
         </Section>
 
         <Section id="paypal" emoji="❌" title={<strong>PAYPAL IS NOT OUR FRIEND.</strong>}>
           We've run into a ton of problems in the past trying to get recurring gifts to process via PayPal. If you want to make a recurring (monthly or quarterly) gift, the best way to do that is via credit card. If that method doesn't work for you for any reason, please contact Carina Buchwald at <a href="mailto:cbuchwald@newamericanpathways.org" style={link}>cbuchwald@newamericanpathways.org</a> to make alternate arrangements.
+        </Section>
+
+        <Section id="bearded-man" emoji="❌" title={<strong>THERE IS A LARGE BEARDED MAN ON MY DONATION CONFIRMATION SCREEN.</strong>}>
+          <>
+            If you've read this far, you must actually be new, and therefore we feel compelled to reassure you this isn't a glitch. That's Spencer wearing overalls on SportsCenter with Scott van Pelt. We've been putting him on the confirmation page as a fun surprise for several years now. <strong>CAN I TURN THIS FEATURE OFF?</strong> No, you cannot. It's fine, he's friendly!
+            <Box sx={{ textAlign: "center", marginTop: "1rem" }}>
+              <img src={import.meta.env.BASE_URL + "SpencerOveralls.jpg"} alt="Spencer in overalls on SportsCenter" style={{ maxWidth: "100%", maxHeight: 400 }} />
+            </Box>
+          </>
         </Section>
 
         <Box sx={{ marginBottom: "3rem" }} />
