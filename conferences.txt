@@ -1,4 +1,5 @@
 AAC
+Army
 Charlotte
 East Carolina
 Florida Atlantic (FAU)
@@ -76,17 +77,14 @@ FIU
 Jacksonville State
 Kennesaw State
 Liberty 
-Louisiana Tech
 Middle Tennessee State
 Missouri State
 North Dakota State
 New Mexico State
 Sam Houston State
-UTEP
 Western Kentucky
 
 Independent
-Army
 Connecticut (UConn)
 Notre Dame
 
@@ -99,7 +97,6 @@ Central Michigan
 Eastern Michigan
 Kent State
 Miami (OH)
-Northern Illinois
 Ohio
 Sacramento State
 Toledo
@@ -111,8 +108,10 @@ Air Force
 Hawai'i
 Nevada
 New Mexico
+Northern Illinois
 San Jose State
 UNLV
+UTEP
 Wyoming
 
 PAC 12
@@ -152,6 +151,7 @@ Georgia State
 James Madison
 Louisiana Lafayette
 Louisiana Monroe
+Louisiana Tech
 Marshall
 Old Dominion
 South Alabama
