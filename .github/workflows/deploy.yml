@@ -25,6 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch donation data from GiveSmart
+        if: ${{ github.event_name == 'schedule' }}
         env:
           GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
           GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2026' }}
@@ -75,6 +76,7 @@ jobs:
           command: pages deploy dist-edsbs --project-name=2026edsbs
 
       - name: Check for data errors
+        if: ${{ github.event_name == 'schedule' }}
         run: |
           if [ -s fetch-errors.txt ]; then
             echo "::error::Some donation rows had invalid data and were skipped"
