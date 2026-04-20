@@ -52,7 +52,7 @@ export default function AboutPage() {
         <QA question="How do I navigate Money Cannon?">
           <>
             <p>
-              The default view is the complete leaderboard, with all 152 eligible teams for the 2026 #CharitibundiBowl. You can also view the standings by conference on the <strong>Conferences</strong> tab, and use the <strong>Rivalries</strong> tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
+              The default view is the complete leaderboard, with all 153 eligible teams for the 2026 #CharitibundiBowl. You can also view the standings by conference on the <strong>Conferences</strong> tab, and use the <strong>Rivalries</strong> tab to investigate the status of such long-standing feuds as the Iron Bowl, the World's Largest Outdoor Cocktail Party, and Texas vs. Texas A&amp;M (just kidding; we know they're not rivals).
             </p>
             <p>
               Teams are listed by the names shown{" "}
