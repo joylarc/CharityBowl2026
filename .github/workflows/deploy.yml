@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-  # TODO: uncomment this once the 2026 campaign starts
-  # schedule:
-  #   - cron: "*/15 * * * *"  # Every 15 minutes — uncomment when campaign is live
+  schedule:
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -25,12 +24,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      # TODO: uncomment this once the 2026 campaign starts
-      # - name: Fetch donation data from GiveSmart
-      #   env:
-      #     GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
-      #     GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2025' }}
-      #   run: python scripts/fetch_givesmart.py --error-log fetch-errors.txt
+      - name: Fetch donation data from GiveSmart
+        env:
+          GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
+          GIVESMART_CAMPAIGN: ${{ vars.GIVESMART_CAMPAIGN || 'Charity Bowl 2026' }}
+        run: python scripts/fetch_givesmart.py --error-log fetch-errors.txt
 
       - name: Set up Node
         uses: actions/setup-node@v4
