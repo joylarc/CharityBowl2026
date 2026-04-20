@@ -57,6 +57,7 @@ jobs:
           cp dist/logo.png dist-edsbs/
           cp dist/nap-logo-white.png dist-edsbs/
           cp dist/SpencerOveralls.jpg dist-edsbs/
+          cp dist/og-image.png dist-edsbs/
           # Clean moneycannon dist (remove edsbs-only pages)
           rm -f dist/testreplacement.html
           rm -f dist/faq.html
