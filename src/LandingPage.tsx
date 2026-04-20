@@ -34,7 +34,7 @@ function SocialIcons({ size = 24 }: { size?: number }) {
   );
 }
 
-const DONATE_LIVE_TIME = new Date("2026-04-20T06:47:00-04:00").getTime();
+const DONATE_LIVE_TIME = new Date("2026-04-20T10:00:00-04:00").getTime();
 const DONATE_URL = "https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113";
 
 function GreenButton({ children, href, donate }: { children: React.ReactNode; href?: string; donate?: boolean }) {
