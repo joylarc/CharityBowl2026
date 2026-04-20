@@ -51,7 +51,11 @@ export default function PreEvent() {
   useEffect(() => {
     const id = setInterval(() => {
       const t = getTimeLeft();
-      if (t === null) clearInterval(id);
+      if (t === null) {
+        clearInterval(id);
+        window.location.reload();
+        return;
+      }
       setTimeLeft(t);
     }, 1000);
     return () => clearInterval(id);

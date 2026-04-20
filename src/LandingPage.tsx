@@ -85,6 +85,15 @@ export default function LandingPage() {
   const goal = 1_000_000;
 
   useEffect(() => {
+    // Auto-reload when donate buttons should go live
+    const timeUntilLive = DONATE_LIVE_TIME - Date.now();
+    if (timeUntilLive > 0) {
+      const timer = setTimeout(() => window.location.reload(), timeUntilLive);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  useEffect(() => {
     fetch(import.meta.env.BASE_URL + "donations.csv")
       .then((res) => res.text())
       .then((text) => {
