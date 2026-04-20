@@ -21,11 +21,15 @@ Live donation leaderboard for the CharitiBundi Bowl fundraising event. Automatic
 
 - **edsbscharitybowl.com non-www subpages don't work.** GoDaddy forwarding redirects `edsbscharitybowl.com` to `www.edsbscharitybowl.com` but does not preserve subpage paths (e.g., `edsbscharitybowl.com/faq.html` fails). Always share links with `www.` prefix. Not fixable without moving DNS away from GoDaddy.
 
+### Pre-Set (automatic at 10 AM ET April 20)
+
+- Moneycannon.org leaderboard goes live automatically (time-based switch in App.tsx, auto-reloads for visitors on the page)
+- Donate buttons on edsbscharitybowl.com enable automatically with GiveSmart link (auto-reloads for visitors on the page)
+- Manual override if needed: set `PRE_EVENT = false` in `src/constants.ts`
+
 ### Go Live
 
-- [ ] Set `PRE_EVENT = false` in `src/constants.ts` and push
-- [ ] Uncomment the cron schedule in `.github/workflows/deploy.yml` and push
-- [ ] Re-enable donate buttons on edsbscharitybowl.com: restore GiveSmart href on all `GreenButton` instances in `src/LandingPage.tsx` and change text back to "Donate"
+- [ ] Uncomment the cron schedule AND the API fetch step in `.github/workflows/deploy.yml` and push
 - [ ] Reactivate the campaign keyword in GiveSmart
 - [ ] Immediately after go-live: run "Daily transaction export" workflow to verify donations.csv and transactions.csv populate correctly before the first cron deploy
 
