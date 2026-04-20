@@ -79,7 +79,6 @@ Kennesaw State
 Liberty 
 Middle Tennessee State
 Missouri State
-North Dakota State
 New Mexico State
 Sam Houston State
 Western Kentucky
@@ -108,6 +107,7 @@ Air Force
 Hawai'i
 Nevada
 New Mexico
+North Dakota State
 Northern Illinois
 San Jose State
 UNLV
