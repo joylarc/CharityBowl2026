@@ -264,7 +264,7 @@ export default function App() {
           />
         </a>
       </header>
-      {PRE_EVENT && Date.now() < new Date("2026-04-20T10:00:00-04:00").getTime() && new URL(window.location.href).searchParams.get("mode") !== "live" ? (
+      {PRE_EVENT && Date.now() < new Date("2026-04-20T06:40:00-04:00").getTime() && new URL(window.location.href).searchParams.get("mode") !== "live" ? (
         <PreEvent />
       ) : (
         <Suspense fallback={<Loading />}>
