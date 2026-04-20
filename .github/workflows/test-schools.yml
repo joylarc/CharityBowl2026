@@ -1,0 +1,88 @@
+name: Compare schools.txt to GiveSmart dropdown
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch transactions and compare team names
+        env:
+          GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
+        run: |
+          python3 -c "
+          import json, subprocess, time
+          from urllib.parse import urlencode
+
+          TOKEN = '${{ secrets.GIVESMART_API_TOKEN }}'
+          BASE = 'https://fundraise.givesmart.com/api/v2'
+
+          def api_get(url):
+              result = subprocess.run([
+                  'curl', '-s', '--fail-with-body',
+                  '-H', f'Authorization: Token token=\"{TOKEN}\"',
+                  '-H', 'Accept: application/json',
+                  '-H', 'Content-type: application/json',
+                  url,
+              ], capture_output=True, text=True)
+              return result.stdout
+
+          # Load schools.txt
+          with open('schools.txt') as f:
+              schools = set(line.strip() for line in f if line.strip())
+          print(f'schools.txt has {len(schools)} teams')
+
+          # Fetch from 2025 campaign (2026 has no data to extract names from)
+          params = urlencode({'campaign': 'Charity Bowl 2025', 'status': 'collected,pending'})
+          text = api_get(f'{BASE}/reports/transactions.json?{params}')
+          report_id = json.loads(text)['id']
+
+          for i in range(30):
+              print(f'Polling... ({i*10}s)')
+              text = api_get(f'{BASE}/reports/results.json?id={report_id}')
+              text = text.strip()
+              if text.startswith('Request#') and 'not yet complete' in text:
+                  time.sleep(10)
+                  continue
+              data = json.loads(text)
+              if isinstance(data, list):
+                  print(f'Got {len(data)} transactions')
+                  # Extract unique team names from dropdown field
+                  api_teams = set()
+                  for txn in data:
+                      team = (txn.get('name_of_school/team_(dropdown)') or txn.get('name_of_team_(dropdown)') or '').strip()
+                      if team:
+                          api_teams.add(team)
+                  print(f'GiveSmart has {len(api_teams)} unique team names')
+                  print()
+
+                  # Find mismatches
+                  in_api_not_schools = api_teams - schools
+                  in_schools_not_api = schools - api_teams
+
+                  if in_api_not_schools:
+                      print('=== IN GIVESMART BUT NOT IN schools.txt ===')
+                      for t in sorted(in_api_not_schools):
+                          print(f'  {t}')
+                  else:
+                      print('All GiveSmart teams found in schools.txt')
+
+                  print()
+                  if in_schools_not_api:
+                      print('=== IN schools.txt BUT NOT IN GIVESMART (may just have no 2025 donations) ===')
+                      for t in sorted(in_schools_not_api):
+                          print(f'  {t}')
+                  else:
+                      print('All schools.txt teams found in GiveSmart')
+                  break
+              time.sleep(10)
+          "

@@ -34,26 +34,32 @@ function SocialIcons({ size = 24 }: { size?: number }) {
   );
 }
 
-function GreenButton({ children, href }: { children: React.ReactNode; href?: string }) {
+const DONATE_LIVE_TIME = new Date("2026-04-20T10:00:00-04:00").getTime();
+const DONATE_URL = "https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113";
+
+function GreenButton({ children, href, donate }: { children: React.ReactNode; href?: string; donate?: boolean }) {
+  const isLive = donate ? Date.now() >= DONATE_LIVE_TIME : true;
+  const activeHref = donate ? (isLive ? DONATE_URL : undefined) : href;
+  const label = donate && !isLive ? "Donate Starting April 20" : children;
   const sx = {
     backgroundColor: "#6ab648",
     color: "#fff",
     fontWeight: "bold",
     textTransform: "uppercase" as const,
     borderRadius: 0,
-    "&:hover": { backgroundColor: href ? "#5a9e3e" : "#6ab648" },
-    opacity: href ? 1 : 0.7,
+    "&:hover": { backgroundColor: activeHref ? "#5a9e3e" : "#6ab648" },
+    opacity: activeHref ? 1 : 0.7,
   };
-  if (href) {
+  if (activeHref) {
     return (
-      <Button variant="contained" href={href} target="_blank" sx={sx}>
-        {children}
+      <Button variant="contained" href={activeHref} target="_blank" sx={sx}>
+        {label}
       </Button>
     );
   }
   return (
     <Button variant="contained" disabled sx={sx}>
-      {children}
+      {label}
     </Button>
   );
 }
@@ -122,7 +128,7 @@ export default function LandingPage() {
         />
         <Box sx={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
           <SocialIcons size={20} />
-          <GreenButton>Donate Starting April 20</GreenButton>
+          <GreenButton donate>Donate</GreenButton>
         </Box>
       </Box>
 
@@ -176,7 +182,7 @@ export default function LandingPage() {
           </a>
           .
         </Typography>
-        <GreenButton>Donate Starting April 20</GreenButton>
+        <GreenButton donate>Donate</GreenButton>
       </Section>
 
       {/* Section 3: Where is the Leaderboard */}
@@ -232,7 +238,7 @@ export default function LandingPage() {
       >
         <Container maxWidth="lg" sx={{ padding: "0 2rem" }}>
           <Box sx={{ marginBottom: "2rem" }}>
-            <GreenButton>Donate Starting April 20</GreenButton>
+            <GreenButton donate>Donate</GreenButton>
           </Box>
           <Typography variant={isSmall ? "h5" : "h4"} sx={{ fontWeight: "bold", fontSize: isSmall ? "1.875rem" : "2.625rem", marginBottom: "1.5rem" }}>
             It begins with spite and ends with hugs (and spite).
