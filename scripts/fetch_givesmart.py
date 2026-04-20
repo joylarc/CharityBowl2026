@@ -258,7 +258,7 @@ def main():
             "total": f"{total:.2f}",
             "school_team": team,
             "conference": conf,
-            "message": txn.get("message") or txn.get("comment") or "",
+            "message": txn.get("dedication/special_message") or txn.get("message") or txn.get("comment") or "",
         })
 
     # Merge manual additions (offline gifts, corporate matches)
