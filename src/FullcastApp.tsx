@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -234,6 +235,22 @@ export default function FullcastApp() {
             <h1 style={{ margin: 0, color: "#fed426", fontSize: "1.8rem", letterSpacing: "0.05em" }}>
               THE FULLCAST GETBACK GIVE-BACK
             </h1>
+            <Button
+              variant="contained"
+              href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113"
+              target="_blank"
+              sx={{
+                backgroundColor: "#6ab648",
+                color: "#fff",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                borderRadius: 0,
+                marginTop: "0.75rem",
+                "&:hover": { backgroundColor: "#5a9e3e" },
+              }}
+            >
+              Donate
+            </Button>
           </Box>
           <Suspense fallback={<Loading />}>
             <Content />
