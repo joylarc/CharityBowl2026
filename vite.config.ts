@@ -14,6 +14,7 @@ export default defineConfig({
         testreplacement: "testreplacement.html",
         about: "about.html",
         faq: "faq.html",
+        fullcast: "fullcast.html",
       },
     },
   },
@@ -27,6 +28,10 @@ export default defineConfig({
         },
         {
           src: "donations*.csv",
+          dest: ".",
+        },
+        {
+          src: "fullcast.csv",
           dest: ".",
         },
         {
