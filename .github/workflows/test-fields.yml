@@ -1,0 +1,77 @@
+name: Test GiveSmart field names
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch transactions and print relevant fields
+        env:
+          GIVESMART_API_TOKEN: ${{ secrets.GIVESMART_API_TOKEN }}
+        run: |
+          python3 -c "
+          import json, subprocess, time
+          from urllib.parse import urlencode
+
+          TOKEN = '${{ secrets.GIVESMART_API_TOKEN }}'
+          BASE = 'https://fundraise.givesmart.com/api/v2'
+
+          def api_get(url):
+              result = subprocess.run([
+                  'curl', '-s', '--fail-with-body',
+                  '-H', f'Authorization: Token token=\"{TOKEN}\"',
+                  '-H', 'Accept: application/json',
+                  '-H', 'Content-type: application/json',
+                  url,
+              ], capture_output=True, text=True)
+              return result.stdout
+
+          params = urlencode({'campaign': 'Charity Bowl 2026', 'status': 'collected,pending'})
+          text = api_get(f'{BASE}/reports/transactions.json?{params}')
+          report_id = json.loads(text)['id']
+          print(f'Report ID: {report_id}')
+
+          for i in range(30):
+              print(f'Polling... ({i*10}s)')
+              text = api_get(f'{BASE}/reports/results.json?id={report_id}')
+              text = text.strip()
+              if text.startswith('Request#') and 'not yet complete' in text:
+                  time.sleep(10)
+                  continue
+              data = json.loads(text)
+              if isinstance(data, list) and len(data) > 0:
+                  print(f'Got {len(data)} transactions')
+
+                  # Show fields related to source/offline/amount/fee
+                  print()
+                  print('=== FIELDS WITH source/offline/amount/fee/charge/net/gross ===')
+                  for key in sorted(data[0].keys()):
+                      if any(w in key.lower() for w in ['source', 'offline', 'amount', 'fee', 'charge', 'net', 'gross', 'billing', 'type']):
+                          print(f'  >>> {key}: {repr(data[0][key])}')
+
+                  # Find an offline transaction if any exist
+                  print()
+                  print('=== LOOKING FOR OFFLINE TRANSACTIONS ===')
+                  for txn in data:
+                      for key in txn:
+                          val = str(txn[key]).lower()
+                          if 'offline' in val or 'bulk' in val:
+                              print(f'  Found offline txn: source-related fields:')
+                              for k in sorted(txn.keys()):
+                                  if any(w in k.lower() for w in ['source', 'offline', 'amount', 'fee', 'type', 'billing']):
+                                      print(f'    {k}: {repr(txn[k])}')
+                              print()
+                              break
+                  break
+              time.sleep(10)
+          "
