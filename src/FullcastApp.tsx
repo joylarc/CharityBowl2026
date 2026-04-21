@@ -204,7 +204,8 @@ function getFullcastStart(): number {
 export default function FullcastApp() {
   const theme = useTheme();
   const fullcastStart = getFullcastStart();
-  const isLive = Date.now() >= fullcastStart;
+  const forceMode = new URL(window.location.href).searchParams.get("mode") === "live";
+  const isLive = forceMode || Date.now() >= fullcastStart;
 
   React.useEffect(() => {
     if (!isLive) {
