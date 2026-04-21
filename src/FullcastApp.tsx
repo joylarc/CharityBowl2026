@@ -234,9 +234,15 @@ export default function FullcastApp() {
           <Content />
         </Suspense>
       ) : (
-        <Box sx={{ textAlign: "center", padding: "3rem" }}>
-          <h2>WATCH THIS SPACE</h2>
-          <p>Leaderboard goes live at 2:00 PM ET</p>
+        <Box sx={{
+          textAlign: "center",
+          padding: "3rem",
+          fontSize: "4rem",
+          fontWeight: "bold",
+          color: "#fff",
+          textShadow: "-2px -2px 0 #fed426, 2px -2px 0 #fed426, -2px 2px 0 #fed426, 2px 2px 0 #fed426, 0 -2px 0 #fed426, 0 2px 0 #fed426, -2px 0 0 #fed426, 2px 0 0 #fed426",
+        }}>
+          WATCH THIS SPACE
         </Box>
       )}
     </>
