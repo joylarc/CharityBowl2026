@@ -247,17 +247,26 @@ def main():
         team_totals[team] = team_totals.get(team, 0) + total
         conf = conferences.get(team.lower(), "")
 
+        donation_pre_fees = txn.get("donation_amount", "")
+        if donation_pre_fees:
+            try:
+                donation_pre_fees = f"{float(str(donation_pre_fees).replace('$', '').replace(',', '')):.2f}"
+            except ValueError:
+                donation_pre_fees = ""
+
         txn_rows.append({
             "transaction_date": txn.get("transaction_date", ""),
             "first_name": txn.get("first_name", ""),
             "last_name": txn.get("last_name", ""),
             "zip_code": txn.get("zip") or txn.get("zip_code") or txn.get("postal_code") or "",
             "email": txn.get("email") or txn.get("email_address") or "",
+            "donation_pre_fees": donation_pre_fees,
+            "pledged_amount": f"{amount:.2f}",
             "frequency": frequency,
-            "amount": f"{amount:.2f}",
             "total": f"{total:.2f}",
             "school_team": team,
             "conference": conf,
+            "source": "GiveSmart",
             "message": txn.get("dedication/special_message") or txn.get("message") or txn.get("comment") or "",
         })
 
@@ -273,11 +282,13 @@ def main():
             "last_name": entry.get("last_name", ""),
             "zip_code": "",
             "email": entry.get("email", ""),
+            "donation_pre_fees": f"{entry['amount']:.2f}",
+            "pledged_amount": f"{entry['amount']:.2f}",
             "frequency": "",
-            "amount": f"{entry['amount']:.2f}",
             "total": f"{entry['amount']:.2f}",
             "school_team": entry["team"],
             "conference": conf,
+            "source": entry.get("type", "offline"),
             "message": entry.get("message", ""),
         })
     if manual:
@@ -293,8 +304,8 @@ def main():
     # Write transactions.csv
     txn_fields = [
         "transaction_date", "first_name", "last_name", "zip_code", "email",
-        "frequency", "amount", "total",
-        "school_team", "conference", "message",
+        "donation_pre_fees", "pledged_amount", "frequency", "total",
+        "school_team", "conference", "source", "message",
     ]
     with open(TRANSACTIONS_CSV_PATH, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=txn_fields)
