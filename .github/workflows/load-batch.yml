@@ -1,0 +1,38 @@
+name: Load manual additions batch
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: "Batch file name (without .csv)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Append batch to manual_additions.csv
+        run: |
+          BATCH="${{ inputs.batch }}.csv"
+          if [ ! -f "$BATCH" ]; then
+            echo "ERROR: $BATCH not found"
+            exit 1
+          fi
+          # Append all lines except the header
+          tail -n +2 "$BATCH" >> manual_additions.csv
+          echo "Appended $(tail -n +2 "$BATCH" | wc -l) rows from $BATCH"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add manual_additions.csv
+          git commit -m "Load batch: ${{ inputs.batch }} [skip ci]"
+          git push
