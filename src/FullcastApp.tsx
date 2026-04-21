@@ -191,18 +191,27 @@ function Loading() {
   );
 }
 
-const FULLCAST_START = new Date("2026-04-20T14:00:00-04:00").getTime(); // 2 PM ET
+function getFullcastStart(): number {
+  // 2 PM ET today
+  const now = new Date();
+  const today = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+  today.setHours(14, 0, 0, 0);
+  // Convert back to UTC timestamp
+  const offset = now.getTime() - new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" })).getTime();
+  return today.getTime() + offset;
+}
 
 export default function FullcastApp() {
   const theme = useTheme();
-  const isLive = Date.now() >= FULLCAST_START;
+  const fullcastStart = getFullcastStart();
+  const isLive = Date.now() >= fullcastStart;
 
   React.useEffect(() => {
     if (!isLive) {
-      const timer = setTimeout(() => window.location.reload(), FULLCAST_START - Date.now());
+      const timer = setTimeout(() => window.location.reload(), fullcastStart - Date.now());
       return () => clearTimeout(timer);
     }
-  }, [isLive]);
+  }, [isLive, fullcastStart]);
 
   return (
     <>
