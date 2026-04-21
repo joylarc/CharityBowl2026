@@ -317,10 +317,10 @@ def main():
                 txn_dt = datetime.strptime(txn_date_str, "%m/%d/%Y")
             except ValueError:
                 continue
-        # Must be today AND between 2 PM ET (18:00 UTC) and 4 PM ET (20:00 UTC)
+        # Must be today AND after 2 PM ET (18:00 UTC)
         if txn_dt.date() != today_utc:
             continue
-        if txn_dt.hour < 18 or txn_dt.hour >= 20:
+        if txn_dt.hour < 18:
             continue
         amount_raw = txn.get("pledged_amount")
         amount = parse_amount(amount_raw)
