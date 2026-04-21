@@ -223,7 +223,7 @@ export default function FullcastApp() {
         }}
       >
         <img
-          style={{ objectFit: "contain", maxWidth: "67%", maxHeight: "27vh" }}
+          style={{ objectFit: "contain", width: "100%", height: "100%", maxHeight: "27vh" }}
           src={import.meta.env.BASE_URL + "fullcast-logo.png"}
           alt="Fullcast Leaderboard"
         />
