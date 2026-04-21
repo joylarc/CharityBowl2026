@@ -191,8 +191,19 @@ function Loading() {
   );
 }
 
+const FULLCAST_START = new Date("2026-04-20T14:00:00-04:00").getTime(); // 2 PM ET
+
 export default function FullcastApp() {
   const theme = useTheme();
+  const isLive = Date.now() >= FULLCAST_START;
+
+  React.useEffect(() => {
+    if (!isLive) {
+      const timer = setTimeout(() => window.location.reload(), FULLCAST_START - Date.now());
+      return () => clearTimeout(timer);
+    }
+  }, [isLive]);
+
   return (
     <>
       <header
@@ -203,17 +214,22 @@ export default function FullcastApp() {
           maxHeight: "40vh",
         }}
       >
-        <a href="https://www.edsbscharitybowl.com" style={{ display: "inline-block" }}>
-          <img
-            style={{ objectFit: "contain", width: "100%", height: "100%" }}
-            src={import.meta.env.BASE_URL + "logo.png"}
-            alt="Fullcast Leaderboard"
-          />
-        </a>
+        <img
+          style={{ objectFit: "contain", width: "100%", height: "100%" }}
+          src={import.meta.env.BASE_URL + "fullcast-logo.png"}
+          alt="Fullcast Leaderboard"
+        />
       </header>
-      <Suspense fallback={<Loading />}>
-        <Content />
-      </Suspense>
+      {isLive ? (
+        <Suspense fallback={<Loading />}>
+          <Content />
+        </Suspense>
+      ) : (
+        <Box sx={{ textAlign: "center", padding: "3rem" }}>
+          <h2>WATCH THIS SPACE</h2>
+          <p>Leaderboard goes live at 2:00 PM ET</p>
+        </Box>
+      )}
     </>
   );
 }
