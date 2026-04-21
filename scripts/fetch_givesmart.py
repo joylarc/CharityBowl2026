@@ -302,8 +302,9 @@ def main():
         for team, total in sorted(team_totals.items()):
             f.write(f'"{team}","{total}"\n')
 
-    # Write fullcast.csv (2-4 PM ET window only, GiveSmart transactions only)
+    # Write fullcast.csv (2-4 PM ET window TODAY only, GiveSmart transactions only)
     fullcast_totals = {}
+    today_utc = datetime.now(timezone.utc).date()
     for txn in transactions:
         txn_date_str = (txn.get("transaction_date") or "").strip()
         if not txn_date_str:
@@ -316,7 +317,9 @@ def main():
                 txn_dt = datetime.strptime(txn_date_str, "%m/%d/%Y")
             except ValueError:
                 continue
-        # 2 PM ET = 18:00 UTC, 4 PM ET = 20:00 UTC
+        # Must be today AND between 2 PM ET (18:00 UTC) and 4 PM ET (20:00 UTC)
+        if txn_dt.date() != today_utc:
+            continue
         if txn_dt.hour < 18 or txn_dt.hour >= 20:
             continue
         amount_raw = txn.get("pledged_amount")

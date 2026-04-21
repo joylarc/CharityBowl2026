@@ -218,14 +218,14 @@ export default function FullcastApp() {
     <>
       <header
         style={{
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: "#0f419f",
           display: "flex",
           justifyContent: "center",
-          maxHeight: "40vh",
+          padding: "1rem",
         }}
       >
         <img
-          style={{ objectFit: "contain", width: "100%", height: "100%" }}
+          style={{ objectFit: "contain", maxWidth: "67%", maxHeight: "27vh" }}
           src={import.meta.env.BASE_URL + "fullcast-logo.png"}
           alt="Fullcast Leaderboard"
         />
@@ -240,8 +240,9 @@ export default function FullcastApp() {
           padding: "3rem",
           fontSize: "4rem",
           fontWeight: "bold",
-          color: "#fff",
-          textShadow: "-2px -2px 0 #fed426, 2px -2px 0 #fed426, -2px 2px 0 #fed426, 2px 2px 0 #fed426, 0 -2px 0 #fed426, 0 2px 0 #fed426, -2px 0 0 #fed426, 2px 0 0 #fed426",
+          color: "#fed426",
+          backgroundColor: "#0f419f",
+          textShadow: "-4px -4px 0 #000, 4px -4px 0 #000, -4px 4px 0 #000, 4px 4px 0 #000, 0 -4px 0 #000, 0 4px 0 #000, -4px 0 0 #000, 4px 0 0 #000",
         }}>
           WATCH THIS SPACE
         </Box>
