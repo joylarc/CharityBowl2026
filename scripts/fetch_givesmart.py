@@ -302,42 +302,7 @@ def main():
         for team, total in sorted(team_totals.items()):
             f.write(f'"{team}","{total}"\n')
 
-    # Write fullcast.csv (2-4 PM ET window TODAY only, GiveSmart transactions only)
-    fullcast_totals = {}
-    today_utc = datetime.now(timezone.utc).date()
-    for txn in transactions:
-        txn_date_str = (txn.get("transaction_date") or "").strip()
-        if not txn_date_str:
-            continue
-        try:
-            # Parse "MM/DD/YYYY HH:MM" format (UTC)
-            txn_dt = datetime.strptime(txn_date_str, "%m/%d/%Y %H:%M")
-        except ValueError:
-            try:
-                txn_dt = datetime.strptime(txn_date_str, "%m/%d/%Y")
-            except ValueError:
-                continue
-        # Must be today AND after 2 PM ET (18:00 UTC)
-        if txn_dt.date() != today_utc:
-            continue
-        if txn_dt.hour < 18:
-            continue
-        amount_raw = txn.get("pledged_amount")
-        amount = parse_amount(amount_raw)
-        if amount is None or amount <= 0:
-            continue
-        team = (txn.get("name_of_team_(dropdown)") or txn.get("name_of_school/team_(dropdown)") or "").strip()
-        if not team:
-            continue
-        frequency = (txn.get("frequency") or "").strip()
-        total = compute_total(amount, frequency)
-        fullcast_totals[team] = fullcast_totals.get(team, 0) + total
-
-    with open(FULLCAST_CSV_PATH, "w", newline="", encoding="utf-8") as f:
-        f.write(f'"{timestamp}"\n')
-        for team, total in sorted(fullcast_totals.items()):
-            f.write(f'"{team}","{total}"\n')
-    print(f"  Fullcast teams: {len(fullcast_totals)}")
+    # Fullcast leaderboard FROZEN — do not update fullcast.csv
 
     # Write transactions.csv
     txn_fields = [

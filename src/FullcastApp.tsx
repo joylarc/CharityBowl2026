@@ -235,6 +235,9 @@ export default function FullcastApp() {
             <h1 style={{ margin: 0, color: "#fed426", fontSize: "1.8rem", letterSpacing: "0.05em" }}>
               THE FULLCAST GETBACK GIVE-BACK
             </h1>
+            <h2 style={{ margin: "0.5rem 0 0 0", color: "#fff", fontSize: "1.2rem", letterSpacing: "0.05em" }}>
+              FINAL STANDINGS
+            </h2>
             <Button
               variant="contained"
               href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113"
