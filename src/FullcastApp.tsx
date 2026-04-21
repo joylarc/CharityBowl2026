@@ -231,9 +231,16 @@ export default function FullcastApp() {
         />
       </header>
       {isLive ? (
-        <Suspense fallback={<Loading />}>
-          <Content />
-        </Suspense>
+        <>
+          <Box sx={{ textAlign: "center", padding: "1rem", backgroundColor: "#0f419f" }}>
+            <h1 style={{ margin: 0, color: "#fed426", fontSize: "1.8rem", letterSpacing: "0.05em" }}>
+              THE FULLCAST GETBACK GIVE-BACK
+            </h1>
+          </Box>
+          <Suspense fallback={<Loading />}>
+            <Content />
+          </Suspense>
+        </>
       ) : (
         <Box sx={{
           textAlign: "center",
