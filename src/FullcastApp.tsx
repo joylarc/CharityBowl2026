@@ -20,7 +20,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import StripedTableRow from "./StripedTableRow";
 
-const { Suspense, useCallback, useMemo, useRef, useState, use } = React;
+const { Suspense, useMemo, useRef, useState, use } = React;
 
 type DonationMap = { [school: string]: number };
 
