@@ -80,7 +80,7 @@ function ProgressCircle({
   const firstOffset = circumference * (1 - firstLap);
   const secondOffset = circumference * (1 - secondLap);
   const overGoal = rawProgress > 1;
-  const showHearts = overGoal && totalRaised <= goal + 10000;
+  const showHearts = overGoal && totalRaised <= goal + 20000;
 
   return (
     <Box sx={{ position: "relative", width: size, height: size, margin: "0 auto" }}>
