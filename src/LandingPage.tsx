@@ -257,29 +257,67 @@ export default function LandingPage() {
           {(() => {
             const size = isSmall ? 320 : 450;
             const strokeWidth = 14;
-            const radius = (size - strokeWidth) / 2;
+            const overStrokeWidth = 20;
+            const radius = (size - overStrokeWidth) / 2;
             const circumference = 2 * Math.PI * radius;
-            const progress = Math.min(totalRaised / goal, 1);
-            const offset = circumference * (1 - progress);
+            const rawProgress = totalRaised / goal;
+            const firstLap = Math.min(rawProgress, 1);
+            const secondLap = rawProgress > 1 ? Math.min(rawProgress - 1, 1) : 0;
+            const firstOffset = circumference * (1 - firstLap);
+            const secondOffset = circumference * (1 - secondLap);
+            const overGoal = rawProgress > 1;
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
+                {overGoal && (
+                  <style>{`
+                    @keyframes pulseGlow {
+                      0%, 100% { opacity: 0.35; }
+                      50% { opacity: 1; }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                      * { animation: none !important; }
+                    }
+                  `}</style>
+                )}
                 <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
+                  {overGoal && (
+                    <defs>
+                      <filter id="over-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feMerge>
+                          <feMergeNode in="blur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                    </defs>
+                  )}
+                  {/* Background track */}
                   <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
-                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                  {/* First lap: green */}
+                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={firstOffset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                  {/* Second lap: gold, thicker, with pulsing glow */}
+                  {overGoal && (
+                    <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={secondOffset} strokeLinecap="round" filter="url(#over-glow)" style={{ transition: "stroke-dashoffset 1s ease", animation: "pulseGlow 2s ease-in-out infinite" }} />
+                  )}
                 </svg>
-                <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "0.5rem" }}>
+                <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
                   <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
                     Raised so far
                   </Typography>
                   <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
                     ${Math.round(totalRaised).toLocaleString()}
                   </Typography>
-                  <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: "0.5rem", paddingTop: "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
+                  {overGoal && (
+                    <Typography variant="caption" sx={{ color: "#f0c040", fontWeight: "bold" }}>
+                      New Goal: $1,500,000
+                    </Typography>
+                  )}
+                  <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: isSmall ? "0.25rem" : "0.5rem", paddingTop: isSmall ? "0.4rem" : "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
                     <Box sx={{ textAlign: "center" }}>
                       <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem" }}>
                         Our Goal
                       </Typography>
-                      <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                      <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
                         ${goal.toLocaleString()}
                       </Typography>
                     </Box>
@@ -287,7 +325,7 @@ export default function LandingPage() {
                       <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
                         Total Donors
                       </Typography>
-                      <Typography variant={isSmall ? "body1" : "h6"} sx={{ fontWeight: "bold" }}>
+                      <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
                         {totalDonors}
                       </Typography>
                     </Box>
