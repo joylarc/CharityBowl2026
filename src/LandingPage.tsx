@@ -91,7 +91,7 @@ function FloatingHearts({ size }: { size: number }) {
         x: center + spread,
         y: center - ringRadius + (Math.random() - 0.5) * 14,
         size: 8 + Math.random() * 22,
-        delay: (i / heartCount) * duration + Math.random() * 0.5,
+        delay: -(Math.random() * duration),
         duration,
       };
     })
@@ -103,9 +103,9 @@ function FloatingHearts({ size }: { size: number }) {
         @keyframes floatUpTall {
           0% { opacity: 0; transform: translateY(0) scale(0.5); }
           15% { opacity: 1; transform: translateY(-15px) scale(1); }
-          50% { opacity: 0.9; transform: translateY(-80px) scale(1.1); }
-          85% { opacity: 0.5; transform: translateY(-130px) scale(0.9); }
-          100% { opacity: 0; transform: translateY(-160px) scale(0.5); }
+          50% { opacity: 0.9; transform: translateY(-120px) scale(1.1); }
+          85% { opacity: 0.5; transform: translateY(-200px) scale(0.9); }
+          100% { opacity: 0; transform: translateY(-250px) scale(0.5); }
         }
         @media (prefers-reduced-motion: reduce) {
           .floating-heart { animation: none !important; opacity: 0.7 !important; }
@@ -125,7 +125,9 @@ function FloatingHearts({ size }: { size: number }) {
             zIndex: 10,
           }}
         >
-          ❤️
+          {h.id % 20 === 19 ? (
+            <img src={import.meta.env.BASE_URL + "SpencerOveralls.jpg"} alt="" style={{ width: h.size * 2.5, height: h.size * 2.5, objectFit: "cover", clipPath: "polygon(50% 12%, 40% 0%, 25% 0%, 10% 5%, 0% 18%, 0% 35%, 0% 50%, 8% 65%, 50% 100%, 92% 65%, 100% 50%, 100% 35%, 100% 18%, 90% 5%, 75% 0%, 60% 0%)" }} />
+          ) : "❤️"}
         </div>
       ))}
     </>
