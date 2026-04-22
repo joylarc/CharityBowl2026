@@ -100,7 +100,7 @@ function ProgressCircle({
           </Typography>
           {overGoal && (
             <Typography variant="caption" sx={{ color: "#f0c040", fontWeight: "bold" }}>
-              {pct}% of goal!
+              New Goal: $1,500,000
             </Typography>
           )}
           <Box sx={{
