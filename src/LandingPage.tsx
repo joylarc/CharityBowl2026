@@ -322,7 +322,7 @@ export default function LandingPage() {
             const firstOffset = circumference * (1 - firstLap);
             const secondOffset = circumference * (1 - secondLap);
             const overGoal = rawProgress > 1;
-            const showHearts = overGoal && totalRaised <= goal + 5000;
+            const showHearts = overGoal && totalRaised <= goal + 10000;
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
                 {showHearts && <FloatingHearts size={size} />}
