@@ -25,6 +25,8 @@ jobs:
             echo "ERROR: $BATCH not found"
             exit 1
           fi
+          # Ensure manual_additions.csv ends with a newline before appending
+          sed -i -e '$a\' manual_additions.csv
           # Append all lines except the header
           tail -n +2 "$BATCH" >> manual_additions.csv
           echo "Appended $(tail -n +2 "$BATCH" | wc -l) rows from $BATCH"
