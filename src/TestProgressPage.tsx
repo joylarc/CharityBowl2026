@@ -29,7 +29,6 @@ function ProgressCircle({
   const firstOffset = circumference * (1 - firstLap);
   const secondOffset = circumference * (1 - secondLap);
   const overGoal = rawProgress > 1;
-  const pct = Math.round(rawProgress * 100);
 
   return (
     <Box sx={{ textAlign: "center" }}>
