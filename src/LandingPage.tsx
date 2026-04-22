@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 // Bluesky SVG icon (no MUI icon available)
 function BlueskyIcon({ size = 20 }: { size?: number }) {
@@ -76,6 +76,60 @@ function Section({ children, dark = false }: { children: React.ReactNode; dark?:
 
 function GreenBar() {
   return <Box sx={{ width: 50, height: 3, backgroundColor: "#6ab648", marginBottom: "1.5rem" }} />;
+}
+
+function FloatingHearts({ size }: { size: number }) {
+  const center = size / 2;
+  const ringRadius = size / 2 - 10;
+  const heartCount = 20;
+  const hearts = useRef(
+    Array.from({ length: heartCount }, (_, i) => {
+      const spread = (Math.random() - 0.5) * 50;
+      const duration = 2.5 + Math.random() * 2.5;
+      return {
+        id: i,
+        x: center + spread,
+        y: center - ringRadius + (Math.random() - 0.5) * 14,
+        size: 8 + Math.random() * 22,
+        delay: (i / heartCount) * duration + Math.random() * 0.5,
+        duration,
+      };
+    })
+  ).current;
+
+  return (
+    <>
+      <style>{`
+        @keyframes floatUpTall {
+          0% { opacity: 0; transform: translateY(0) scale(0.5); }
+          15% { opacity: 1; transform: translateY(-15px) scale(1); }
+          50% { opacity: 0.9; transform: translateY(-80px) scale(1.1); }
+          85% { opacity: 0.5; transform: translateY(-130px) scale(0.9); }
+          100% { opacity: 0; transform: translateY(-160px) scale(0.5); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .floating-heart { animation: none !important; opacity: 0.7 !important; }
+        }
+      `}</style>
+      {hearts.map((h) => (
+        <div
+          key={h.id}
+          className="floating-heart"
+          style={{
+            position: "absolute",
+            left: h.x - h.size / 2,
+            top: h.y - h.size / 2,
+            fontSize: h.size,
+            animation: `floatUpTall ${h.duration}s ease-in-out ${h.delay}s infinite`,
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        >
+          ❤️
+        </div>
+      ))}
+    </>
+  );
 }
 
 export default function LandingPage() {
@@ -266,8 +320,10 @@ export default function LandingPage() {
             const firstOffset = circumference * (1 - firstLap);
             const secondOffset = circumference * (1 - secondLap);
             const overGoal = rawProgress > 1;
+            const showHearts = overGoal && totalRaised <= goal + 5000;
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
+                {showHearts && <FloatingHearts size={size} />}
                 {overGoal && (
                   <style>{`
                     @keyframes pulseGlow {
