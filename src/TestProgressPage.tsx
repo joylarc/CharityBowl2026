@@ -76,7 +76,7 @@ function ProgressCircle({
   const circumference = 2 * Math.PI * radius;
   const rawProgress = totalRaised / goal;
   const firstLap = Math.min(rawProgress, 1);
-  const secondLap = rawProgress > 1 ? Math.min(rawProgress - 1, 1) : 0;
+  const secondLap = rawProgress > 1 ? Math.min((rawProgress - 1) * 2, 1) : 0;
   const firstOffset = circumference * (1 - firstLap);
   const secondOffset = circumference * (1 - secondLap);
   const overGoal = rawProgress > 1;
