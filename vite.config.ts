@@ -15,7 +15,6 @@ export default defineConfig({
         about: "about.html",
         faq: "faq.html",
         fullcast: "fullcast.html",
-        testprogress: "testprogress.html",
       },
     },
   },

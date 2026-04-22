@@ -61,7 +61,6 @@ jobs:
           cp dist/SpencerOveralls.jpg dist-edsbs/
           cp dist/og-image.png dist-edsbs/
           cp dist/IMG_1107.jpg dist-edsbs/
-          cp dist/testprogress.html dist-edsbs/
           # Clean moneycannon dist (remove edsbs-only pages)
           rm -f dist/testreplacement.html
           rm -f dist/faq.html
