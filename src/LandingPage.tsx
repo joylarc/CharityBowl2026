@@ -84,13 +84,13 @@ function FloatingHearts({ size }: { size: number }) {
   const heartCount = 20;
   const hearts = useRef(
     Array.from({ length: heartCount }, (_, i) => {
-      const spread = (Math.random() - 0.5) * 50;
+      const spread = (Math.random() - 0.5) * size * 0.1;
       const duration = 2.5 + Math.random() * 2.5;
       return {
         id: i,
         x: center + spread,
         y: center - ringRadius + (Math.random() - 0.5) * 14,
-        size: 8 + Math.random() * 22,
+        size: i % 20 === 19 ? 20 : 10 + Math.random() * 30,
         delay: -(Math.random() * duration),
         duration,
       };
