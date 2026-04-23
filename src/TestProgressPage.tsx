@@ -294,9 +294,6 @@ export default function TestProgressPage() {
       <Typography variant="h4" sx={{ textAlign: "center", mb: 1, fontWeight: "bold" }}>
         🔔 Ring the Bell Prototype
       </Typography>
-      <Typography variant="body2" sx={{ textAlign: "center", mb: 4, color: "#aaa" }}>
-        Click the bell — Spencer hearts burst out! Each click plays a different sound.
-      </Typography>
 
       <Box sx={{ maxWidth: 500, mx: "auto", mb: 4, px: 2 }}>
         <Typography variant="body2" sx={{ color: "#aaa", mb: 1 }}>
