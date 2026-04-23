@@ -62,6 +62,14 @@ jobs:
           cp dist/og-image.png dist-edsbs/
           cp dist/IMG_1107.jpg dist-edsbs/
           cp dist/testprogress.html dist-edsbs/
+          cp dist/kicker-spencer.jpg dist-edsbs/
+          cp dist/Bell.mp3 dist-edsbs/
+          cp "dist/Bell 2.mp3" dist-edsbs/
+          cp dist/Welcome.mp3 dist-edsbs/
+          cp "dist/Just take those old records off the shelf.mp3" dist-edsbs/
+          cp "dist/a cappella.mp3" dist-edsbs/
+          cp "dist/Never done that before.mp3" dist-edsbs/
+          cp "dist/oh no disaster.mp3" dist-edsbs/
           # Clean moneycannon dist (remove edsbs-only pages)
           rm -f dist/testreplacement.html
           rm -f dist/faq.html

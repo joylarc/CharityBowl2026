@@ -1,65 +1,172 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
 
-function FloatingHearts({ size }: { size: number }) {
-  const center = size / 2;
-  const ringRadius = size / 2 - 10;
-  const heartCount = 20;
-  const hearts = useRef(
-    Array.from({ length: heartCount }, (_, i) => {
-      const spread = (Math.random() - 0.5) * size * 0.1;
-      const duration = 2.5 + Math.random() * 2.5;
+/* ------------------------------------------------------------------ */
+/*  Spencer Burst — one-time confetti of Spencer hearts from a point   */
+/* ------------------------------------------------------------------ */
+function SpencerBurst({ originX, originY, trigger }: { originX: number; originY: number; trigger: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgsRef = useRef<HTMLImageElement[]>([]);
+  const prevTrigger = useRef(0);
+
+  // Preload both Spencer images
+  if (imgsRef.current.length === 0) {
+    for (const src of ["SpencerOveralls.jpg", "kicker-spencer.jpg"]) {
+      const img = new Image();
+      img.src = import.meta.env.BASE_URL + src;
+      imgsRef.current.push(img);
+    }
+  }
+
+  if (trigger > 0 && trigger !== prevTrigger.current) {
+    prevTrigger.current = trigger;
+
+    const count = 18;
+    const particles = Array.from({ length: count }, () => {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2; // mostly upward, spread ~70deg
+      const speed = 600 + Math.random() * 500;
       return {
-        id: i,
-        x: center + spread,
-        y: center - ringRadius + (Math.random() - 0.5) * 14,
-        size: i % 20 === 19 ? 20 : 10 + Math.random() * 30,
-        delay: -(Math.random() * duration),
-        duration,
+        x: 0,
+        y: 0,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 24 + Math.random() * 30,
+        rotation: 0,
+        rotationSpeed: (Math.random() - 0.5) * 600,
+        opacity: 1,
+        drag: 0.98 + Math.random() * 0.015,
+        imgIndex: Math.random() > 0.5 ? 0 : 1,
       };
-    })
-  ).current;
+    });
+
+    const gravity = 800;
+    let lastTime = 0;
+    let animId = 0;
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      lastTime = time;
+
+      let anyAlive = false;
+
+      for (const p of particles) {
+        if (p.opacity <= 0) continue;
+        anyAlive = true;
+
+        p.vy += gravity * dt;
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.rotation += p.rotationSpeed * dt;
+
+        // Fade out once falling past origin
+        if (p.y > 100) {
+          p.opacity -= dt * 0.8;
+        }
+      }
+
+      // Render to canvas
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const imgs = imgsRef.current;
+          if (imgs.length > 0 && imgs[0].complete) {
+            for (const p of particles) {
+              if (p.opacity <= 0) continue;
+              const img = imgs[p.imgIndex] && imgs[p.imgIndex].complete ? imgs[p.imgIndex] : imgs[0];
+              ctx.save();
+              ctx.globalAlpha = Math.max(0, p.opacity);
+              ctx.translate(originX + p.x, originY + p.y);
+              ctx.rotate((p.rotation * Math.PI) / 180);
+
+              // Draw heart-shaped clip
+              const s = p.size;
+              ctx.beginPath();
+              ctx.moveTo(0, -s * 0.35);
+              ctx.bezierCurveTo(-s * 0.5, -s * 0.8, -s, -s * 0.2, 0, s * 0.45);
+              ctx.moveTo(0, -s * 0.35);
+              ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.2, 0, s * 0.45);
+              ctx.closePath();
+              ctx.clip();
+
+              ctx.drawImage(img, -s, -s, s * 2, s * 2);
+              ctx.restore();
+            }
+          }
+        }
+      }
+
+      if (anyAlive) {
+        animId = requestAnimationFrame(animate);
+      } else if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext("2d");
+        if (ctx) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      }
+    };
+
+    // Cancel any previous animation
+    cancelAnimationFrame(animId);
+    requestAnimationFrame(animate);
+  }
 
   return (
-    <>
-      <style>{`
-        @keyframes floatUpTall {
-          0% { opacity: 0; transform: translateY(0) scale(0.5); }
-          15% { opacity: 1; transform: translateY(-15px) scale(1); }
-          50% { opacity: 0.9; transform: translateY(-120px) scale(1.1); }
-          85% { opacity: 0.5; transform: translateY(-200px) scale(0.9); }
-          100% { opacity: 0; transform: translateY(-250px) scale(0.5); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .floating-heart { animation: none !important; opacity: 0.7 !important; }
-        }
-      `}</style>
-      {hearts.map((h) => (
-        <div
-          key={h.id}
-          className="floating-heart"
-          style={{
-            position: "absolute",
-            left: h.x - h.size / 2,
-            top: h.y - h.size / 2,
-            fontSize: h.size,
-            animation: `floatUpTall ${h.duration}s ease-in-out ${h.delay}s infinite`,
-            pointerEvents: "none",
-            zIndex: 10,
-          }}
-        >
-          {h.id % 20 === 19 ? (
-            <img src={import.meta.env.BASE_URL + "SpencerOveralls.jpg"} alt="" style={{ width: h.size * 2.5, height: h.size * 2.5, objectFit: "cover", clipPath: "polygon(50% 12%, 40% 0%, 25% 0%, 10% 5%, 0% 18%, 0% 35%, 0% 50%, 8% 65%, 50% 100%, 92% 65%, 100% 50%, 100% 35%, 100% 18%, 90% 5%, 75% 0%, 60% 0%)" }} />
-          ) : "❤️"}
-        </div>
-      ))}
-    </>
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 9999,
+      }}
+    />
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Audio clips — cycle through on each bell click                     */
+/* ------------------------------------------------------------------ */
+const SOUND_FILES = [
+  "Bell.mp3",
+  "Welcome.mp3",
+  "Just take those old records off the shelf.mp3",
+  "Bell 2.mp3",
+  "a cappella.mp3",
+  "Never done that before.mp3",
+  "oh no disaster.mp3",
+];
+
+const SOUND_NAMES = [
+  "🔔 Bell",
+  "🎙️ Welcome",
+  "🎵 Old Records Off the Shelf",
+  "🔔 Bell 2",
+  "🎤 A Cappella",
+  "😮 Never Done That Before",
+  "💥 Oh No Disaster",
+];
+
+function playSound(index: number) {
+  const audio = new Audio(import.meta.env.BASE_URL + SOUND_FILES[index]);
+  audio.play();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Progress Circle (simplified — no auto-hearts for this prototype)   */
+/* ------------------------------------------------------------------ */
 function ProgressCircle({
   totalRaised,
   goal,
@@ -80,11 +187,9 @@ function ProgressCircle({
   const firstOffset = circumference * (1 - firstLap);
   const secondOffset = circumference * (1 - secondLap);
   const overGoal = rawProgress > 1;
-  const showHearts = overGoal && totalRaised <= goal + 20000;
 
   return (
     <Box sx={{ position: "relative", width: size, height: size, margin: "0 auto" }}>
-      {showHearts && <FloatingHearts size={size} />}
       {overGoal && (
         <style>{`
           @keyframes pulseGlow {
@@ -155,21 +260,45 @@ function ProgressCircle({
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Test Page                                                          */
+/* ------------------------------------------------------------------ */
 export default function TestProgressPage() {
   const isSmall = useMediaQuery("(max-width:600px)");
   const goal = 1_000_000;
-  const [raised, setRaised] = useState(995_000);
+  const [raised, setRaised] = useState(1_050_000);
+  const [burstTrigger, setBurstTrigger] = useState(0);
+  const [burstOrigin, setBurstOrigin] = useState({ x: 0, y: 0 });
+  const [soundIndex, setSoundIndex] = useState(0);
+  const [lastSound, setLastSound] = useState("");
+
+  const handleRing = useCallback((e: React.MouseEvent) => {
+    // Get bell position for burst origin
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setBurstOrigin({
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    });
+
+    // Play the current sound
+    playSound(soundIndex);
+    setLastSound(SOUND_NAMES[soundIndex]);
+    setSoundIndex((i) => (i + 1) % SOUND_FILES.length);
+
+    // Trigger burst
+    setBurstTrigger((t) => t + 1);
+  }, [soundIndex]);
 
   return (
     <Box sx={{ minHeight: "100vh", py: 4, px: 2 }}>
       <Typography variant="h4" sx={{ textAlign: "center", mb: 1, fontWeight: "bold" }}>
-        Progress Circle Preview
+        🔔 Ring the Bell Prototype
       </Typography>
       <Typography variant="body2" sx={{ textAlign: "center", mb: 4, color: "#aaa" }}>
-        Drag the slider to simulate donation total
+        Click the bell — Spencer hearts burst out! Each click plays a different sound.
       </Typography>
 
-      <Box sx={{ maxWidth: 500, mx: "auto", mb: 6, px: 2 }}>
+      <Box sx={{ maxWidth: 500, mx: "auto", mb: 4, px: 2 }}>
         <Typography variant="body2" sx={{ color: "#aaa", mb: 1 }}>
           Simulated total: <strong style={{ color: "#fff" }}>${raised.toLocaleString()}</strong>
         </Typography>
@@ -177,7 +306,7 @@ export default function TestProgressPage() {
           value={raised}
           onChange={(_, v) => setRaised(v as number)}
           min={900_000}
-          max={1_100_000}
+          max={1_500_000}
           step={500}
           sx={{
             color: raised > goal ? "#f0c040" : "#6ab648",
@@ -186,12 +315,36 @@ export default function TestProgressPage() {
         />
         <Box sx={{ display: "flex", justifyContent: "space-between", color: "#888", fontSize: "0.75rem" }}>
           <span>$900K</span>
-          <span>$1M (goal)</span>
-          <span>$1.1M</span>
+          <span>$1M</span>
+          <span>$1.5M</span>
         </Box>
       </Box>
 
       <ProgressCircle totalRaised={raised} goal={goal} isSmall={isSmall} />
+
+      <Box sx={{ textAlign: "center", mt: 3 }}>
+        <IconButton
+          onClick={handleRing}
+          sx={{
+            fontSize: "3.5rem",
+            transition: "transform 0.15s",
+            "&:hover": { transform: "scale(1.15)" },
+            "&:active": { transform: "scale(0.85)" },
+          }}
+        >
+          🔔
+        </IconButton>
+        <Typography variant="caption" sx={{ display: "block", color: "#aaa", mt: 0.5 }}>
+          Ring the bell to celebrate!
+        </Typography>
+        {lastSound && (
+          <Typography variant="caption" sx={{ display: "block", color: "#f0c040", mt: 0.5 }}>
+            Now playing: {lastSound}
+          </Typography>
+        )}
+      </Box>
+
+      <SpencerBurst originX={burstOrigin.x} originY={burstOrigin.y} trigger={burstTrigger} />
     </Box>
   );
 }
