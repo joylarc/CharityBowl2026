@@ -86,6 +86,22 @@ export default function HeadToHead() {
   const [schools, setSchoolsState] = useState<string[]>(
     parseSchoolsFromQuery(cQuery, schoolIndex.idToName)
   );
+  const [rivalryName, setRivalryNameState] = useState(
+    url.searchParams.get("name") || ""
+  );
+  const setRivalryName = useCallback(
+    (name: string) => {
+      const url = new URL(window.location.href);
+      setRivalryNameState(name);
+      if (name === "") {
+        url.searchParams.delete("name");
+      } else {
+        url.searchParams.set("name", name);
+      }
+      window.history.replaceState({}, "", url);
+    },
+    [setRivalryNameState]
+  );
   const setSchools = useCallback(
     (q: string[]) => {
       const url = new URL(window.location.href);
@@ -150,6 +166,28 @@ export default function HeadToHead() {
               if (value != null) {
                 setSchools([...schools, value]);
               }
+            }}
+          />
+        </Box>
+      )}
+      {schools.length > 0 && (
+        <Box sx={{ padding: "0 1rem 0.5rem 1rem" }}>
+          <TextField
+            fullWidth
+            variant="standard"
+            placeholder="Name this rivalry (limit 100 characters)"
+            value={rivalryName}
+            onChange={(e) => setRivalryName(e.target.value.slice(0, 100))}
+            slotProps={{
+              input: {
+                style: {
+                  fontSize: rivalryName ? "1.25rem" : "0.875rem",
+                  fontWeight: rivalryName ? "bold" : "normal",
+                  textAlign: "center",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                },
+              },
             }}
           />
         </Box>
