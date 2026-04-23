@@ -266,7 +266,7 @@ function ProgressCircle({
 export default function TestProgressPage() {
   const isSmall = useMediaQuery("(max-width:600px)");
   const goal = 1_000_000;
-  const [raised, setRaised] = useState(1_050_000);
+  const [raised, setRaised] = useState(1_350_000);
   const [burstTrigger, setBurstTrigger] = useState(0);
   const [burstOrigin, setBurstOrigin] = useState({ x: 0, y: 0 });
   const [soundIndex, setSoundIndex] = useState(0);
@@ -319,6 +319,7 @@ export default function TestProgressPage() {
 
       <ProgressCircle totalRaised={raised} goal={goal} isSmall={isSmall} />
 
+      {raised >= 1_370_251 && (
       <Box sx={{ textAlign: "center", mt: 3 }}>
         <IconButton
           onClick={handleRing}
@@ -340,6 +341,7 @@ export default function TestProgressPage() {
           </Typography>
         )}
       </Box>
+      )}
 
       <SpencerBurst originX={burstOrigin.x} originY={burstOrigin.y} trigger={burstTrigger} />
     </Box>
