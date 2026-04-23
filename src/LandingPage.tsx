@@ -4,10 +4,11 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import IconButton from "@mui/material/IconButton";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect, useRef, useCallback } = React;
 
 // Bluesky SVG icon (no MUI icon available)
 function BlueskyIcon({ size = 20 }: { size?: number }) {
@@ -134,11 +135,148 @@ function FloatingHearts({ size }: { size: number }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Spencer Burst — confetti of Spencer hearts from bell click         */
+/* ------------------------------------------------------------------ */
+function SpencerBurst({ originX, originY, trigger }: { originX: number; originY: number; trigger: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgsRef = useRef<HTMLImageElement[]>([]);
+  const prevTrigger = useRef(0);
+
+  if (imgsRef.current.length === 0) {
+    for (const src of ["SpencerOveralls.jpg", "kicker-spencer.jpg"]) {
+      const img = new Image();
+      img.src = import.meta.env.BASE_URL + src;
+      imgsRef.current.push(img);
+    }
+  }
+
+  if (trigger > 0 && trigger !== prevTrigger.current) {
+    prevTrigger.current = trigger;
+
+    const count = 18;
+    const particles = Array.from({ length: count }, () => {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+      const speed = 600 + Math.random() * 500;
+      return {
+        x: 0, y: 0,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 24 + Math.random() * 30,
+        rotation: 0,
+        rotationSpeed: (Math.random() - 0.5) * 600,
+        opacity: 1,
+        drag: 0.98 + Math.random() * 0.015,
+        imgIndex: Math.random() > 0.5 ? 0 : 1,
+      };
+    });
+
+    const gravity = 800;
+    let lastTime = 0;
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      lastTime = time;
+
+      let anyAlive = false;
+      for (const p of particles) {
+        if (p.opacity <= 0) continue;
+        anyAlive = true;
+        p.vy += gravity * dt;
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.rotation += p.rotationSpeed * dt;
+        if (p.y > 100) p.opacity -= dt * 0.8;
+      }
+
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const imgs = imgsRef.current;
+          if (imgs.length > 0 && imgs[0].complete) {
+            for (const p of particles) {
+              if (p.opacity <= 0) continue;
+              const img = imgs[p.imgIndex] && imgs[p.imgIndex].complete ? imgs[p.imgIndex] : imgs[0];
+              ctx.save();
+              ctx.globalAlpha = Math.max(0, p.opacity);
+              ctx.translate(originX + p.x, originY + p.y);
+              ctx.rotate((p.rotation * Math.PI) / 180);
+              const s = p.size;
+              ctx.beginPath();
+              ctx.moveTo(0, -s * 0.35);
+              ctx.bezierCurveTo(-s * 0.5, -s * 0.8, -s, -s * 0.2, 0, s * 0.45);
+              ctx.moveTo(0, -s * 0.35);
+              ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.2, 0, s * 0.45);
+              ctx.closePath();
+              ctx.clip();
+              ctx.drawImage(img, -s, -s, s * 2, s * 2);
+              ctx.restore();
+            }
+          }
+        }
+      }
+
+      if (anyAlive) {
+        requestAnimationFrame(animate);
+      } else if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext("2d");
+        if (ctx) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 9999 }}
+    />
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Audio clips                                                        */
+/* ------------------------------------------------------------------ */
+const SOUND_FILES = [
+  "Bell.mp3",
+  "Welcome.mp3",
+  "Just take those old records off the shelf.mp3",
+  "Bell 2.mp3",
+  "a cappella.mp3",
+  "Never done that before.mp3",
+  "oh no disaster.mp3",
+];
+
+function playSound(index: number) {
+  const audio = new Audio(import.meta.env.BASE_URL + SOUND_FILES[index]);
+  audio.play();
+}
+
+const BELL_THRESHOLD = 1_370_251;
+
 export default function LandingPage() {
   const isSmall = useMediaQuery("(max-width:600px)");
   const [totalRaised, setTotalRaised] = useState(0);
   const [totalDonors, setTotalDonors] = useState(0);
   const goal = 1_000_000;
+  const [burstTrigger, setBurstTrigger] = useState(0);
+  const [burstOrigin, setBurstOrigin] = useState({ x: 0, y: 0 });
+  const [soundIndex, setSoundIndex] = useState(0);
+  const handleRing = useCallback((e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setBurstOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+    playSound(soundIndex);
+    setSoundIndex((i) => (i + 1) % SOUND_FILES.length);
+    setBurstTrigger((t) => t + 1);
+  }, [soundIndex]);
 
   useEffect(() => {
     // Auto-reload when donate buttons should go live
@@ -393,7 +531,27 @@ export default function LandingPage() {
             );
           })()}
         </Container>
+        {totalRaised >= BELL_THRESHOLD && (
+          <Box sx={{ textAlign: "center", mt: 2, mb: 1 }}>
+            <IconButton
+              onClick={handleRing}
+              sx={{
+                fontSize: "3.5rem",
+                transition: "transform 0.15s",
+                "&:hover": { transform: "scale(1.15)" },
+                "&:active": { transform: "scale(0.85)" },
+              }}
+            >
+              🔔
+            </IconButton>
+            <Typography variant="caption" sx={{ display: "block", color: "#aaa" }}>
+              Ring the bell to celebrate!
+            </Typography>
+          </Box>
+        )}
       </Box>
+
+      <SpencerBurst originX={burstOrigin.x} originY={burstOrigin.y} trigger={burstTrigger} />
 
       {/* Text to donate */}
       <Box sx={{ backgroundColor: "#555", textAlign: "center", padding: "2rem 0", borderTop: "3px solid #666" }}>
