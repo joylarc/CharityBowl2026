@@ -461,6 +461,17 @@ export default function LandingPage() {
             const secondOffset = circumference * (1 - secondLap);
             const overGoal = rawProgress > 1;
             const showHearts = overGoal && totalRaised <= goal + 20000;
+            // Animate: start empty, fill green after mount, then gold after green finishes
+            const [animPhase, setAnimPhase] = useState(0);
+            useEffect(() => {
+              if (totalRaised > 0) {
+                requestAnimationFrame(() => setAnimPhase(1));
+                if (overGoal) {
+                  const timer = setTimeout(() => setAnimPhase(2), 1000);
+                  return () => clearTimeout(timer);
+                }
+              }
+            }, [totalRaised > 0, overGoal]);
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
                 {showHearts && <FloatingHearts size={size} />}
@@ -490,10 +501,10 @@ export default function LandingPage() {
                   {/* Background track */}
                   <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
                   {/* First lap: green */}
-                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={firstOffset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 1 ? firstOffset : circumference} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
                   {/* Second lap: gold, thicker, with pulsing glow */}
                   {overGoal && (
-                    <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={secondOffset} strokeLinecap="round" filter="url(#over-glow)" style={{ transition: "stroke-dashoffset 1s ease", animation: "pulseGlow 2s ease-in-out infinite" }} />
+                    <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter="url(#over-glow)" style={{ transition: "stroke-dashoffset 0.5s ease", animation: "pulseGlow 2s ease-in-out infinite" }} />
                   )}
                 </svg>
                 <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
