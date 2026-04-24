@@ -533,7 +533,8 @@ function GlowCircle({
   glowType: "shimmer" | "breathing" | "sharp-flare" | "color-shift";
   id: string;
 }) {
-  const size = 320;
+  const isSmall = typeof window !== "undefined" && window.innerWidth <= 600;
+  const size = isSmall ? 320 : 450;
   const strokeWidth = 14;
   const overStrokeWidth = 20;
   const cyanStrokeWidth = 24;
