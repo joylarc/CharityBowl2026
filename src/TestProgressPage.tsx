@@ -663,7 +663,6 @@ function BasketballGame() {
   const hamImgRef = useRef<HTMLImageElement | null>(null);
   const animRef = useRef(0);
   const scoreRef = useRef(0);
-  const [score, setScore] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Preload images
@@ -856,7 +855,6 @@ function BasketballGame() {
           ball.scored = true;
           // Score!
           scoreRef.current++;
-          setScore(scoreRef.current);
           spawnHamBurst(ball.x, ball.y);
           // Play audio at milestones
           const clipUrl = hamAudioRef.current[scoreRef.current];
