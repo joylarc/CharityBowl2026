@@ -2,7 +2,6 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 
@@ -677,11 +676,40 @@ function GlowCircle({
         </svg>
         <Box sx={{
           position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
-          display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+          display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "0.25rem",
         }}>
+          <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
+            Raised so far
+          </Typography>
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             ${Math.round(totalRaised).toLocaleString()}
           </Typography>
+          {overGoal && (
+            <Typography variant="caption" sx={{ color: showCyan ? "#00feff" : "#f0c040", fontWeight: "bold" }}>
+              New Goal: ${showCyan ? "2,000,000" : "1,500,000"}
+            </Typography>
+          )}
+          <Box sx={{
+            width: "60%", borderTop: "1px solid #666", marginTop: "0.25rem", paddingTop: "0.4rem",
+            display: "flex", justifyContent: "center", gap: "1.5rem",
+          }}>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.6rem" }}>
+                Our Goal
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                ${goal.toLocaleString()}
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.6rem", whiteSpace: "nowrap" }}>
+                Total Donors
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                1,842
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>
@@ -692,7 +720,6 @@ function GlowCircle({
 /*  Test Page                                                          */
 /* ------------------------------------------------------------------ */
 export default function TestProgressPage() {
-  const isSmall = useMediaQuery("(max-width:600px)");
   const goal = 1_000_000;
   const [raised, setRaised] = useState(1_350_000);
   const [burstTrigger, setBurstTrigger] = useState(0);
@@ -745,11 +772,8 @@ export default function TestProgressPage() {
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 4 }}>
-        <GlowCircle totalRaised={raised} goal={goal} label="1. Shimmer" glowType="shimmer" id="shimmer" />
-        <GlowCircle totalRaised={raised} goal={goal} label="2. Breathing Stroke" glowType="breathing" id="breathing" />
-        <GlowCircle totalRaised={raised} goal={goal} label="3. Sharp Flare" glowType="sharp-flare" id="sharp" />
-        <GlowCircle totalRaised={raised} goal={goal} label="4. Color Shift" glowType="color-shift" id="shift" />
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <GlowCircle totalRaised={raised} goal={goal} label="Shimmer" glowType="shimmer" id="shimmer" />
       </Box>
 
       {raised >= 1_370_251 && raised < 1_500_000 && (
