@@ -353,11 +353,14 @@ function BasketballGame() {
 
     let pendingAudioUrl: string | null = null;
 
-    const onDown = (e: PointerEvent) => {
+    canvas.addEventListener("click", () => {
       if (pendingAudioUrl) {
         new Audio(pendingAudioUrl).play().catch(() => {});
         pendingAudioUrl = null;
       }
+    });
+
+    const onDown = (e: PointerEvent) => {
       const pos = getPos(e);
       const ball = ballRef.current;
       const dx = pos.x - ball.x;
