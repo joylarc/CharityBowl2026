@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
@@ -521,93 +521,167 @@ function SpencerBellB({ onClick, ringing }: { onClick: (e: React.MouseEvent) => 
 /* ------------------------------------------------------------------ */
 /*  Progress Circle (simplified — no auto-hearts for this prototype)   */
 /* ------------------------------------------------------------------ */
-function ProgressCircle({
+function GlowCircle({
   totalRaised,
   goal,
-  isSmall,
+  label,
+  glowType,
+  id,
 }: {
   totalRaised: number;
   goal: number;
-  isSmall: boolean;
+  label: string;
+  glowType: "shimmer" | "breathing" | "sharp-flare" | "color-shift";
+  id: string;
 }) {
-  const size = isSmall ? 320 : 450;
+  const size = 320;
   const strokeWidth = 14;
   const overStrokeWidth = 20;
-  const radius = (size - overStrokeWidth) / 2;
+  const cyanStrokeWidth = 24;
+  const radius = (size - cyanStrokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const rawProgress = totalRaised / goal;
   const firstLap = Math.min(rawProgress, 1);
   const secondLap = rawProgress > 1 ? Math.min((rawProgress - 1) * 2, 1) : 0;
+  const thirdLap = rawProgress > 1.5 ? Math.min((rawProgress - 1.5) * 2, 1) : 0;
   const firstOffset = circumference * (1 - firstLap);
   const secondOffset = circumference * (1 - secondLap);
+  const thirdOffset = circumference * (1 - thirdLap);
   const overGoal = rawProgress > 1;
+  const showCyan = rawProgress > 1.5;
+
+  // Shimmer: animate a gradient rotation around the ring
+  const shimmerRef = useRef<SVGCircleElement>(null);
+  useEffect(() => {
+    if (glowType !== "shimmer" || !showCyan || !shimmerRef.current) return;
+    let animId = 0;
+    const animate = (time: number) => {
+      const el = shimmerRef.current;
+      if (!el) return;
+      const t = (time / 1000) * 0.5;
+      const wave = Math.sin(t * Math.PI * 2);
+      el.setAttribute("stroke-opacity", String(0.5 + wave * 0.5));
+      el.setAttribute("stroke-width", String(cyanStrokeWidth + wave * 3));
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [showCyan, glowType]);
+
+  // Breathing: stroke width pulses
+  const breathRef = useRef<SVGCircleElement>(null);
+  useEffect(() => {
+    if (glowType !== "breathing" || !showCyan || !breathRef.current) return;
+    let animId = 0;
+    const animate = (time: number) => {
+      const el = breathRef.current;
+      if (!el) return;
+      const t = (time / 1000) * 0.8;
+      const wave = Math.sin(t * Math.PI * 2);
+      el.setAttribute("stroke-width", String(cyanStrokeWidth + wave * 8));
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [showCyan, glowType]);
+
+  // Color shift: alternate between cyan and white
+  const shiftRef = useRef<SVGCircleElement>(null);
+  useEffect(() => {
+    if (glowType !== "color-shift" || !showCyan || !shiftRef.current) return;
+    let animId = 0;
+    const animate = (time: number) => {
+      const el = shiftRef.current;
+      if (!el) return;
+      const t = (time / 1000) * 0.4;
+      const wave = (Math.sin(t * Math.PI * 2) + 1) / 2; // 0 to 1
+      const r = Math.round(0 + wave * 255);
+      const g = Math.round(254 + wave * 1);
+      const b = Math.round(255);
+      el.setAttribute("stroke", `rgb(${r},${g},${b})`);
+      animId = requestAnimationFrame(animate);
+    };
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [showCyan, glowType]);
+
+  const cyanRef = glowType === "shimmer" ? shimmerRef : glowType === "breathing" ? breathRef : glowType === "color-shift" ? shiftRef : undefined;
 
   return (
-    <Box sx={{ position: "relative", width: size, height: size, margin: "0 auto" }}>
-      {overGoal && (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="caption" sx={{ display: "block", color: "#aaa", mb: 1 }}>
+        {label}
+      </Typography>
+      <Box sx={{ position: "relative", width: size, height: size, margin: "0 auto" }}>
         <style>{`
           @keyframes pulseGlow {
             0%, 100% { opacity: 0.35; }
+            50% { opacity: 1; }
+          }
+          @keyframes sharpFlare {
+            0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
           }
           @media (prefers-reduced-motion: reduce) {
             * { animation: none !important; }
           }
         `}</style>
-      )}
-      <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-        {overGoal && (
+        <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
           <defs>
-            <filter id="over-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <filter id={`gold-glow-${id}`} x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="5" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            <filter id={`cyan-sharp-${id}`} x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feColorMatrix in="blur" type="matrix" values="2 0 0 0 0  0 2 0 0 0  0 0 2 0 0  0 0 0 1 0" result="bright" />
+              <feMerge>
+                <feMergeNode in="bright" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id={`cyan-soft-${id}`} x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
-        )}
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={firstOffset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
-        {overGoal && (
-          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={secondOffset} strokeLinecap="round" filter="url(#over-glow)" style={{ transition: "stroke-dashoffset 1s ease", animation: "pulseGlow 2s ease-in-out infinite" }} />
-        )}
-      </svg>
-      <Box sx={{
-        position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
-        display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem",
-      }}>
-        <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
-          Raised so far
-        </Typography>
-        <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
-          ${Math.round(totalRaised).toLocaleString()}
-        </Typography>
-        {overGoal && (
-          <Typography variant="caption" sx={{ color: "#f0c040", fontWeight: "bold" }}>
-            New Goal: $1,500,000
-          </Typography>
-        )}
+          {/* Background track */}
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
+          {/* Green */}
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={firstOffset} strokeLinecap="round" />
+          {/* Gold */}
+          {overGoal && (
+            <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={secondOffset} strokeLinecap="round" filter={secondLap < 1 ? `url(#gold-glow-${id})` : undefined} style={{ animation: secondLap < 1 ? "pulseGlow 2s ease-in-out infinite" : undefined }} />
+          )}
+          {/* Cyan third lap */}
+          {showCyan && (
+            <circle
+              ref={cyanRef}
+              cx={size / 2} cy={size / 2} r={radius}
+              fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth}
+              strokeDasharray={circumference} strokeDashoffset={thirdOffset}
+              strokeLinecap="round"
+              filter={glowType === "sharp-flare" ? `url(#cyan-sharp-${id})` : `url(#cyan-soft-${id})`}
+              style={{
+                animation: glowType === "sharp-flare" ? "sharpFlare 1.5s ease-in-out infinite" : undefined,
+                transition: "stroke-dashoffset 1s ease",
+              }}
+            />
+          )}
+        </svg>
         <Box sx={{
-          width: "60%", borderTop: "1px solid #666", marginTop: isSmall ? "0.25rem" : "0.5rem", paddingTop: isSmall ? "0.4rem" : "0.75rem",
-          display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem",
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
+          display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
         }}>
-          <Box sx={{ textAlign: "center" }}>
-            <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem" }}>
-              Our Goal
-            </Typography>
-            <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
-              ${goal.toLocaleString()}
-            </Typography>
-          </Box>
-          <Box sx={{ textAlign: "center" }}>
-            <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
-              Total Donors
-            </Typography>
-            <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
-              1,842
-            </Typography>
-          </Box>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            ${Math.round(totalRaised).toLocaleString()}
+          </Typography>
         </Box>
       </Box>
     </Box>
@@ -646,7 +720,7 @@ export default function TestProgressPage() {
   return (
     <Box sx={{ minHeight: "100vh", py: 4, px: 2 }}>
       <Typography variant="h4" sx={{ textAlign: "center", mb: 1, fontWeight: "bold" }}>
-        🔔 Ring the Bell Prototype
+        Cyan Third Lap — Glow Options
       </Typography>
 
       <Box sx={{ maxWidth: 500, mx: "auto", mb: 4, px: 2 }}>
@@ -656,22 +730,27 @@ export default function TestProgressPage() {
         <Slider
           value={raised}
           onChange={(_, v) => setRaised(v as number)}
-          min={900_000}
-          max={1_500_000}
-          step={500}
+          min={1_400_000}
+          max={2_000_000}
+          step={1000}
           sx={{
-            color: raised > goal ? "#f0c040" : "#6ab648",
+            color: raised > 1_500_000 ? "#00feff" : "#f0c040",
             "& .MuiSlider-thumb": { width: 20, height: 20 },
           }}
         />
         <Box sx={{ display: "flex", justifyContent: "space-between", color: "#888", fontSize: "0.75rem" }}>
-          <span>$900K</span>
-          <span>$1M</span>
+          <span>$1.4M</span>
           <span>$1.5M</span>
+          <span>$2M</span>
         </Box>
       </Box>
 
-      <ProgressCircle totalRaised={raised} goal={goal} isSmall={isSmall} />
+      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 4 }}>
+        <GlowCircle totalRaised={raised} goal={goal} label="1. Shimmer" glowType="shimmer" id="shimmer" />
+        <GlowCircle totalRaised={raised} goal={goal} label="2. Breathing Stroke" glowType="breathing" id="breathing" />
+        <GlowCircle totalRaised={raised} goal={goal} label="3. Sharp Flare" glowType="sharp-flare" id="sharp" />
+        <GlowCircle totalRaised={raised} goal={goal} label="4. Color Shift" glowType="color-shift" id="shift" />
+      </Box>
 
       {raised >= 1_370_251 && raised < 1_500_000 && (
       <Box sx={{ textAlign: "center", mt: 3 }}>
