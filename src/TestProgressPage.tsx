@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 
 /* ------------------------------------------------------------------ */
 /*  Spencer Burst — one-time confetti of Spencer hearts from a point   */
@@ -137,6 +138,181 @@ function SpencerBurst({ originX, originY, trigger }: { originX: number; originY:
 }
 
 /* ------------------------------------------------------------------ */
+/*  Cascading Spencers — solitaire win animation                       */
+/* ------------------------------------------------------------------ */
+function CascadingSpencers({ active }: { active: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const animRef = useRef<number>(0);
+  const cardsRef = useRef<Array<{
+    x: number; y: number; vx: number; vy: number;
+    width: number; height: number; rotation: number; rotationSpeed: number;
+    settled: boolean;
+  }>>([]);
+  const trailRef = useRef<Array<{ x: number; y: number; rotation: number; opacity: number; width: number; height: number }>>([]);
+  const spawnTimer = useRef(0);
+  const spawnIndex = useRef(0);
+
+  if (!imgRef.current) {
+    const img = new Image();
+    img.src = import.meta.env.BASE_URL + "spenceroveralls.0.jpg";
+    imgRef.current = img;
+  }
+
+  // Spawn points across the top
+  const spawnPoints = useRef(
+    Array.from({ length: 6 }, (_, i) => ({
+      x: (i + 0.5) * (window.innerWidth / 6),
+      y: -20,
+    }))
+  ).current;
+
+  if (active && animRef.current === 0) {
+    cardsRef.current = [];
+    trailRef.current = [];
+    spawnTimer.current = 0;
+    spawnIndex.current = 0;
+
+    let lastTime = 0;
+    const gravity = 500;
+    const bounceDamping = 0.75;
+    const trailInterval = 3; // frames between trail snapshots
+    let frameCount = 0;
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      lastTime = time;
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      // Spawn new cards periodically
+      spawnTimer.current += dt;
+      if (spawnTimer.current > 0.4 && cardsRef.current.length < 40) {
+        spawnTimer.current = 0;
+        const sp = spawnPoints[spawnIndex.current % spawnPoints.length];
+        spawnIndex.current++;
+        const cardW = 50 + Math.random() * 20;
+        const cardH = cardW * 1.4;
+        cardsRef.current.push({
+          x: sp.x,
+          y: sp.y,
+          vx: (Math.random() - 0.5) * 200,
+          vy: 50 + Math.random() * 100,
+          width: cardW,
+          height: cardH,
+          rotation: 0,
+          rotationSpeed: (Math.random() - 0.5) * 200,
+          settled: false,
+        });
+      }
+
+      // Update physics
+      for (const card of cardsRef.current) {
+        if (card.settled) continue;
+
+        card.vy += gravity * dt;
+        card.x += card.vx * dt;
+        card.y += card.vy * dt;
+        card.rotation += card.rotationSpeed * dt;
+
+        // Bounce off bottom
+        if (card.y + card.height / 2 > canvas.height) {
+          card.y = canvas.height - card.height / 2;
+          card.vy = -Math.abs(card.vy) * bounceDamping;
+          card.vx += (Math.random() - 0.5) * 100;
+
+          // Settle if bounce is tiny
+          if (Math.abs(card.vy) < 20 && Math.abs(card.vx) < 10) {
+            card.settled = true;
+            card.vy = 0;
+            card.vx = 0;
+            card.rotationSpeed = 0;
+          }
+        }
+
+        // Bounce off sides
+        if (card.x < 0) { card.x = 0; card.vx = Math.abs(card.vx) * 0.8; }
+        if (card.x > canvas.width) { card.x = canvas.width; card.vx = -Math.abs(card.vx) * 0.8; }
+      }
+
+      // Add trail snapshots
+      frameCount++;
+      if (frameCount % trailInterval === 0) {
+        for (const card of cardsRef.current) {
+          if (!card.settled && card.y > 0 && card.y < canvas.height + 50) {
+            trailRef.current.push({
+              x: card.x, y: card.y,
+              rotation: card.rotation,
+              opacity: 0.85,
+              width: card.width, height: card.height,
+            });
+          }
+        }
+      }
+
+      // Trails persist permanently — no fading
+
+      // Draw
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const img = imgRef.current;
+      if (!img || !img.complete) { animRef.current = requestAnimationFrame(animate); return; }
+
+      // Draw trails
+      for (const t of trailRef.current) {
+        if (t.opacity <= 0) continue;
+        ctx.save();
+        ctx.globalAlpha = t.opacity;
+        ctx.translate(t.x, t.y);
+        ctx.rotate((t.rotation * Math.PI) / 180);
+        ctx.drawImage(img, -t.width / 2, -t.height / 2, t.width, t.height);
+        ctx.restore();
+      }
+
+      // Draw active cards
+      for (const card of cardsRef.current) {
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.translate(card.x, card.y);
+        ctx.rotate((card.rotation * Math.PI) / 180);
+        // Card border
+        ctx.fillStyle = "white";
+        ctx.fillRect(-card.width / 2 - 2, -card.height / 2 - 2, card.width + 4, card.height + 4);
+        ctx.drawImage(img, -card.width / 2, -card.height / 2, card.width, card.height);
+        ctx.restore();
+      }
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+  }
+
+  if (!active && animRef.current) {
+    cancelAnimationFrame(animRef.current);
+    animRef.current = 0;
+    cardsRef.current = [];
+    trailRef.current = [];
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
+      if (ctx) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
+  }
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 9998 }}
+    />
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Audio clips — cycle through on each bell click                     */
 /* ------------------------------------------------------------------ */
 const SOUND_FILES = [
@@ -162,6 +338,184 @@ const SOUND_NAMES = [
 function playSound(index: number) {
   const audio = new Audio(import.meta.env.BASE_URL + SOUND_FILES[index]);
   audio.play();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Option A: Spencer head IS the bell                                 */
+/* ------------------------------------------------------------------ */
+function SpencerBellA({ onClick, ringing }: { onClick: (e: React.MouseEvent) => void; ringing: number }) {
+  return (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="caption" sx={{ display: "block", color: "#aaa", mb: 1 }}>
+        Option A: Spencer IS the bell
+      </Typography>
+      <Box
+        onClick={onClick}
+        sx={{
+          display: "inline-block",
+          cursor: "pointer",
+          transition: "transform 0.15s",
+          "&:hover": { transform: "scale(1.1)" },
+        }}
+      >
+        <style>{`
+          @keyframes rockBell {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-12deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-8deg); }
+            50% { transform: rotate(5deg); }
+            60% { transform: rotate(-3deg); }
+            70% { transform: rotate(1deg); }
+            100% { transform: rotate(0deg); }
+          }
+        `}</style>
+        <div key={`bellA-${ringing}`} style={{
+          animation: ringing ? `rockBell 0.8s ease-out` : "none",
+          transformOrigin: "50% 0%",
+        }}>
+          {/* Handle/yoke */}
+          <div style={{
+            width: 20,
+            height: 12,
+            backgroundColor: "#f0c040",
+            borderRadius: "10px 10px 0 0",
+            margin: "0 auto",
+          }} />
+          <div style={{
+            width: 4,
+            height: 8,
+            backgroundColor: "#f0c040",
+            margin: "0 auto",
+          }} />
+          {/* Spencer head as bell body */}
+          <div style={{
+            width: 80,
+            height: 80,
+            borderRadius: "50% 50% 50% 50% / 40% 40% 60% 60%",
+            overflow: "hidden",
+            border: "3px solid #f0c040",
+            margin: "0 auto",
+          }}>
+            <img
+              src={import.meta.env.BASE_URL + "SpencerOveralls.jpg"}
+              alt="Ring the bell"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
+          {/* Bell rim */}
+          <div style={{
+            width: 90,
+            height: 6,
+            backgroundColor: "#f0c040",
+            borderRadius: 3,
+            margin: "0 auto",
+          }} />
+        </div>
+      </Box>
+    </Box>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Option B: Bell with Spencer clapper                                */
+/* ------------------------------------------------------------------ */
+function SpencerBellB({ onClick, ringing }: { onClick: (e: React.MouseEvent) => void; ringing: number }) {
+  return (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="caption" sx={{ display: "block", color: "#aaa", mb: 1 }}>
+        Option B: Spencer is the clapper
+      </Typography>
+      <Box
+        onClick={onClick}
+        sx={{
+          display: "inline-block",
+          cursor: "pointer",
+          transition: "transform 0.15s",
+          "&:hover": { transform: "scale(1.1)" },
+        }}
+      >
+        <style>{`
+          @keyframes rockBellB {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(12deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(8deg); }
+            40% { transform: rotate(-6deg); }
+            50% { transform: rotate(4deg); }
+            60% { transform: rotate(-2deg); }
+            100% { transform: rotate(0deg); }
+          }
+          @keyframes swingClapper {
+            0% { transform: rotate(0deg); }
+            8% { transform: rotate(-35deg); }
+            16% { transform: rotate(30deg); }
+            24% { transform: rotate(-25deg); }
+            32% { transform: rotate(20deg); }
+            40% { transform: rotate(-15deg); }
+            48% { transform: rotate(10deg); }
+            56% { transform: rotate(-6deg); }
+            64% { transform: rotate(3deg); }
+            100% { transform: rotate(0deg); }
+          }
+        `}</style>
+        <div key={`bellB-${ringing}`} style={{
+          animation: ringing ? `rockBellB 1.5s ease-out` : "none",
+          transformOrigin: "50% 0%",
+        }}>
+          {/* Handle */}
+          <div style={{
+            width: 24,
+            height: 14,
+            backgroundColor: "#f0c040",
+            borderRadius: "12px 12px 0 0",
+            margin: "0 auto",
+          }} />
+          {/* Bell body */}
+          <svg width="100" height="85" viewBox="0 0 100 85" style={{ display: "block", margin: "0 auto" }}>
+            <path
+              d="M15,70 Q15,15 50,10 Q85,15 85,70 Z"
+              fill="#f0c040"
+              stroke="#d4a030"
+              strokeWidth="2"
+            />
+            {/* Bell opening */}
+            <ellipse cx="50" cy="72" rx="42" ry="8" fill="#d4a030" />
+          </svg>
+          {/* Clapper — Spencer head swinging */}
+          <div key={`clapper-${ringing}`} style={{
+            position: "relative",
+            top: -30,
+            marginBottom: -20,
+            animation: ringing ? `swingClapper 1.5s ease-out` : "none",
+            transformOrigin: "50% -20px",
+          }}>
+            <div style={{
+              width: 4,
+              height: 16,
+              backgroundColor: "#d4a030",
+              margin: "0 auto",
+            }} />
+            <div style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              overflow: "hidden",
+              margin: "0 auto",
+              border: "2px solid #d4a030",
+            }}>
+              <img
+                src={import.meta.env.BASE_URL + "SpencerOveralls.jpg"}
+                alt="Ring the bell"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+          </div>
+        </div>
+      </Box>
+    </Box>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -271,22 +625,22 @@ export default function TestProgressPage() {
   const [burstOrigin, setBurstOrigin] = useState({ x: 0, y: 0 });
   const [soundIndex, setSoundIndex] = useState(0);
   const [lastSound, setLastSound] = useState("");
+  const [ringing, setRinging] = useState(0);
+  const [showCascade, setShowCascade] = useState(false);
 
   const handleRing = useCallback((e: React.MouseEvent) => {
-    // Get bell position for burst origin
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     setBurstOrigin({
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2,
     });
 
-    // Play the current sound
     playSound(soundIndex);
     setLastSound(SOUND_NAMES[soundIndex]);
     setSoundIndex((i) => (i + 1) % SOUND_FILES.length);
 
-    // Trigger burst
     setBurstTrigger((t) => t + 1);
+    setRinging((r) => r + 1);
   }, [soundIndex]);
 
   return (
@@ -319,7 +673,7 @@ export default function TestProgressPage() {
 
       <ProgressCircle totalRaised={raised} goal={goal} isSmall={isSmall} />
 
-      {raised >= 1_370_251 && (
+      {raised >= 1_370_251 && raised < 1_500_000 && (
       <Box sx={{ textAlign: "center", mt: 3 }}>
         <IconButton
           onClick={handleRing}
@@ -342,8 +696,26 @@ export default function TestProgressPage() {
         )}
       </Box>
       )}
+      {raised >= 1_500_000 && (
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 8, mt: 4, flexWrap: "wrap" }}>
+        <SpencerBellA onClick={(e) => { setRinging((r) => r + 1); }} ringing={ringing} />
+        <SpencerBellB onClick={(e) => { setRinging((r) => r + 1); }} ringing={ringing} />
+      </Box>
+      )}
 
       <SpencerBurst originX={burstOrigin.x} originY={burstOrigin.y} trigger={burstTrigger} />
+
+      {/* Solitaire cascade test */}
+      <Box sx={{ textAlign: "center", mt: 4 }}>
+        <Button
+          variant="contained"
+          onClick={() => setShowCascade((v) => !v)}
+          sx={{ backgroundColor: showCascade ? "#c62828" : "#f0c040", color: "#000" }}
+        >
+          {showCascade ? "Stop Cascade" : "🃏 Test Solitaire Cascade"}
+        </Button>
+      </Box>
+      <CascadingSpencers active={showCascade} />
     </Box>
   );
 }
