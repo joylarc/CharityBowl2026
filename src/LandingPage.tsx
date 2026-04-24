@@ -294,8 +294,8 @@ function BasketballGame() {
     stickImgRef.current = img;
   }
 
-  // Preload basketball audio clips into memory
-  const hamAudioRef = useRef<Record<number, string>>({});
+  // Preload basketball audio as reusable Audio elements
+  const hamAudioRef = useRef<Record<number, HTMLAudioElement>>({});
   const hamBlobsLoaded = useRef(false);
   useEffect(() => {
     if (hamBlobsLoaded.current) return;
@@ -309,7 +309,9 @@ function BasketballGame() {
       fetch(import.meta.env.BASE_URL + file)
         .then(r => r.blob())
         .then(blob => {
-          hamAudioRef.current[Number(n)] = URL.createObjectURL(blob);
+          const audio = new Audio(URL.createObjectURL(blob));
+          audio.load();
+          hamAudioRef.current[Number(n)] = audio;
         });
     }
   }, []);
@@ -351,12 +353,25 @@ function BasketballGame() {
       return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
-    let pendingAudioUrl: string | null = null;
+    let pendingAudio: HTMLAudioElement | null = null;
 
+    // Unlock all audio elements on first tap (iOS requirement)
+    let audioUnlocked = false;
+    canvas.addEventListener("touchstart", () => {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      for (const audio of Object.values(hamAudioRef.current)) {
+        audio.muted = true;
+        audio.play().then(() => { audio.pause(); audio.currentTime = 0; audio.muted = false; }).catch(() => {});
+      }
+    }, { once: true });
+
+    // Play pending audio on next tap (mobile fallback)
     canvas.addEventListener("click", () => {
-      if (pendingAudioUrl) {
-        new Audio(pendingAudioUrl).play().catch(() => {});
-        pendingAudioUrl = null;
+      if (pendingAudio) {
+        pendingAudio.currentTime = 0;
+        pendingAudio.play().catch(() => {});
+        pendingAudio = null;
       }
     });
 
@@ -444,8 +459,11 @@ function BasketballGame() {
           ball.scored = true;
           scoreRef.current++;
           spawnHamBurst(ball.x, ball.y);
-          const clipUrl = hamAudioRef.current[scoreRef.current];
-          if (clipUrl) pendingAudioUrl = clipUrl;
+          const clip = hamAudioRef.current[scoreRef.current];
+          if (clip) {
+            clip.currentTime = 0;
+            clip.play().catch(() => { pendingAudio = clip; });
+          }
           resetBall();
         }
         if (ball.y > canvas.height + 50 || ball.x < -50 || ball.x > canvas.width + 50) resetBall();
