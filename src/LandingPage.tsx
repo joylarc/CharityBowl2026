@@ -461,6 +461,27 @@ export default function LandingPage() {
             const secondOffset = circumference * (1 - secondLap);
             const overGoal = rawProgress > 1;
             const showHearts = overGoal && totalRaised <= goal + 20000;
+            const quiverThreshold = 1_450_000;
+            const isQuivering = totalRaised >= quiverThreshold && secondLap < 1;
+            // Amplitude increases from 0 to 1 as we approach $1.5M
+            const quiverIntensity = isQuivering ? Math.min((totalRaised - quiverThreshold) / (1_500_000 - quiverThreshold), 1) : 0;
+            const quiverAmplitude = quiverIntensity * circumference * 0.015;
+            const goldRef = useRef<SVGCircleElement>(null);
+            useEffect(() => {
+              if (!isQuivering || !goldRef.current) return;
+              let animId = 0;
+              const animate = (time: number) => {
+                const el = goldRef.current;
+                if (!el) return;
+                const speed = 0.3 - quiverIntensity * 0.15;
+                const t = (time / 1000) / speed;
+                const wave = Math.sin(t * Math.PI * 2);
+                el.setAttribute("stroke-dashoffset", String(secondOffset + wave * quiverAmplitude));
+                animId = requestAnimationFrame(animate);
+              };
+              animId = requestAnimationFrame(animate);
+              return () => cancelAnimationFrame(animId);
+            }, [isQuivering, quiverIntensity, secondOffset, quiverAmplitude]);
             // Animate: start empty, fill green after mount, then gold after green finishes
             const [animPhase, setAnimPhase] = useState(0);
             useEffect(() => {
@@ -504,7 +525,10 @@ export default function LandingPage() {
                   <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 1 ? firstOffset : circumference} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
                   {/* Second lap: gold, thicker, with pulsing glow */}
                   {overGoal && (
-                    <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter="url(#over-glow)" style={{ transition: "stroke-dashoffset 0.5s ease", animation: "pulseGlow 2s ease-in-out infinite" }} />
+                    <circle ref={isQuivering ? goldRef : undefined} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter="url(#over-glow)" style={{
+                      transition: isQuivering ? "none" : "stroke-dashoffset 0.5s ease",
+                      animation: "pulseGlow 2s ease-in-out infinite",
+                    }} />
                   )}
                 </svg>
                 <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
