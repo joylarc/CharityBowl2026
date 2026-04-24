@@ -698,8 +698,8 @@ export default function TestProgressPage() {
       )}
       {raised >= 1_500_000 && (
       <Box sx={{ display: "flex", justifyContent: "center", gap: 8, mt: 4, flexWrap: "wrap" }}>
-        <SpencerBellA onClick={(e) => { setRinging((r) => r + 1); }} ringing={ringing} />
-        <SpencerBellB onClick={(e) => { setRinging((r) => r + 1); }} ringing={ringing} />
+        <SpencerBellA onClick={() => { setRinging((r) => r + 1); }} ringing={ringing} />
+        <SpencerBellB onClick={() => { setRinging((r) => r + 1); }} ringing={ringing} />
       </Box>
       )}
 
