@@ -9,6 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import StripedTableRow from "./StripedTableRow";
+import { LIGHTS_OUT } from "./constants";
 
 const { useMemo } = React;
 
@@ -53,7 +54,7 @@ export default function Leaderboard({ query }: LeaderboardProps) {
             {filteredRows.map((row) => (
               <StripedTableRow key={row.rank}>
                 <TableCell>{row.rank}</TableCell>
-                <TableCell>{row.school}</TableCell>
+                <TableCell>{LIGHTS_OUT ? "???????" : row.school}</TableCell>
                 <TableCell>
                   $
                   {Math.round(row.amount).toLocaleString(undefined, {
