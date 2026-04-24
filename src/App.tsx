@@ -163,7 +163,7 @@ function DvdBouncer({ onClose, isSmall }: { onClose: () => void; isSmall: boolea
         <a href="https://www.edsbscharitybowl.com" target="_blank" style={{ color: "inherit" }}>
           EDSBSCHARITYBOWL.COM
         </a>
-        <div style={{ marginTop: "0.75rem", fontSize: "0.7rem", opacity: 0.5 }}>
+        <div style={{ marginTop: "0.75rem", fontSize: "0.85rem", fontWeight: "bold", opacity: 0.6 }}>
           click to dismiss
         </div>
       </div>
