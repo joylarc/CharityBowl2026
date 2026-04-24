@@ -1,6 +1,5 @@
 import * as React from "react";
 import "./App.css";
-import Paper, { PaperProps } from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
@@ -9,10 +8,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { LIGHTS_OUT, PRE_EVENT } from "./constants.ts";
 import { useTheme } from "@mui/material/styles";
@@ -73,10 +68,6 @@ function Search({ query, setQuery, placeholder = "Search for a team" }: SearchPr
       />
     </Box>
   );
-}
-
-function DialogBody(props: PaperProps) {
-  return <Paper {...props} elevation={0} variant="outlined" />;
 }
 
 const DVD_COLORS = ["#fed426", "#ff6b6b", "#51cf66", "#339af0", "#cc5de8", "#ff922b", "#20c997"];
