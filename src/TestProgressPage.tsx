@@ -756,7 +756,20 @@ function BasketballGame() {
       return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
+    // Unlock audio on first touch (mobile requirement)
+    let audioUnlocked = false;
+    const unlockAudio = () => {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      for (const audio of Object.values(hamAudioRef.current)) {
+        const a = new Audio(audio);
+        a.volume = 0;
+        a.play().then(() => a.pause()).catch(() => {});
+      }
+    };
+
     const onDown = (e: PointerEvent) => {
+      unlockAudio();
       const pos = getPos(e);
       const ball = ballRef.current;
       const dx = pos.x - ball.x;
@@ -800,7 +813,7 @@ function BasketballGame() {
       const dy = (last.y - first.y) / dt;
       const speed = Math.sqrt(dx * dx + dy * dy);
       if (speed < 50) { resetBall(); return; }
-      ball.vx = dx * 0.4;
+      ball.vx = dx * 0.25;
       ball.vy = dy * 0.4;
       ball.launched = true;
       posHistory.length = 0;
@@ -879,18 +892,18 @@ function BasketballGame() {
       }
       hamBurstRef.current = hamBurstRef.current.filter(h => h.opacity > 0);
 
-      // Draw stick-spencer on the left
+      // Draw hoop
+      const hoopImg = hoopImgRef.current;
+      if (hoopImg && hoopImg.complete) {
+        ctx.drawImage(hoopImg, hoop.x, hoop.y, hoop.w, hoop.h);
+      }
+
+      // Draw stick-spencer on the left (after hoop so it's on top)
       const stickImg = stickRef.current;
       if (stickImg && stickImg.complete) {
         const stickH = 180;
         const stickW = stickH * (stickImg.naturalWidth / stickImg.naturalHeight);
         ctx.drawImage(stickImg, 15, canvas.height / 2 - stickH / 2, stickW, stickH);
-      }
-
-      // Draw hoop
-      const hoopImg = hoopImgRef.current;
-      if (hoopImg && hoopImg.complete) {
-        ctx.drawImage(hoopImg, hoop.x, hoop.y, hoop.w, hoop.h);
       }
 
       // Draw aiming line when dragging
