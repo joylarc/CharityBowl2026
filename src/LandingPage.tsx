@@ -806,12 +806,16 @@ export default function LandingPage() {
             useEffect(() => {
               if (totalRaised > 0) {
                 requestAnimationFrame(() => setAnimPhase(1));
+                const timers: ReturnType<typeof setTimeout>[] = [];
                 if (overGoal) {
-                  const timer = setTimeout(() => setAnimPhase(2), 1000);
-                  return () => clearTimeout(timer);
+                  timers.push(setTimeout(() => setAnimPhase(2), 1000));
+                  if (showCyan) {
+                    timers.push(setTimeout(() => setAnimPhase(3), 1500));
+                  }
                 }
+                return () => timers.forEach(clearTimeout);
               }
-            }, [totalRaised > 0, overGoal]);
+            }, [totalRaised > 0, overGoal, showCyan]);
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
                 {showHearts && <FloatingHearts size={size} />}
@@ -858,7 +862,7 @@ export default function LandingPage() {
                   )}
                   {/* Third lap: cyan with shimmer */}
                   {showCyan && (
-                    <circle ref={shimmerRef} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeDasharray={circumference} strokeDashoffset={thirdOffset} strokeLinecap="round" filter="url(#cyan-glow)" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                    <circle ref={shimmerRef} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 3 ? thirdOffset : circumference} strokeLinecap="round" filter="url(#cyan-glow)" style={{ transition: "stroke-dashoffset 0.5s ease" }} />
                   )}
                 </svg>
                 <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
