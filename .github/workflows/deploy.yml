@@ -72,6 +72,12 @@ jobs:
           cp "dist/a cappella.mp3" dist-edsbs/
           cp "dist/Never done that before.mp3" dist-edsbs/
           cp "dist/oh no disaster.mp3" dist-edsbs/
+          cp dist/basketball-hoop.png dist-edsbs/
+          cp dist/ham.png dist-edsbs/
+          cp dist/stick-spencer.jpg dist-edsbs/
+          cp "dist/I don't do romance.mp3" dist-edsbs/
+          cp "dist/very singular.mp3" dist-edsbs/
+          cp "dist/you wouldnt understand.mp3" dist-edsbs/
           # Clean moneycannon dist (remove edsbs-only pages)
           rm -f dist/testreplacement.html
           rm -f dist/faq.html

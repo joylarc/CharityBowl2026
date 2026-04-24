@@ -652,6 +652,342 @@ function ProgressCircle({
 }
 
 /* ------------------------------------------------------------------ */
+/*  Basketball Mini-Game                                                */
+/* ------------------------------------------------------------------ */
+function BasketballGame() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ballRef = useRef({ x: 0, y: 0, vx: 0, vy: 0, dragging: false, launched: false, settled: false, scored: false });
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const hamBurstRef = useRef<Array<{ x: number; y: number; vx: number; vy: number; rotation: number; rotationSpeed: number; opacity: number; size: number }>>([]);
+  const hoopImgRef = useRef<HTMLImageElement | null>(null);
+  const hamImgRef = useRef<HTMLImageElement | null>(null);
+  const animRef = useRef(0);
+  const scoreRef = useRef(0);
+  const [score, setScore] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Preload images
+  if (!hoopImgRef.current) {
+    const img = new Image();
+    img.src = import.meta.env.BASE_URL + "basketball-hoop.png";
+    hoopImgRef.current = img;
+  }
+  if (!hamImgRef.current) {
+    const img = new Image();
+    img.src = import.meta.env.BASE_URL + "ham.png";
+    hamImgRef.current = img;
+  }
+  const stickRef = useRef<HTMLImageElement | null>(null);
+  if (!stickRef.current) {
+    const img = new Image();
+    img.src = import.meta.env.BASE_URL + "stick-spencer.jpg";
+    stickRef.current = img;
+  }
+  // Preload basketball audio clips into memory via fetch
+  const hamAudioRef = useRef<Record<number, string>>({});
+  const hamBlobsLoaded = useRef(false);
+  useEffect(() => {
+    if (hamBlobsLoaded.current) return;
+    hamBlobsLoaded.current = true;
+    const clips: Record<number, string> = {
+      3: "I don't do romance.mp3",
+      7: "very singular.mp3",
+      13: "you wouldnt understand.mp3",
+    };
+    for (const [n, file] of Object.entries(clips)) {
+      fetch(import.meta.env.BASE_URL + file)
+        .then(r => r.blob())
+        .then(blob => {
+          hamAudioRef.current[Number(n)] = URL.createObjectURL(blob);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      canvas.width = container.offsetWidth;
+      canvas.height = 400;
+      resetBall();
+    };
+
+    const getHoopRect = () => {
+      const w = canvas.width;
+      const hoopW = 180;
+      const hoopH = 130;
+      return {
+        x: w / 2 - hoopW / 2,
+        y: 20,
+        w: hoopW,
+        h: hoopH,
+        rimX: w / 2,
+        rimY: 110,
+        rimRadius: 40,
+      };
+    };
+
+    const getBallStart = () => ({
+      x: canvas.width / 2,
+      y: canvas.height - 50,
+    });
+
+    const resetBall = () => {
+      const start = getBallStart();
+      const ball = ballRef.current;
+      ball.x = start.x;
+      ball.y = start.y;
+      ball.vx = 0;
+      ball.vy = 0;
+      ball.dragging = false;
+      ball.launched = false;
+      ball.settled = false;
+      ball.scored = false;
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Pointer events
+    const getPos = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    };
+
+    const onDown = (e: PointerEvent) => {
+      const pos = getPos(e);
+      const ball = ballRef.current;
+      const dx = pos.x - ball.x;
+      const dy = pos.y - ball.y;
+      if (Math.sqrt(dx * dx + dy * dy) < 30 && !ball.launched) {
+        ball.dragging = true;
+        dragStartRef.current = { x: pos.x, y: pos.y };
+        canvas.setPointerCapture(e.pointerId);
+      }
+    };
+
+    // Track last several positions for smooth velocity calculation
+    const posHistory: Array<{ x: number; y: number; t: number }> = [];
+
+    const onMove = (e: PointerEvent) => {
+      const ball = ballRef.current;
+      if (!ball.dragging) return;
+      const pos = getPos(e);
+      posHistory.push({ ...pos, t: performance.now() });
+      // Keep last 10 positions
+      if (posHistory.length > 10) posHistory.shift();
+      ball.x = pos.x;
+      ball.y = pos.y;
+    };
+
+    const onUp = () => {
+      const ball = ballRef.current;
+      if (!ball.dragging) return;
+      ball.dragging = false;
+      // Calculate velocity from recent position history
+      if (posHistory.length < 2) { resetBall(); return; }
+      // Use positions from ~50-100ms ago for stable velocity
+      const now = performance.now();
+      const recent = posHistory.filter(p => now - p.t < 150);
+      if (recent.length < 2) { resetBall(); return; }
+      const first = recent[0];
+      const last = recent[recent.length - 1];
+      const dt = (last.t - first.t) / 1000;
+      if (dt < 0.01) { resetBall(); return; }
+      const dx = (last.x - first.x) / dt;
+      const dy = (last.y - first.y) / dt;
+      const speed = Math.sqrt(dx * dx + dy * dy);
+      if (speed < 50) { resetBall(); return; }
+      ball.vx = dx * 0.4;
+      ball.vy = dy * 0.4;
+      ball.launched = true;
+      posHistory.length = 0;
+    };
+
+    canvas.addEventListener("pointerdown", onDown);
+    canvas.addEventListener("pointermove", onMove);
+    canvas.addEventListener("pointerup", onUp);
+
+    // Animation
+    const gravity = 600;
+    let lastTime = 0;
+
+    const spawnHamBurst = (x: number, y: number) => {
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 * i) / 12 + (Math.random() - 0.5) * 0.5;
+        const speed = 200 + Math.random() * 300;
+        hamBurstRef.current.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 200,
+          rotation: 0,
+          rotationSpeed: (Math.random() - 0.5) * 500,
+          opacity: 1,
+          size: 20 + Math.random() * 25,
+        });
+      }
+    };
+
+    const animate = (time: number) => {
+      if (!lastTime) lastTime = time;
+      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      lastTime = time;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const ball = ballRef.current;
+      const hoop = getHoopRect();
+
+      // Update ball physics
+      if (ball.launched && !ball.settled) {
+        ball.vy += gravity * dt;
+        ball.x += ball.vx * dt;
+        ball.y += ball.vy * dt;
+
+        // Check if ball goes through rim
+        const dx = ball.x - hoop.rimX;
+        const dy = ball.y - hoop.rimY;
+        if (Math.abs(dx) < hoop.rimRadius && Math.abs(dy) < 20 && ball.vy > 0 && !ball.scored) {
+          ball.scored = true;
+          // Score!
+          scoreRef.current++;
+          setScore(scoreRef.current);
+          spawnHamBurst(ball.x, ball.y);
+          // Play audio at milestones
+          const clipUrl = hamAudioRef.current[scoreRef.current];
+          if (clipUrl) new Audio(clipUrl).play();
+          resetBall();
+        }
+
+        // Off screen? Reset
+        if (ball.y > canvas.height + 50 || ball.x < -50 || ball.x > canvas.width + 50) {
+          resetBall();
+        }
+      }
+
+      // Update ham burst particles
+      for (const h of hamBurstRef.current) {
+        if (h.opacity <= 0) continue;
+        h.vy += gravity * 0.5 * dt;
+        h.x += h.vx * dt;
+        h.y += h.vy * dt;
+        h.rotation += h.rotationSpeed * dt;
+        h.opacity -= dt * 0.5;
+      }
+      hamBurstRef.current = hamBurstRef.current.filter(h => h.opacity > 0);
+
+      // Draw stick-spencer on the left
+      const stickImg = stickRef.current;
+      if (stickImg && stickImg.complete) {
+        const stickH = 180;
+        const stickW = stickH * (stickImg.naturalWidth / stickImg.naturalHeight);
+        ctx.drawImage(stickImg, 15, canvas.height / 2 - stickH / 2, stickW, stickH);
+      }
+
+      // Draw hoop
+      const hoopImg = hoopImgRef.current;
+      if (hoopImg && hoopImg.complete) {
+        ctx.drawImage(hoopImg, hoop.x, hoop.y, hoop.w, hoop.h);
+      }
+
+      // Draw aiming line when dragging
+      if (ball.dragging && posHistory.length >= 2) {
+        const first = posHistory[0];
+        const last = posHistory[posHistory.length - 1];
+        const dx = last.x - first.x;
+        const dy = last.y - first.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        if (len > 3) {
+          const nx = dx / len;
+          const ny = dy / len;
+          ctx.beginPath();
+          ctx.setLineDash([5, 5]);
+          ctx.strokeStyle = "rgba(255,255,255,0.4)";
+          ctx.lineWidth = 2;
+          ctx.moveTo(ball.x, ball.y);
+          ctx.lineTo(ball.x + nx * 80, ball.y + ny * 80);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      // Draw ball
+      ctx.font = "36px serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🏀", ball.x, ball.y);
+
+      // Draw ham burst
+      const hamImg = hamImgRef.current;
+      if (hamImg && hamImg.complete) {
+        for (const h of hamBurstRef.current) {
+          ctx.save();
+          ctx.globalAlpha = h.opacity;
+          ctx.translate(h.x, h.y);
+          ctx.rotate((h.rotation * Math.PI) / 180);
+          ctx.drawImage(hamImg, -h.size / 2, -h.size / 2, h.size, h.size);
+          ctx.restore();
+        }
+      }
+
+      // Draw score
+      if (scoreRef.current > 0) {
+        ctx.font = "bold 18px Montserrat, sans-serif";
+        ctx.fillStyle = "#f0c040";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "top";
+        ctx.fillText(`🍖 ${scoreRef.current}`, canvas.width - 10, 10);
+      }
+
+      // Instructions
+      if (!ball.launched && !ball.dragging) {
+        ctx.font = "14px Montserrat, sans-serif";
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Flick 🏀 toward the hoop!", canvas.width / 2, canvas.height - 10);
+      }
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("resize", resize);
+      canvas.removeEventListener("pointerdown", onDown);
+      canvas.removeEventListener("pointermove", onMove);
+      canvas.removeEventListener("pointerup", onUp);
+    };
+  }, []);
+
+  return (
+    <Box ref={containerRef} sx={{ width: "100%", maxWidth: 500, mx: "auto", mt: 4 }}>
+      <Typography variant="h6" sx={{ textAlign: "center", mb: 1, fontWeight: "bold" }}>
+        🏀 Shoot Some Hoops With Spencer
+      </Typography>
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "100%",
+          height: 400,
+          borderRadius: 8,
+          backgroundColor: "#000",
+          touchAction: "none",
+          cursor: "grab",
+        }}
+      />
+    </Box>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Test Page                                                          */
 /* ------------------------------------------------------------------ */
 export default function TestProgressPage() {
@@ -752,6 +1088,8 @@ export default function TestProgressPage() {
         </Button>
       </Box>
       <CascadingSpencers active={showCascade} />
+
+      <BasketballGame />
     </Box>
   );
 }
