@@ -461,7 +461,7 @@ export default function LandingPage() {
             const secondOffset = circumference * (1 - secondLap);
             const overGoal = rawProgress > 1;
             const showHearts = overGoal && totalRaised <= goal + 20000;
-            const quiverThreshold = 1_450_000;
+            const quiverThreshold = 1_400_000;
             const isQuivering = totalRaised >= quiverThreshold && secondLap < 1;
             // Amplitude increases from 0 to 1 as we approach $1.5M
             const quiverIntensity = isQuivering ? Math.min((totalRaised - quiverThreshold) / (1_500_000 - quiverThreshold), 1) : 0;
