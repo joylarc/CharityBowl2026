@@ -8,7 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
+import { LIGHTS_OUT } from "./constants";
+
 const { useState, useEffect, useRef, useCallback } = React;
+const DARK_MATCH_RED = "#ff1a1a";
 
 // Bluesky SVG icon (no MUI icon available)
 function BlueskyIcon({ size = 20 }: { size?: number }) {
@@ -819,7 +822,7 @@ export default function LandingPage() {
             return (
               <Box sx={{ position: "relative", width: size, height: size, margin: "2rem auto" }}>
                 {showHearts && <FloatingHearts size={size} />}
-                {overGoal && (
+                {(overGoal || LIGHTS_OUT) && (
                   <style>{`
                     @keyframes pulseGlow {
                       0%, 100% { opacity: 0.35; }
@@ -831,7 +834,7 @@ export default function LandingPage() {
                   `}</style>
                 )}
                 <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-                  {overGoal && (
+                  {(overGoal || LIGHTS_OUT) && (
                     <defs>
                       <filter id="over-glow" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur stdDeviation="5" result="blur" />
@@ -851,29 +854,36 @@ export default function LandingPage() {
                   )}
                   {/* Background track */}
                   <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#666" strokeWidth={strokeWidth} />
-                  {/* First lap: green */}
-                  <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 1 ? firstOffset : circumference} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
-                  {/* Second lap: gold, thicker, with pulsing glow */}
-                  {overGoal && (
-                    <circle ref={isQuivering ? goldRef : undefined} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter={secondLap < 1 ? "url(#over-glow)" : undefined} style={{
-                      transition: isQuivering ? "none" : "stroke-dashoffset 0.5s ease",
-                      animation: secondLap < 1 ? "pulseGlow 2s ease-in-out infinite" : undefined,
-                    }} />
-                  )}
-                  {/* Third lap: cyan with shimmer */}
-                  {showCyan && (
-                    <circle ref={shimmerRef} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 3 ? thirdOffset : circumference} strokeLinecap="round" filter="url(#cyan-glow)" style={{ transition: "stroke-dashoffset 0.5s ease" }} />
+                  {LIGHTS_OUT ? (
+                    /* Dark match: full cyan pulsing ring */
+                    <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeLinecap="round" filter="url(#cyan-glow)" style={{ animation: "pulseGlow 2s ease-in-out infinite" }} />
+                  ) : (
+                    <>
+                      {/* First lap: green */}
+                      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 1 ? firstOffset : circumference} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
+                      {/* Second lap: gold, thicker, with pulsing glow */}
+                      {overGoal && (
+                        <circle ref={isQuivering ? goldRef : undefined} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter={secondLap < 1 ? "url(#over-glow)" : undefined} style={{
+                          transition: isQuivering ? "none" : "stroke-dashoffset 0.5s ease",
+                          animation: secondLap < 1 ? "pulseGlow 2s ease-in-out infinite" : undefined,
+                        }} />
+                      )}
+                      {/* Third lap: cyan with shimmer */}
+                      {showCyan && (
+                        <circle ref={shimmerRef} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 3 ? thirdOffset : circumference} strokeLinecap="round" filter="url(#cyan-glow)" style={{ transition: "stroke-dashoffset 0.5s ease" }} />
+                      )}
+                    </>
                   )}
                 </svg>
                 <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
                   <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 2, color: "#aaa" }}>
                     Raised so far
                   </Typography>
-                  <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold" }}>
-                    ${Math.round(totalRaised).toLocaleString()}
+                  <Typography variant={isSmall ? "h3" : "h2"} sx={{ fontWeight: "bold", color: LIGHTS_OUT ? DARK_MATCH_RED : undefined }}>
+                    {LIGHTS_OUT ? "$???????" : `$${Math.round(totalRaised).toLocaleString()}`}
                   </Typography>
-                  {overGoal && (
-                    <Typography variant="caption" sx={{ color: showCyan ? "#00feff" : "#f0c040", fontWeight: "bold" }}>
+                  {overGoal && !LIGHTS_OUT && (
+                    <Typography variant={isSmall ? "body2" : "body1"} sx={{ color: showCyan ? "#00feff" : "#f0c040", fontWeight: "bold" }}>
                       New Goal: ${showCyan ? "2,000,000" : "1,500,000"}
                     </Typography>
                   )}
@@ -883,18 +893,23 @@ export default function LandingPage() {
                         Our Goal
                       </Typography>
                       <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
-                        ${goal.toLocaleString()}
+                        ${LIGHTS_OUT ? "2,000,000" : goal.toLocaleString()}
                       </Typography>
                     </Box>
                     <Box sx={{ textAlign: "center" }}>
                       <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: 1, color: "#6ab648", fontSize: "0.65rem", whiteSpace: "nowrap" }}>
                         Total Donors
                       </Typography>
-                      <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold" }}>
-                        {totalDonors}
+                      <Typography variant={isSmall ? "body2" : "h6"} sx={{ fontWeight: "bold", color: LIGHTS_OUT ? DARK_MATCH_RED : undefined }}>
+                        {LIGHTS_OUT ? "????" : totalDonors}
                       </Typography>
                     </Box>
                   </Box>
+                  {LIGHTS_OUT && (
+                    <Typography variant="caption" sx={{ color: "#00feff", fontWeight: "bold", textTransform: "uppercase", letterSpacing: 3, mt: 1 }}>
+                      🔒 Dark Match Activated 🔒
+                    </Typography>
+                  )}
                 </Box>
               </Box>
             );
