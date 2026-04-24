@@ -756,20 +756,15 @@ function BasketballGame() {
       return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
-    // Unlock audio on first touch (mobile requirement)
-    let audioUnlocked = false;
-    const unlockAudio = () => {
-      if (audioUnlocked) return;
-      audioUnlocked = true;
-      for (const audio of Object.values(hamAudioRef.current)) {
-        const a = new Audio(audio);
-        a.volume = 0;
-        a.play().then(() => a.pause()).catch(() => {});
-      }
-    };
+    // Track pending audio to play on next user gesture
+    let pendingAudioUrl: string | null = null;
 
     const onDown = (e: PointerEvent) => {
-      unlockAudio();
+      // Play any pending audio from a previous score (mobile requires user gesture)
+      if (pendingAudioUrl) {
+        new Audio(pendingAudioUrl).play().catch(() => {});
+        pendingAudioUrl = null;
+      }
       const pos = getPos(e);
       const ball = ballRef.current;
       const dx = pos.x - ball.x;
@@ -869,9 +864,9 @@ function BasketballGame() {
           // Score!
           scoreRef.current++;
           spawnHamBurst(ball.x, ball.y);
-          // Play audio at milestones
+          // Queue audio for next user gesture (mobile can't play from rAF)
           const clipUrl = hamAudioRef.current[scoreRef.current];
-          if (clipUrl) new Audio(clipUrl).play();
+          if (clipUrl) pendingAudioUrl = clipUrl;
           resetBall();
         }
 
