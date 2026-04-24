@@ -452,14 +452,18 @@ export default function LandingPage() {
             const size = isSmall ? 320 : 450;
             const strokeWidth = 14;
             const overStrokeWidth = 20;
-            const radius = (size - overStrokeWidth) / 2;
+            const cyanStrokeWidth = 24;
+            const radius = (size - cyanStrokeWidth) / 2;
             const circumference = 2 * Math.PI * radius;
             const rawProgress = totalRaised / goal;
             const firstLap = Math.min(rawProgress, 1);
             const secondLap = rawProgress > 1 ? Math.min((rawProgress - 1) * 2, 1) : 0;
+            const thirdLap = rawProgress > 1.5 ? Math.min((rawProgress - 1.5) * 2, 1) : 0;
             const firstOffset = circumference * (1 - firstLap);
             const secondOffset = circumference * (1 - secondLap);
+            const thirdOffset = circumference * (1 - thirdLap);
             const overGoal = rawProgress > 1;
+            const showCyan = rawProgress > 1.5;
             const showHearts = overGoal && totalRaised <= goal + 20000;
             const quiverThreshold = 1_400_000;
             const isQuivering = totalRaised >= quiverThreshold && secondLap < 1;
@@ -482,6 +486,23 @@ export default function LandingPage() {
               animId = requestAnimationFrame(animate);
               return () => cancelAnimationFrame(animId);
             }, [isQuivering, quiverIntensity, secondOffset, quiverAmplitude]);
+            // Shimmer effect for cyan ring
+            const shimmerRef = useRef<SVGCircleElement>(null);
+            useEffect(() => {
+              if (!showCyan || !shimmerRef.current) return;
+              let animId = 0;
+              const animate = (time: number) => {
+                const el = shimmerRef.current;
+                if (!el) return;
+                const t = (time / 1000) * 0.5;
+                const wave = Math.sin(t * Math.PI * 2);
+                el.setAttribute("stroke-opacity", String(0.5 + wave * 0.5));
+                el.setAttribute("stroke-width", String(cyanStrokeWidth + wave * 3));
+                animId = requestAnimationFrame(animate);
+              };
+              animId = requestAnimationFrame(animate);
+              return () => cancelAnimationFrame(animId);
+            }, [showCyan]);
             // Animate: start empty, fill green after mount, then gold after green finishes
             const [animPhase, setAnimPhase] = useState(0);
             useEffect(() => {
@@ -517,6 +538,13 @@ export default function LandingPage() {
                           <feMergeNode in="SourceGraphic" />
                         </feMerge>
                       </filter>
+                      <filter id="cyan-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="6" result="blur" />
+                        <feMerge>
+                          <feMergeNode in="blur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
                     </defs>
                   )}
                   {/* Background track */}
@@ -525,10 +553,14 @@ export default function LandingPage() {
                   <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#6ab648" strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 1 ? firstOffset : circumference} strokeLinecap="round" style={{ transition: "stroke-dashoffset 1s ease" }} />
                   {/* Second lap: gold, thicker, with pulsing glow */}
                   {overGoal && (
-                    <circle ref={isQuivering ? goldRef : undefined} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter="url(#over-glow)" style={{
+                    <circle ref={isQuivering ? goldRef : undefined} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0c040" strokeWidth={overStrokeWidth} strokeDasharray={circumference} strokeDashoffset={animPhase >= 2 ? secondOffset : circumference} strokeLinecap="round" filter={secondLap < 1 ? "url(#over-glow)" : undefined} style={{
                       transition: isQuivering ? "none" : "stroke-dashoffset 0.5s ease",
-                      animation: "pulseGlow 2s ease-in-out infinite",
+                      animation: secondLap < 1 ? "pulseGlow 2s ease-in-out infinite" : undefined,
                     }} />
+                  )}
+                  {/* Third lap: cyan with shimmer */}
+                  {showCyan && (
+                    <circle ref={shimmerRef} cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#00feff" strokeWidth={cyanStrokeWidth} strokeDasharray={circumference} strokeDashoffset={thirdOffset} strokeLinecap="round" filter="url(#cyan-glow)" style={{ transition: "stroke-dashoffset 1s ease" }} />
                   )}
                 </svg>
                 <Box sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: isSmall ? "0.25rem" : "0.5rem" }}>
@@ -539,8 +571,8 @@ export default function LandingPage() {
                     ${Math.round(totalRaised).toLocaleString()}
                   </Typography>
                   {overGoal && (
-                    <Typography variant="caption" sx={{ color: "#f0c040", fontWeight: "bold" }}>
-                      New Goal: $1,500,000
+                    <Typography variant="caption" sx={{ color: showCyan ? "#00feff" : "#f0c040", fontWeight: "bold" }}>
+                      New Goal: ${showCyan ? "2,000,000" : "1,500,000"}
                     </Typography>
                   )}
                   <Box sx={{ width: "60%", borderTop: "1px solid #666", marginTop: isSmall ? "0.25rem" : "0.5rem", paddingTop: isSmall ? "0.4rem" : "0.75rem", display: "flex", justifyContent: "center", gap: isSmall ? "1.5rem" : "3rem" }}>
