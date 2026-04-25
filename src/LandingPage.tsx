@@ -12,6 +12,38 @@ import { LIGHTS_OUT } from "./constants";
 
 const { useState, useEffect, useRef, useCallback } = React;
 const DARK_MATCH_RED = "#ff1a1a";
+const DARK_MATCH_TIME = new Date("2026-04-25T00:01:00-04:00").getTime();
+
+function DarkMatchCountdown() {
+  const [timeLeft, setTimeLeft] = useState(() => Math.max(0, DARK_MATCH_TIME - Date.now()));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, DARK_MATCH_TIME - Date.now());
+      setTimeLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(interval);
+        window.location.reload();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (timeLeft <= 0) return null;
+
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return (
+    <Box sx={{ textAlign: "center", mb: 2 }}>
+      <Typography variant="h6" sx={{ color: "#00feff", fontWeight: "bold", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        TIME TO DARK MATCH: {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+      </Typography>
+    </Box>
+  );
+}
 
 // Bluesky SVG icon (no MUI icon available)
 function BlueskyIcon({ size = 20 }: { size?: number }) {
@@ -747,6 +779,10 @@ export default function LandingPage() {
           <Typography variant={isSmall ? "h5" : "h4"} sx={{ fontWeight: "bold", fontSize: isSmall ? "1.875rem" : "2.625rem", marginBottom: "1.5rem" }}>
             It begins with spite and ends with hugs (and spite).
           </Typography>
+
+          {!LIGHTS_OUT && Date.now() < new Date("2026-04-25T00:01:00-04:00").getTime() && (
+            <DarkMatchCountdown />
+          )}
 
           {/* Progress circle */}
           {(() => {

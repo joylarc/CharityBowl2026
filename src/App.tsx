@@ -19,7 +19,48 @@ import Navigation, { TabType } from "./Navigation";
 import Rivalries from "./Rivalries";
 import { AppContext, useAppState, createState } from "./state";
 
-const { Suspense, useCallback, useRef, useState, use } = React;
+const { Suspense, useCallback, useRef, useState, useEffect, use } = React;
+
+const DARK_MATCH_TIME = new Date("2026-04-25T00:01:00-04:00").getTime();
+
+function DarkMatchCountdown() {
+  const [timeLeft, setTimeLeft] = useState(() => Math.max(0, DARK_MATCH_TIME - Date.now()));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, DARK_MATCH_TIME - Date.now());
+      setTimeLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(interval);
+        window.location.reload();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (timeLeft <= 0) return null;
+
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return (
+    <div style={{
+      display: "inline-block",
+      color: "#00feff",
+      fontSize: "0.875rem",
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      letterSpacing: "0.1em",
+      padding: "0.5rem 1.25rem",
+      border: "1px solid #00feff",
+      borderRadius: "4px",
+    }}>
+      Time to Dark Match: {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+    </div>
+  );
+}
 
 interface SearchProps {
   query: string;
@@ -218,24 +259,46 @@ function Content() {
             padding: "0.75rem 0",
           }}
         >
-          <a
-            href={LIGHTS_OUT ? "https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113" : "/about.html"}
-            target={LIGHTS_OUT ? "_blank" : undefined}
-            style={{
-              display: "inline-block",
-              color: LIGHTS_OUT ? "#fed426" : "#666",
-              textDecoration: "none",
-              fontSize: "0.875rem",
-              fontWeight: LIGHTS_OUT ? "bold" : 500,
-              textTransform: "uppercase",
-              letterSpacing: "0.02857em",
-              padding: "0.5rem 1.25rem",
-              border: `1px solid ${LIGHTS_OUT ? "#fed426" : "#999"}`,
-              borderRadius: "4px",
-            }}
-          >
-            {LIGHTS_OUT ? "Donate" : "About Money Cannon"}
-          </a>
+          {LIGHTS_OUT ? (
+            <a
+              href="https://fundraise.givesmart.com/form/9bJ4vg?vid=1pu113"
+              target="_blank"
+              style={{
+                display: "inline-block",
+                color: "#fed426",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                letterSpacing: "0.02857em",
+                padding: "0.5rem 1.25rem",
+                border: "1px solid #fed426",
+                borderRadius: "4px",
+              }}
+            >
+              Donate
+            </a>
+          ) : Date.now() < DARK_MATCH_TIME ? (
+            <DarkMatchCountdown />
+          ) : (
+            <a
+              href="/about.html"
+              style={{
+                display: "inline-block",
+                color: "#666",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                textTransform: "uppercase",
+                letterSpacing: "0.02857em",
+                padding: "0.5rem 1.25rem",
+                border: "1px solid #999",
+                borderRadius: "4px",
+              }}
+            >
+              About Money Cannon
+            </a>
+          )}
         </Box>
         {!LIGHTS_OUT && <Navigation tab={tab} setTab={setTab} />}
         <CustomTabPanel value={tab} index="leaderboard">
