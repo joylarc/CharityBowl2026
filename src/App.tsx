@@ -48,13 +48,13 @@ function DarkMatchCountdown() {
   return (
     <div style={{
       display: "inline-block",
-      color: "#00feff",
+      color: "#ff1a1a",
       fontSize: "0.875rem",
       fontWeight: "bold",
       textTransform: "uppercase",
       letterSpacing: "0.1em",
       padding: "0.5rem 1.25rem",
-      border: "1px solid #00feff",
+      border: "1px solid #ff1a1a",
       borderRadius: "4px",
     }}>
       Time to Dark Match: {pad(hours)}:{pad(minutes)}:{pad(seconds)}
