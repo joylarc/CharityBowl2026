@@ -14,7 +14,7 @@ import {
 } from "@mui/material/styles";
 
 const omniPalette: PaletteOptions = {
-  mode: LIGHTS_OUT ? "dark" : undefined,
+  mode: "dark",
   primary: {
     light: "#d9fffe",
     main: "#00feff",
